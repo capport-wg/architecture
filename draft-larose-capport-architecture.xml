@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!-- This template is for creating an Internet Draft using xml2rfc,
+    which is available here: http://xml.resource.org. -->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!-- One method to get references from the online citation libraries.
+    There has to be one entity for each item to be referenced. 
+    An alternate method (rfc include) is described in the references. -->
+
+<!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs), 
+    please see http://xml.resource.org/authoring/README.html. -->
+<!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
+    (Here they are set differently than their defaults in xml2rfc v1.32) -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space 
+    (using these PIs as follows is recommended by the RFC Editor) -->
+<?rfc compact="yes" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<!-- end of list of popular I-D processing instructions -->
+<rfc category="info" docName="draft-larose-capport-architecture-00" ipr="trust200902">
+ <!-- category values: std, bcp, info, exp, and historic
+    ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
+       or pre5378Trust200902
+    you can add the attributes updates="NNNN" and obsoletes="NNNN" 
+    they will automatically be output with "(if approved)" -->
+
+ <!-- ***** FRONT MATTER ***** -->
+
+ <front>
+   <!-- The abbreviated title is used in the page header - it is only necessary if the 
+        full title is longer than 39 characters -->
+
+   <title abbrev="CAPPORT Architecture">CAPPORT Architecture</title>
+
+   <!-- add 'role="editor"' below for the editors if appropriate -->
+
+   <!-- Another author who claims to be an editor -->
+
+    <author fullname="Kyle Larose" initials="K." surname="Larose">
+      <organization>Sandvine</organization>
+      <address>
+        <postal>
+          <street>408 Albert Street</street>
+          <!-- Reorder these if your country does things differently -->
+          <city>Waterloo</city>
+          <region>ON</region>
+          <code>N2L 3V3</code>
+          <country>Canada</country>
+        </postal>
+        <phone>+1 519 880 2400</phone>
+        <email>klarose@sandvine.com</email>
+        <!-- uri and facsimile elements may also be added -->
+      </address>
+    </author>
+
+    <author fullname="David Dolson" initials="D." surname="Dolson">
+      <organization>Sandvine</organization>
+      <address>
+        <postal>
+          <street>408 Albert Street</street>
+          <!-- Reorder these if your country does things differently -->
+          <city>Waterloo</city>
+          <region>ON</region>
+          <code>N2L 3V3</code>
+          <country>Canada</country>
+        </postal>
+        <phone>+1 519 880 2400</phone>
+        <email>ddolson@sandvine.com</email>
+        <!-- uri and facsimile elements may also be added -->
+      </address>
+    </author>
+
+
+    <date year="2017" />
+
+   <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
+        in the current day for you. If only the current year is specified, xml2rfc will fill 
+	 in the current day and month for you. If the year is not the current one, it is 
+	 necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the 
+	 purpose of calculating the expiry date).  With drafts it is normally sufficient to 
+	 specify just the year. -->
+
+   <!-- Meta-data Declarations -->
+
+   <area>art</area>
+
+   <workgroup>Internet Engineering Task Force</workgroup>
+
+   <!-- WG name at the upperleft corner of the doc,
+        IETF is fine for individual submissions.  
+	 If this element is not present, the default is "Network Working Group",
+        which is used by the RFC Editor as a nod to the history of the IETF. -->
+
+   <keyword>plus</keyword>
+
+   <!-- Keywords will be incorporated into HTML output
+        files in a meta tag but they have no effect on text or nroff
+        output. If you submit your draft to the RFC Editor, the
+        keywords will be used for the search engine. -->
+
+   <abstract>
+     <t>This document aims to document concensus on the CAPPORT architecture.
+        DHCP, ICMP, and an HTTP API are used to provide the solution.
+     </t>
+   </abstract>
+ </front>
+
+ <middle>
+   <section title="Introduction">
+     <t>
+       Problems with captive portals have been described in
+       <xref target="I-D.nottingham-capport-problem"/>.
+     </t>
+     <t>
+       This document standardizes an architecture for implementing captive portals
+       that provides tools for addressing most of those problems.
+     </t>
+     <t>
+       The architecture also attempts to enable IoT devices, in particular
+       devices without user interfaces, to navigate a captive portal.
+     </t>
+     <t>
+       The architecture uses the following mechanisms:
+       <list>
+         <t>DHCP/DHCP6 providing end-user devices with a URI in the
+            Captive-Portal Router Advertisement option <xref target="RFC7710"/>.
+            This URI is an API that the end-user devices access for
+            information about what is required to escape captivity.
+         </t>
+         <t>Notifying end-user devices of captivity with ICMP/ICMP6 "unreachable" messages.
+            This notification can work with any internet protocol, not just
+            clear-text HTTP. This notification does not carry the portal URI,
+            rather triggers the DHCP-provisioned portal to be accessed.
+            This notification carries a "reason" that allows the devices
+            to receive customized work-flows at the portal.
+         </t>
+         <t>
+            Receipt of the ICMP/ICMP6 messages inform an end-user device
+            that it is captive. This permits the device to take immediate
+            action to satisfy the portal (according to its configuration/policy).
+            The architecture recommends the device to query the
+            DHCP-provisioned CAPPORT URI with the specified "reason".
+            This API returns a status and a menu for navigating the captive portal.
+            Typically one of the menu items is a web page suitable for browsing.
+         </t>
+       </list>
+     </t>
+     <t>
+       The architecture attempts to provide privacy, authentication, and safety mechanisms
+       to the extent possible.
+     </t>
+
+     <section title="Requirements Language">
+<!-- TODO: remove this section? -->
+       <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+       "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+       document are to be interpreted as described in <xref
+       target="RFC2119">RFC 2119</xref>.</t>
+     </section>
+   </section>
+
+   <section title="Components">
+
+     <section anchor="section_dhcp" title="DHCP">
+       <t>
+         A standard for providing a portal URI is described in <xref target="RFC7710"/>.
+         The CAPPORT architecture expects this URI to access the API described
+         in <xref target="section_api"/>.
+       </t>
+       <t>
+         Although it is not clear from RFC7710  what protocol should be executed
+         at the specified URI, it may have been assumed to be an HTML page,
+         and hence there may be clients assuming a browser should open this URI.
+         For backwards compatibility, it might be necessary for the server
+         to check Agent-Id when serving the URI.
+       </t>
+     </section>
+     <section anchor="section_icmp" title="ICMP/ICMP6">
+       <t>
+         A mechanism to trigger captive portal work-flows in the end-user device
+         is proposed earlier in <xref target="I-D.wkumari-capport-icmp-unreach"/>.
+       </t>
+     </section>
+
+     <section anchor="section_api" title="Captive Portal API">
+       <t>
+         The client performs GET at the DHCP-specified URI.
+         The response is a JSON document.
+       </t>
+       <t>
+         IMPROVE ME.
+       </t>
+     </section>
+   </section>
+<!--
+   <section anchor="Acknowledgements" title="Acknowledgements">
+     <t>The authors thank ...
+        for their review and suggestions.</t>
+   </section>
+-->
+
+   <!-- Possibly a 'Contributors' section ... -->
+
+   <section anchor="IANA" title="IANA Considerations">
+     <t>This memo includes no request to IANA.</t>
+
+   </section>
+
+   <section anchor="Security" title="Security Considerations">
+     <!--All drafts are required to have a security considerations section.  See RFC3552 -->
+     <section title="Authenticated APIs">
+       <t>
+         The solution described here assumes that when the client needs to
+         trusted the API server, server authentication will be utilized.
+       </t>
+       <t>
+         TODO: this document has not specified the authentication mechanism.
+       </t>
+     </section>
+     <section title="Risk of Nuisance Captive Portal">
+       <t>
+         It is possible for any user on the internet to send ICMP packets in an attempt
+         to cause the receiving equipment to go to the captive portal. This has been
+         considered and addressed in the following ways:
+         <list>
+           <t>The ICMP packet does not carry the URL, making this method safer
+              than 307-redirect methods currently in use.
+           </t>
+           <t>The ICMP packet carries a token that would not be available, even to an
+              on-path attacker. Although possible to guess by brute force, the 
+              impact is nuisance due to other precautions.
+           </t>
+           <t>Even when redirected, the client securely authenticates with API servers.
+           </t>
+         </list>
+       </t>
+     </section>
+     <section title="User Options">
+       <t>
+         The ICMP messaging informs the end-user device it is being held captive.
+         There is no requirement that the device do something about this.
+         Devices may permit users to disable automatic reaction to captive-portal indications.
+         Hence, support is provided for users who wish to manually navigate the captive portal.
+       </t>
+     </section>
+   </section>
+ </middle>
+
+ <!--  *****BACK MATTER ***** -->
+
+ <back>
+   <!-- References split into informative and normative -->
+
+   <!-- There are 2 ways to insert reference entries from the citation libraries:
+    1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
+    2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
+       (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
+
+    Both are cited textually in the same manner: by using xref elements.
+    If you use the PI option, xml2rfc will, by default, try to find included files in the same
+    directory as the including file. You can also define the XML_LIBRARY environment variable
+    with a value containing a set of directories to search.  These can be either in the local
+    filing system or remote ones accessed by http (http://domain/dir/... ).-->
+
+   <references title="Normative References">
+     <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
+     &RFC2119;
+     <?rfc include="reference.RFC.7710.xml"?>
+
+   </references>
+   <references title="Informative References">
+     <?rfc include="reference.I-D.wkumari-capport-icmp-unreach.xml"?>
+     <?rfc include="reference.I-D.nottingham-capport-problem.xml"?>
+   </references>
+
+<!--
+   <section anchor="app-additional" title="Additional Stuff">
+     <t>This becomes an Appendix.</t>
+   </section>
+-->
+ </back>
+</rfc>
