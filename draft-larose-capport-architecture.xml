@@ -165,7 +165,6 @@
        The architecture attempts to provide privacy, authentication, and safety mechanisms
        to the extent possible.
      </t>
-
      <section title="Requirements Language">
 <!-- TODO: remove this section? -->
        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -173,6 +172,12 @@
        document are to be interpreted as described in <xref
        target="RFC2119">RFC 2119</xref>.</t>
      </section>
+     <section title="Terminlogogy">
+       <t>Captive Network: A network for which communication outside of it is subject to a captive portal</t>
+       <t>Captive Portal Enforcement: The device which enforces the captive portal in the captive netowrk</t>
+       <t>Captive Portal Client: Also know as Client. A device which wants to communicate outside the captive network</t>
+     </section>
+
    </section>
 
    <section title="Components">
@@ -203,10 +208,83 @@
          The client performs GET at the DHCP-specified URI.
          The response is a JSON document.
        </t>
-       <t>
-         IMPROVE ME.
-       </t>
+        <t>
+         * must support a secure channel (e.g. HTTPS)
+         * High level document describes further APIs allowing clients to make decisions
+         * Can provide options for interactive or non-interactive clients
+         * May want to provide a default http captive portal for clients wihch expect it
+         * Should be able to: 
+          * Ask for quota information (remaining time/bytes/etc)
+          * Ask whether allowed through captive portal
+          * Provide credentials to gain access
+          * Describe the required credentials to gain access
+        </t> 
      </section>
+     <section anchor="section_client" title="Client">
+      <t>
+       The device attepmting to communicate outside the captive network.
+      </t>
+      <t>
+        * May be interactive or non-iteractive
+        * May have different mechanisms for notifying the user of the captive portal
+        * Needs to recognize the ICMP unreachable message, and to invoke its captive portal
+          handling in response to it.
+        * Needs to cache the URI for the captive portal API from the DHCP lease.
+        * May cache credentials to respond to captive portal notifications
+        * Interactive clients typically ask their users how to proceed through interacting
+          with the captive portal. Interactions may be as simple as accepting a terms of agreement,
+          or as complicated as filling out some forms.
+        * An example interactive client is a smart phone.
+        * Non interactive clients will likely be provisioned with credentials in order to automatically gain access.
+        * An example non interactive client is an IoT device such as a smart thermostat.
+        * May need to distinguish between types of clients here.
+      </t>
+     </section>
+     <section anchor="section_capport_enforcement" title="Captive Portal Enforcement">
+      <t>
+        The Captive Portal Enforcement component applies captive portal policy to traffic moving between the captive network and the rest of the internet.
+      </t>
+      <t>
+        * Sends ICMP for disallowed clients
+        * Allows traffic through for allowed clients 
+        * Updates policy in response to operations from the Captive Portal API.
+      <t>
+     </section>
+   </section>
+   </section>
+   <section anchor="section_workflow" title="Solution Workflow">
+    <t> This section describes the general workflow of solutions adhering to the architecture. </t>
+    <t> 
+    Initial connection
+    1) The client joins the captive network by acquiring a DHCP lease
+    2) The client learns the URI for the Captive Portal API from the DHCP response (rfc7710)
+    3) The client attemps a connection outside the captive network
+    4) The captive portal enforcement device drops the connective requests, and replies with an icmp unreach indicating that it is
+       behind a captive portal, and that access is denied (I-D.wkumari-capport-icmp-unreach)
+        *** Is this drop okay? ***
+    5) The client handles the icmp unreachable message by invoking its captive portal handling infrastructure
+    6) The captive portal handling infrastructure communicates with the Captive Portal API to gain access to outside the captive network
+    7) The Captive Portal API indicates to the captive portal enforcement device that the client is allowed through
+    8) The client's next connection attempt succeeds.
+    </t>
+    <t>
+    Connection about to expire
+    1) The client sends a packet to the outside network.
+    2) The captive portal device detects that the client's access is about to expire (low quota/time/etc)
+    3) The captive portal sends an icmp unreach to the client indicating that it needs to refresh its access.
+            *** Will this interrupt communication somehow? ***
+    4) The client device handles this message by invoking its captive portal handling infrsatructure.
+    5) The captive portal handling infrastructure communicates with the Captive Portal API to gain access to outside the captive network
+    6) The Captive Portal API gives more quota to the client by indicating to the captive portal enforcement device the new, extended quota.
+    7) The client continues unaffected.
+    </t>
+    <t>
+    Connection expired.
+    1) The client sends a packet to the outside network.
+    2) The captive portal device detects that the client's access has expired.
+    3) The remaining workflow is that same as for the initial connection.
+    What happens to a long-running flow here? Does it continue afterwards, or does communication need to be reestablished?
+    </t>
    </section>
 <!--
    <section anchor="Acknowledgements" title="Acknowledgements">
