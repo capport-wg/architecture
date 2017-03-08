@@ -191,15 +191,24 @@
        <t>
          Although it is not clear from RFC7710  what protocol should be executed
          at the specified URI, it may have been assumed to be an HTML page,
-         and hence there may be clients assuming a browser should open this URI.
+         and hence there may be User Equipment assuming a browser should open this URI.
          For backwards compatibility, it might be necessary for the server
          to check Agent-Id when serving the URI.
        </t>
      </section>
      <section anchor="section_icmp" title="ICMP/ICMP6">
        <t>
-         A mechanism to trigger captive portal work-flows in the end-user device
+         A mechanism to trigger captive portal work-flows in the User Equipment
          is proposed earlier in <xref target="I-D.wkumari-capport-icmp-unreach"/>.
+       </t>
+       <t>
+         The Captive Portal Enforcement function is required to send such
+         ICMP messages when disallowed User Equipment attempts to send
+         to the network.
+       </t>
+       <t>
+         The ICMP messages MUST NOT be sent to the internet devices. The indications
+         are only sent to the User Equipment.
        </t>
      </section>
 
@@ -227,9 +236,12 @@
           interfaces it points to?]
         </t>
      </section>
-     <section anchor="section_client" title="Client">
+     <section anchor="section_client" title="User Equipment">
       <t>
-       The device attepmting to communicate outside the captive network.
+       The User Equipment is the device that a user desires to communicate 
+       with a network. The User Equipment communication is typically
+       restricted by the Captive Portal Enforcement until site-specific
+       requirements have been met.
       </t>
       <t>
       <list style="symbols">
@@ -238,12 +250,13 @@
         <t>Needs to recognize the ICMP unreachable message, and to invoke its captive portal
           handling in response to it.</t>
         <t>Needs to cache the URI for the captive portal API from the DHCP lease.</t>
-        <t>May cache credentials to respond to captive portal notifications</t>
+        <t>May cache credentials to automatically respond to captive portal notifications</t>
         <t>Interactive clients typically ask their users how to proceed through interacting
           with the captive portal. Interactions may be as simple as accepting a terms of agreement,
           or as complicated as filling out some forms.</t>
         <t>An example interactive client is a smart phone.</t>
-        <t>Non interactive clients will likely be provisioned with credentials in order to automatically gain access.</t>
+        <t>Non interactive clients may be provisioned with credentials
+           out of band (e.g., via USB programming) in order to automatically gain access.</t>
         <t>An example non interactive client is an IoT device such as a smart thermostat.</t>
         <t>May need to distinguish between types of clients here.</t>
       </list>
@@ -251,13 +264,19 @@
      </section>
      <section anchor="section_capport_enforcement" title="Captive Portal Enforcement">
       <t>
-        The Captive Portal Enforcement component applies captive portal policy to traffic moving between the captive network and the rest of the internet.
+        The Captive Portal Enforcement component restricts network access to 
+        User Equipment according to site-specific policy. Typically User Equipment
+        is denied network access until it has performed some action.
       </t>
       <t>
+       The Captive Portal Enforcement component:
        <list style="symbols">
-        <t>Sends ICMP for disallowed clients</t>
-        <t>Allows traffic through for allowed clients </t>
-        <t>Updates policy in response to operations from the Captive Portal API.</t>
+        <t>Allows traffic through for allowed User Equipment.</t>
+        <t>Blocks traffic and sends ICMP notifications for disallowed User Equipment.</t>
+        <t>Permits disallowed User Equipment to access necessary APIs and web pages to
+           fulfill requirements of exiting captivity.</t>
+        <t>May modify responses to canary URLs, or perform other methods of notification.</t>
+        <t>Updates policy per User Equipment in response to operations from the Captive Portal API.</t>
        </list>
       </t>
      </section>
