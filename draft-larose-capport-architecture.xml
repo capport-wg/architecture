@@ -248,10 +248,10 @@
         * Sends ICMP for disallowed clients
         * Allows traffic through for allowed clients 
         * Updates policy in response to operations from the Captive Portal API.
-      <t>
+      </t>
      </section>
    </section>
-   </section>
+
    <section anchor="section_workflow" title="Solution Workflow">
     <t> This section describes the general workflow of solutions adhering to the architecture. </t>
     <t> 
