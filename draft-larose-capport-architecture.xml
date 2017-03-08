@@ -210,14 +210,21 @@
          The ICMP messages MUST NOT be sent to the internet devices. The indications
          are only sent to the User Equipment.
        </t>
+       <t>
+         The User Equipment does not necessarily deliver the impact of the ICMP message
+         to the application that triggered it. The User Equipment may be
+         able to satisfy the Captive Portal requirements quickly enough
+         that existing transport connections are not impacted.
+       </t>
      </section>
 
      <section anchor="section_api" title="Captive Portal API">
        <t>
-         The client performs GET at the DHCP-specified URI.
+         The User Equipment performs GET at the DHCP-specified URI.
+         The API is implemented at the CAPPORT API Server.
          The response is a JSON document. The following information
          should be available in the response document, allowing
-         clients to choose the next step:
+         User Equipment devices to choose the next step:
          <list style="symbols">
           <t>Quota information (remaining time/bytes/etc.)</t>
           <t>Whether the device is allowed through captive portal or blocked.</t>
@@ -227,11 +234,11 @@
          </list>
        </t>
         <t>
-          The API is intended to provide information and a menu of choices
-          to support options for interactive or non-interactive clients.
+          The CAPPORT API is intended to provide information and a menu of choices
+          to support options for interactive or non-interactive User Equipment.
         </t>
         <t>
-          The API should support TLS for privacy.
+          The CAPPORT API should support TLS for privacy.
           [Does this API need to be secure, or do we place security at the
           interfaces it points to?]
         </t>
@@ -251,14 +258,14 @@
           handling in response to it.</t>
         <t>Needs to cache the URI for the captive portal API from the DHCP lease.</t>
         <t>May cache credentials to automatically respond to captive portal notifications</t>
-        <t>Interactive clients typically ask their users how to proceed through interacting
+        <t>Interactive User Equipment typically ask their users how to proceed through interacting
           with the captive portal. Interactions may be as simple as accepting a terms of agreement,
           or as complicated as filling out some forms.</t>
-        <t>An example interactive client is a smart phone.</t>
-        <t>Non interactive clients may be provisioned with credentials
+        <t>An example interactive User Equipment is a smart phone.</t>
+        <t>Non interactive User Equipment may be provisioned with credentials
            out of band (e.g., via USB programming) in order to automatically gain access.</t>
-        <t>An example non interactive client is an IoT device such as a smart thermostat.</t>
-        <t>May need to distinguish between types of clients here.</t>
+        <t>An example non interactive User Equipment is an IoT device such as a smart thermostat.</t>
+        <t>May need to distinguish between types of User Equipment here.</t>
       </list>
       </t>
      </section>
@@ -284,43 +291,55 @@
 
    <section anchor="section_workflow" title="Solution Workflow">
     <t> This section describes the general workflow of solutions adhering to the architecture. </t>
+    <section title="Initial Connection">
     <t> 
-    Initial connection
     <list style="numbers">
-      <t>The client joins the captive network by acquiring a DHCP lease</t>
-      <t>The client learns the URI for the Captive Portal API from the DHCP response (rfc7710)</t>
-      <t>The client attemps a connection outside the captive network</t>
-      <t>The captive portal enforcement device drops the connective requests, and replies with an icmp unreach indicating that it is
-       behind a captive portal, and that access is denied (I-D.wkumari-capport-icmp-unreach)
-        *** Is this drop okay? ***</t>
-      <t>The client handles the icmp unreachable message by invoking its captive portal handling infrastructure</t>
-      <t>The captive portal handling infrastructure communicates with the Captive Portal API to gain access to outside the captive network</t>
-      <t>The Captive Portal API indicates to the captive portal enforcement device that the client is allowed through</t>
-      <t>The client's next connection attempt succeeds.</t>
+      <t>The User Equipment joins the captive network by acquiring a DHCP lease</t>
+      <t>The User Equipment learns the URI for the Captive Portal API from the DHCP response
+         (<xref target="RFC7710"/>).</t>
+      <t>The User Equipment attemps a connection outside the captive network</t>
+      <t>The Captive Portal Enforcement device drops the connective requests,
+         and replies with an ICMP UNREACHABLE message indicating that it is
+         behind a captive portal, and that access is denied
+          <xref target="I-D.wkumari-capport-icmp-unreach"/>.
+       </t>
+      <t>The User Equipment handles the ICMP unreachable message by invoking its
+         captive portal handling infrastructure</t>
+      <t>The captive portal handling infrastructure communicates with the
+         Captive Portal API to gain access to outside the captive network</t>
+      <t>The Captive Portal API server indicates to the Captive Portal Enforcement
+         device that the User Equipment is allowed through</t>
+      <t>Subsequent packets from the User Equipment are permitted.</t>
     </list>
     </t>
+    </section>
+    <section title="Connection About to Expire">
     <t>
-    Connection about to expire
      <list style="numbers">
-      <t>The client sends a packet to the outside network.</t>
-      <t>The captive portal device detects that the client's access is about to expire (low quota/time/etc)</t>
-      <t>The captive portal sends an icmp unreach to the client indicating that it needs to refresh its access.
-            *** Will this interrupt communication somehow? ***</t>
-      <t>The client device handles this message by invoking its captive portal handling infrsatructure.</t>
+      <t>The User Equipment sends a packet to the outside network.</t>
+      <t>The Captive Portal Enforcement detects that the User Equipment's access is about to expire (low quota/time/etc)</t>
+      <t>The Captive Portal Enforcement sends an ICMP unreachable to
+         the User Equipment indicating that it needs to refresh its access.</t>
+      <t>The User Equipment handles this message by invoking its captive
+         portal handling infrsatructure.</t>
       <t>The captive portal handling infrastructure communicates with the Captive Portal API to gain access to outside the captive network</t>
-      <t>The Captive Portal API gives more quota to the client by indicating to the captive portal enforcement device the new, extended quota.</t>
-      <t>The client continues unaffected.</t>
+      <t>The Captive Portal API Server gives more quota (time, bytes, etc.) to
+         the User Equipment by indicating to the Captive Portal Enforcement the new, extended quota.</t>
+      <t>The User Equipment continues unaffected.</t>
      </list>
     </t>
+    </section>
+    <section title="Connection expired">
     <t>
-    Connection expired.
      <list style="numbers">
-      <t>The client sends a packet to the outside network.</t>
-      <t>The captive portal device detects that the client's access has expired.</t>
+      <t>The User Equipment sends a packet to the outside network.</t>
+      <t>The Captive Portal Enforcement device detects that the User Equipment's access has expired.</t>
       <t>The remaining workflow is that same as for the initial connection.</t>
      </list>
-    What happens to a long-running flow here? Does it continue afterwards, or does communication need to be reestablished?
+    User Equipment may attempt to maintain transport connections, leaving
+    it to the application to determine timeouts.
     </t>
+    </section>
    </section>
 <!--
    <section anchor="Acknowledgements" title="Acknowledgements">
@@ -340,7 +359,7 @@
      <!--All drafts are required to have a security considerations section.  See RFC3552 -->
      <section title="Authenticated APIs">
        <t>
-         The solution described here assumes that when the client needs to
+         The solution described here assumes that when the User Equipment needs to
          trusted the API server, server authentication will be utilized.
        </t>
        <t>
@@ -360,7 +379,7 @@
               on-path attacker. Although possible to guess by brute force, the 
               impact is nuisance due to other precautions.
            </t>
-           <t>Even when redirected, the client securely authenticates with API servers.
+           <t>Even when redirected, the User Equipment securely authenticates with API servers.
            </t>
          </list>
        </t>
