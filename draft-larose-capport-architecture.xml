@@ -437,7 +437,7 @@ EXTERNAL NETWORK
          The ICMP messaging informs the end-user device it is being held captive.
          There is no requirement that the device do something about this.
          Devices may permit users to disable automatic reaction to captive-portal indications.
-         Hence, support is provided for users who wish to manually navigate the captive portal.
+         Hence, end-user devices may allow users to manually control captive portal interactions.
        </t>
      </section>
    </section>
