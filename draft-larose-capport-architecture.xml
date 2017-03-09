@@ -172,10 +172,10 @@
        document are to be interpreted as described in <xref
        target="RFC2119">RFC 2119</xref>.</t>
      </section>
-     <section title="Terminlogogy">
+     <section title="Terminology">
        <t>Captive Network: A network for which communication outside of it is subject to a captive portal</t>
        <t>Captive Portal Enforcement: The device which enforces the captive portal in the captive netowrk</t>
-       <t>Captive Portal Client: Also know as Client. A device which wants to communicate outside the captive network</t>
+       <t>Captive Portal User Equipment: Also known as User Equipment. A device which wants to communicate outside the captive network</t>
      </section>
 
    </section>
@@ -336,8 +336,12 @@
       <t>The Captive Portal Enforcement device detects that the User Equipment's access has expired.</t>
       <t>The remaining workflow is that same as for the initial connection.</t>
      </list>
-    User Equipment may attempt to maintain transport connections, leaving
-    it to the application to determine timeouts.
+     User Equipment may attempt to maintain transport connections, leaving
+     it to the application to determine timeouts.
+    </t>
+    <t>
+     User Equipment may preemptively invoke its captive portal handling infrastructure when receiving the DHCP response indicating that it is behind a captive portal,
+     rather than waiting for the ICMP unreachable message.
     </t>
     </section>
    </section>
@@ -360,7 +364,7 @@
      <section title="Authenticated APIs">
        <t>
          The solution described here assumes that when the User Equipment needs to
-         trusted the API server, server authentication will be utilized.
+         trust the API server, server authentication will be utilized.
        </t>
        <t>
          TODO: this document has not specified the authentication mechanism.
