@@ -144,7 +144,7 @@
             information about what is required to escape captivity.
          </t>
          <t>Notifying end-user devices of captivity with ICMP/ICMP6 "unreachable" messages.
-            This notification can work with any internet protocol, not just
+            This notification can work with any Internet protocol, not just
             clear-text HTTP. This notification does not carry the portal URI,
             rather triggers the DHCP-provisioned portal to be accessed.
             This notification carries a "reason" that allows the devices
@@ -207,7 +207,7 @@
          to the network.
        </t>
        <t>
-         The ICMP messages MUST NOT be sent to the internet devices. The indications
+         The ICMP messages MUST NOT be sent to the Internet devices. The indications
          are only sent to the User Equipment.
        </t>
        <t>
@@ -416,7 +416,7 @@ EXTERNAL NETWORK
      </section>
      <section title="Risk of Nuisance Captive Portal">
        <t>
-         It is possible for any user on the internet to send ICMP packets in an attempt
+         It is possible for any user on the Internet to send ICMP packets in an attempt
          to cause the receiving equipment to go to the captive portal. This has been
          considered and addressed in the following ways:
          <list>
