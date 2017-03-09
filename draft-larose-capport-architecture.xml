@@ -182,7 +182,34 @@
 
    <section title="Components">
 
-     <section anchor="section_dhcp" title="DHCP">
+     <section anchor="section_client" title="User Equipment">
+      <t>
+       The User Equipment is the device that a user desires to communicate 
+       with a network. The User Equipment communication is typically
+       restricted by the Captive Portal Enforcement, described in <xref target="section_capport_enforcement"/>,
+       until site-specific requirements have been met.
+      </t>
+      <t>
+      <list style="symbols">
+        <t>May be interactive or non-iteractive</t>
+        <t>May have different mechanisms for notifying the user of the captive portal</t>
+        <t>Needs to recognize the ICMP unreachable message, and to invoke its captive portal
+          handling in response to it.</t>
+        <t>Needs to cache the URI for the captive portal API from the DHCP lease.</t>
+        <t>May cache credentials to automatically respond to captive portal notifications</t>
+        <t>Interactive User Equipment typically ask their users how to proceed through interacting
+          with the captive portal. Interactions may be as simple as accepting a terms of agreement,
+          or as complicated as filling out some forms.</t>
+        <t>An example interactive User Equipment is a smart phone.</t>
+        <t>Non interactive User Equipment may be provisioned with credentials
+           out of band (e.g., via USB programming) in order to automatically gain access.</t>
+        <t>An example non interactive User Equipment is an IoT device such as a smart thermostat.</t>
+        <t>May need to distinguish between types of User Equipment here.</t>
+      </list>
+      </t>
+     </section>
+
+     <section anchor="section_dhcp" title="DHCP Server">
        <t>
          A standard for providing a portal URI is described in <xref target="RFC7710"/>.
          The CAPPORT architecture expects this URI to access the API described
@@ -196,37 +223,8 @@
          to check Agent-Id when serving the URI.
        </t>
      </section>
-     <section anchor="section_icmp" title="ICMP/ICMP6">
-       <t>
-         A mechanism to trigger captive portal work-flows in the User Equipment
-         is proposed earlier in <xref target="I-D.wkumari-capport-icmp-unreach"/>.
-         Additionally, the Unreachable message carries a token to prove
-         it is a valid notification.
-       </t>
-       <t>
-         The Captive Portal Enforcement function is required to send such
-         ICMP messages when disallowed User Equipment attempts to send
-         to the network.
-       </t>
-       <t>
-         The ICMP messages MUST NOT be sent to the Internet devices. The indications
-         are only sent to the User Equipment.
-       </t>
-       <t>
-         The User Equipment MUST verify that the token matches the token
-         received earlier via the CAPPORT API. If tokens do not match,
-         the ICMP message MUST be discarded with no further impact.
-         (It MAY be counted.)
-       </t>
-       <t>
-         The User Equipment does not necessarily deliver the impact of the ICMP message
-         to the application that triggered it. The User Equipment may be
-         able to satisfy the Captive Portal requirements quickly enough
-         that existing transport connections are not impacted.
-       </t>
-     </section>
 
-     <section anchor="section_api" title="Captive Portal API">
+     <section anchor="section_api" title="Captive Portal API Server">
        <t>
          The User Equipment performs GET at the DHCP-specified URI.
          The API is implemented at the CAPPORT API Server.
@@ -252,32 +250,6 @@
           interfaces it points to?]
         </t>
      </section>
-     <section anchor="section_client" title="User Equipment">
-      <t>
-       The User Equipment is the device that a user desires to communicate 
-       with a network. The User Equipment communication is typically
-       restricted by the Captive Portal Enforcement until site-specific
-       requirements have been met.
-      </t>
-      <t>
-      <list style="symbols">
-        <t>May be interactive or non-iteractive</t>
-        <t>May have different mechanisms for notifying the user of the captive portal</t>
-        <t>Needs to recognize the ICMP unreachable message, and to invoke its captive portal
-          handling in response to it.</t>
-        <t>Needs to cache the URI for the captive portal API from the DHCP lease.</t>
-        <t>May cache credentials to automatically respond to captive portal notifications</t>
-        <t>Interactive User Equipment typically ask their users how to proceed through interacting
-          with the captive portal. Interactions may be as simple as accepting a terms of agreement,
-          or as complicated as filling out some forms.</t>
-        <t>An example interactive User Equipment is a smart phone.</t>
-        <t>Non interactive User Equipment may be provisioned with credentials
-           out of band (e.g., via USB programming) in order to automatically gain access.</t>
-        <t>An example non interactive User Equipment is an IoT device such as a smart thermostat.</t>
-        <t>May need to distinguish between types of User Equipment here.</t>
-      </list>
-      </t>
-     </section>
      <section anchor="section_capport_enforcement" title="Captive Portal Enforcement">
       <t>
         The Captive Portal Enforcement component restricts network access to 
@@ -295,6 +267,27 @@
         <t>Updates policy per User Equipment in response to operations from the Captive Portal API.</t>
        </list>
       </t>
+     </section>
+     <section anchor="section_icmp" title="ICMP/ICMP6">
+       <t>
+         A mechanism to trigger captive portal work-flows in the User Equipment
+         is proposed earlier in <xref target="I-D.wkumari-capport-icmp-unreach"/>.
+       </t>
+       <t>
+         The Captive Portal Enforcement function is required to send such
+         ICMP messages when disallowed User Equipment attempts to send
+         to the network.
+       </t>
+       <t>
+         The ICMP messages MUST NOT be sent to the Internet devices. The indications
+         are only sent to the User Equipment.
+       </t>
+       <t>
+         The User Equipment does not necessarily deliver the impact of the ICMP message
+         to the application that triggered it. The User Equipment may be
+         able to satisfy the Captive Portal requirements quickly enough
+         that existing transport connections are not impacted.
+       </t>
      </section>
      <section title="Component Diagram">
      <t>
