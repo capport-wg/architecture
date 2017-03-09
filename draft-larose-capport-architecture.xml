@@ -272,6 +272,8 @@
        <t>
          A mechanism to trigger captive portal work-flows in the User Equipment
          is proposed earlier in <xref target="I-D.wkumari-capport-icmp-unreach"/>.
+         Additionally, the Unreachable message carries a token to prove
+         it is a valid notification.
        </t>
        <t>
          The Captive Portal Enforcement function is required to send such
@@ -281,6 +283,12 @@
        <t>
          The ICMP messages MUST NOT be sent to the Internet devices. The indications
          are only sent to the User Equipment.
+       </t>
+       <t>
+         The User Equipment MUST verify that the token matches the token
+         received earlier via the CAPPORT API. If tokens do not match,
+         the ICMP message MUST be discarded with no further impact.
+         (It MAY be counted.)
        </t>
        <t>
          The User Equipment does not necessarily deliver the impact of the ICMP message
