@@ -294,26 +294,26 @@
             The following diagram shows the communication between each component.
            </preamble>
            <artwork><![CDATA[
-o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
-CAPTIVE NETWORK
-                                             +----------+
- +-------------+   CAPPORT API URI           |   DHCP   |
- |             | <-------------------------+ +----------+
- |    User     |        
- |  Equipment  |   Request Access/Information +-------------+
- |             | +--------------------------> | CAPPORT API |
- +-------------+                              +-------------+
-        ^  |  Connection Attempt                       | 
-        |  +-------------------> +---------------+  Allow/Deny Access   
-        |                        |               |     |
-        |   ICMP Unreachable     | Captive Portal|     | 
-        +----------------------+ | Enforcement   | <---+
-                                 +---------------+
-                                        |         
-                             To/from external network
-                                        |
-                                        | 
-o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
+o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
+. CAPTIVE NETWORK                                                       .
+.                                              +---------------+        .
+.  +-------------+   CAPPORT API URI           |  DHCP Server  |        .
+.  |             | <-------------------------+ +---------------+        .
+.  |    User     |                                                      .
+.  |  Equipment  |   Request Access/Information +--------------------+  .
+.  |             | +--------------------------> | CAPPORT API Server |  .
+.  +-------------+                              +--------------------+  .
+.         ^  |  Connection Attempt                       |              .
+.         |  +-------------------> +---------------+  Allow/Deny Access . 
+.         |                        |               |     |              . 
+.         |   ICMP Unreachable     | Captive Portal|     |              .
+.         +----------------------+ | Enforcement   | <---+              .
+.                                  +---------------+                    .
+.                                         |                             .
+.                              To/from external network                 .
+.                                         |                             .
+.                                         |                             .
+o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
 EXTERNAL NETWORK
 
         Figure 1: Captive Portal Architecture Component Diagram
@@ -321,12 +321,12 @@ EXTERNAL NETWORK
        </figure>
         In the diagram:
              <list style="symbols">
-              <t>The User Equipment communicates with the DHCP server to get access to the captive network, and learn about the CAPPORT API URI.</t>
+              <t>The User Equipment communicates with the DHCP Server to get access to the captive network, and learn about the CAPPORT API URI.</t>
               <t>The User Equipment attempts to communicate through the captive portal enforcement device.</t>
               <t>The Captive Portal Enforcement device either lets the User Equipment's traffic through, or responds with an ICMP Unreachable</t>
-              <t>The User Equipment requests access to outside the captive network, or requests more information, from the CAPPORT API</t>
-              <t> The CAPPORT API directs the Captive Portal Enforcement device to either allow or deny access in response to requests from the User Equipment
-                  or quota/timing restrictions.
+              <t>The User Equipment requests access to outside the captive network, or requests more information, from the CAPPORT API server</t>
+              <t> The CAPPORT API server directs the Captive Portal Enforcement device to either allow or deny access in response to requests
+                  from the User Equipment or quota/timing restrictions.
               </t>
              </list>
     </t>
