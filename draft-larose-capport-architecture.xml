@@ -287,6 +287,50 @@
        </list>
       </t>
      </section>
+     <section title="Component Diagram">
+     <t>
+       <figure>
+           <preamble>
+            The following diagram shows the communication between each component.
+           </preamble>
+           <artwork><![CDATA[
+o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
+CAPTIVE NETWORK
+                                             +----------+
+ +-------------+   REST API URI              |   DHCP   |
+ |             | <-------------------------+ +----------+
+ |    User     |        
+ |  Equipment  |   Request Access/Information +----------+
+ |             | +--------------------------> | REST API |
+ +-------------+                              +----------+
+        ^  |  Connection Attempt                       | 
+        |  +-------------------> +---------------+  Allow/Deny Access   
+        |                        |               |     |
+        |   ICMP Unreachable     | Captive Portal|     | 
+        +----------------------+ | Enforcement   | <---+
+                                 +---------------+
+                                        |         
+                             To/from external network
+                                        |
+                                        | 
+o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
+EXTERNAL NETWORK
+
+        Figure 1: Captive Portal Architecture Component Diagram
+           ]]></artwork>
+       </figure>
+        In the diagram:
+             <list style="symbols">
+              <t>The User Equipment communicates with the DHCP server to get access to the captive network, and learn about the REST API URI.</t>
+              <t>The User Equipment attempts to communicate through the captive portal enforcement device.</t>
+              <t>The Captive Portal Enforcement device either lets the User Equipment's traffic through, or responds with an ICMP Unreachable</t>
+              <t>The User Equipment requests access to outside the captive network, or requests more information, from the REST API</t>
+              <t> The REST API directs the Captive Portal Enforcement device to either allow or deny access in response to requests from the User Equipment
+                  or quota/timing restrictions.
+              </t>
+             </list>
+    </t>
+    </section>
    </section>
 
    <section anchor="section_workflow" title="Solution Workflow">
