@@ -200,6 +200,8 @@
        <t>
          A mechanism to trigger captive portal work-flows in the User Equipment
          is proposed earlier in <xref target="I-D.wkumari-capport-icmp-unreach"/>.
+         Additionally, the Unreachable message carries a token to prove
+         it is a valid notification.
        </t>
        <t>
          The Captive Portal Enforcement function is required to send such
@@ -209,6 +211,12 @@
        <t>
          The ICMP messages MUST NOT be sent to the Internet devices. The indications
          are only sent to the User Equipment.
+       </t>
+       <t>
+         The User Equipment MUST verify that the token matches the token
+         received earlier via the CAPPORT API. If tokens do not match,
+         the ICMP message MUST be discarded with no further impact.
+         (It MAY be counted.)
        </t>
        <t>
          The User Equipment does not necessarily deliver the impact of the ICMP message
@@ -231,6 +239,7 @@
           <t>Method of providing credentials to gain access.</t>
           <t>Describe the required credentials to gain access.</t>
           <t>URL of a web page for devices with browsers and humans.</t>
+          <t>A token used to verify later ICMP messages are valid.</t>
          </list>
        </t>
         <t>
@@ -341,19 +350,16 @@ EXTERNAL NETWORK
       <t>The User Equipment joins the captive network by acquiring a DHCP lease</t>
       <t>The User Equipment learns the URI for the Captive Portal API from the DHCP response
          (<xref target="RFC7710"/>).</t>
-      <t>The User Equipment attemps a connection outside the captive network</t>
-      <t>The Captive Portal Enforcement device drops the connective requests,
-         and replies with an ICMP UNREACHABLE message indicating that it is
-         behind a captive portal, and that access is denied
-          <xref target="I-D.wkumari-capport-icmp-unreach"/>.
-       </t>
-      <t>The User Equipment handles the ICMP unreachable message by invoking its
-         captive portal handling infrastructure</t>
-      <t>The captive portal handling infrastructure communicates with the
-         Captive Portal API to gain access to outside the captive network</t>
+      <t>The User Equipment accesses the CAPPORT API to receive parameters
+         of the Captive Network, including the token.</t>
+      <t>The User Equipment communicates with the CAPPORT API to gain
+         access to the outside network.</t>
       <t>The Captive Portal API server indicates to the Captive Portal Enforcement
          device that the User Equipment is allowed through</t>
-      <t>Subsequent packets from the User Equipment are permitted.</t>
+      <t>The User Equipment attempts a connection outside the captive network</t>
+      <t>If the requirements have been satisfied, the access is permitted;
+         otherwise the "Expired" behavior occurs</t>
+      <t>The User Equipment accesses the network until conditions Expire</t>
     </list>
     </t>
     </section>
@@ -363,7 +369,10 @@ EXTERNAL NETWORK
       <t>The User Equipment sends a packet to the outside network.</t>
       <t>The Captive Portal Enforcement detects that the User Equipment's access is about to expire (low quota/time/etc)</t>
       <t>The Captive Portal Enforcement sends an ICMP unreachable to
-         the User Equipment indicating that it needs to refresh its access.</t>
+         the User Equipment indicating that it needs to refresh its access.
+         <xref target="I-D.wkumari-capport-icmp-unreach"/>.
+         The message contains the token given to the User Equipment earlier.</t>
+      <t>The User Equipment verifies the message, including the token</t>
       <t>The User Equipment handles this message by invoking its captive
          portal handling infrsatructure.</t>
       <t>The captive portal handling infrastructure communicates with the Captive Portal API to gain access to outside the captive network</t>
@@ -425,7 +434,8 @@ EXTERNAL NETWORK
            </t>
            <t>The ICMP packet carries a token that would not be available, even to an
               on-path attacker. Although possible to guess by brute force, the 
-              impact is nuisance due to other precautions.
+              impact is nuisance due to other precautions. We suggest a 32-bit token
+              would be sufficient to deter nuisance attacks.
            </t>
            <t>Even when redirected, the User Equipment securely authenticates with API servers.
            </t>
