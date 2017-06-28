@@ -116,7 +116,9 @@
 
    <abstract>
      <t>This document aims to document concensus on the CAPPORT architecture.
-        DHCP, ICMP, and an HTTP API are used to provide the solution.
+        DHCP or Router Advertisements, ICMP, and an HTTP API are used to
+        provide the solution. The role of Provisioning Domains (PvDs) is
+        described.
      </t>
    </abstract>
  </front>
@@ -124,40 +126,82 @@
  <middle>
    <section title="Introduction">
      <t>
-       Problems with captive portals have been described in
-       <xref target="I-D.nottingham-capport-problem"/>.
+       In this document, "Captive Portal" is used to describe a network to
+       which a device may be voluntarily attached, such that network access is
+       limited until some requirements have been fulfilled.  Typically a user
+       is required to use a web browser to fullfil requirements imposed by the
+       network operator, such as reading advertisements, accepting an
+       acceptable-use policy, or providing some form of credentials.
+     </t>
+     <t>
+       Implementations generally require a web server, some method to
+       allow/block traffic, and some method to alert the user.  Common methods
+       of alerting the user involve modifying HTTP or DNS traffic.
+     </t>
+     <t>
+       Problems with captive portal implementations have been described in
+       <xref target="I-D.nottingham-capport-problem"/>. [If that document
+       cannot be published, consider putting its best parts into an appendix of
+       this document.]
      </t>
      <t>
        This document standardizes an architecture for implementing captive portals
-       that provides tools for addressing most of those problems.
+       that provides tools for addressing most of those problems. We are guided
+       by these principles:
+       <list style="symbols">
+         <t>Solutions should not require the forging of responses from DNS or
+            HTTP servers, or any other protocol.  In particular, avoid any need
+            for intercepting TLS traffic.</t>
+         <t>Solutions should operate at the layer of Internet Protocol (IP) or
+            above, not being specific to any particular access technology such
+            as Cable, WiFi or 3GPP.</t>
+         <t>Solutions should allow a captive-portal alert when any
+            protocol is used. (Versus requiring a user to visit a
+            clear-text HTTP site.)</t>
+         <t>Explicitly identifying the state of captivity to devices (in
+            contrast to modification of DNS or HTTP, which is only indirectly
+            machine-detectable by the client--by comparing with expected
+            response).</t>
+         <t>Provide a path of incremental migration, acknowledging a huge
+            variety of portals and end-user device implementations and software
+            versions.</t>
+         <t>Improve security by providing mechanisms for trust, allowing
+            alerts from trusted network operators to be distinguished from
+            attacks from untrusted agents.</t>
+       </list>
      </t>
      <t>
-       The architecture also attempts to enable IoT devices, in particular
-       devices without user interfaces, to navigate a captive portal.
+       A side-benefit of the architecture described in this document is that
+       IoT devices, in particular devices without user interfaces, are able to
+       identify a state of captivity.  However, a mechanism for such devices to
+       escape captivity is not described.
      </t>
      <t>
        The architecture uses the following mechanisms:
        <list style="symbols">
-         <t>DHCP/DHCP6 providing end-user devices with a URI in the
-            Captive-Portal Router Advertisement option <xref target="RFC7710"/>.
-            This URI is an API that the end-user devices access for
-            information about what is required to escape captivity.
+         <t>Network provisioning protocols providing end-user devices with a
+            URI for the API that end-user devices access for information about
+            what is required to escape captivity. DHCP, DHCPv6, and
+            Router-Advertisement options for this purpose are available in
+            <xref target="RFC7710"/>. Other protocols (such as RADIUS),
+            Provisioning Domains
+            <xref target="I-D.bruneau-intarea-provisioning-domains"/>, or
+            static configuration may also be used.
+            A device may query this API at any time to determine whether the
+            network is holding the device in a captive state.
          </t>
-         <t>Notifying end-user devices of captivity with ICMP/ICMP6 "unreachable" messages.
+         <t>Notifying end-user devices of captivity with ICMP/ICMP6 messages
+            in response to traffic.
             This notification can work with any Internet protocol, not just
             clear-text HTTP. This notification does not carry the portal URI,
-            rather triggers the DHCP-provisioned portal to be accessed.
-            This notification carries a "reason" that allows the devices
-            to receive customized work-flows at the portal.
+            rather triggers the provisioned portal API to be accessed.
          </t>
          <t>
             Receipt of the ICMP/ICMP6 messages inform an end-user device
             that it is captive. This permits the device to take immediate
             action to satisfy the portal (according to its configuration/policy).
             The architecture recommends the device to query the
-            DHCP-provisioned CAPPORT URI with the specified "reason".
-            This API returns a status and a menu for navigating the captive portal.
-            Typically one of the menu items is a web page suitable for browsing.
+            provisioned API.
          </t>
        </list>
      </t>
@@ -173,9 +217,20 @@
        target="RFC2119">RFC 2119</xref>.</t>
      </section>
      <section title="Terminology">
-       <t>Captive Network: A network for which communication outside of it is subject to a captive portal</t>
-       <t>Captive Portal Enforcement: The device which enforces the captive portal in the captive netowrk</t>
-       <t>Captive Portal User Equipment: Also known as User Equipment. A device which wants to communicate outside the captive network</t>
+       <t>Captive Network: A network which limits communication of attached
+          devices to restricted hosts until the user has satisfied
+          Captive Portal Conditions, after which access is permitted to a wider
+          set of hosts (typically the internet).</t>
+       <t>Captive Portal Conditions: site-specific requirements that a user
+          or device must satisfy in order to gain access to the wider network.</t>
+       <t>Captive Portal Enforcement: The network equipment which enforces the
+          traffic restriction and causes the user to visit the portal.</t>
+       <t>Captive Portal User Equipment: Also known as User Equipment. A device
+          which has voluntarily joined a network wants to communicate beyond
+          the constraints of the captive network</t>
+       <t>Captive Portal Server: The web server providing a user interface for
+          assisting the user in satisfying the conditions to excape
+          captivity.</t>
      </section>
 
    </section>
@@ -184,96 +239,158 @@
 
      <section anchor="section_client" title="User Equipment">
       <t>
-       The User Equipment is the device that a user desires to communicate 
-       with a network. The User Equipment communication is typically
+       The User Equipment is the device that a user desires to be attached to
+       a network with full access to all hosts on the network (e.g., to have
+       Internet access). The User Equipment communication is typically
        restricted by the Captive Portal Enforcement, described in <xref target="section_capport_enforcement"/>,
        until site-specific requirements have been met.
       </t>
       <t>
+        At this time we consider only devices with web browsers, with web
+        applications being the means of satisfying Captive Portal Conditions.
+      </t>
+      <t>
       <list style="symbols">
-        <t>May be interactive or non-iteractive</t>
-        <t>May have different mechanisms for notifying the user of the captive portal</t>
-        <t>Needs to recognize the ICMP unreachable message, and to invoke its captive portal
-          handling in response to it.</t>
-        <t>Needs to cache the URI for the captive portal API from the DHCP lease.</t>
-        <t>May cache credentials to automatically respond to captive portal notifications</t>
-        <t>Interactive User Equipment typically ask their users how to proceed through interacting
-          with the captive portal. Interactions may be as simple as accepting a terms of agreement,
-          or as complicated as filling out some forms.</t>
         <t>An example interactive User Equipment is a smart phone.</t>
-        <t>Non interactive User Equipment may be provisioned with credentials
-           out of band (e.g., via USB programming) in order to automatically gain access.</t>
-        <t>An example non interactive User Equipment is an IoT device such as a smart thermostat.</t>
-        <t>May need to distinguish between types of User Equipment here.</t>
+        <t>Supports provisioning of the URI for the Captive Portal API (e.g., by DHCP)</t>
+        <t>May distinguish Captive Portal API access per network interface, in the manner
+           of Provisioning Domain Architecture <xref target="RFC7556"/>.</t>
+        <t>Has a mechanism for notifying the user of the Captive Portal</t>
+        <t>Has a web browser so that the user may navigate the Captive Portal
+           user interface.</t>
+        <t>Is able to receive and validate the Captive Portal ICMP message
+           types, and to access the Captive Portal API in response.</t>
+        <t>May restrict application access to networks not granting full
+           network access. E.g., a device connected to a mobile network may
+           be connecting to a WiFi network; the operating system may
+           avoid updating the default route until network access restrictions
+           have been lifted (excepting access to the Captive Portal server).
+           This has been termed "make before break".</t>
       </list>
       </t>
      </section>
 
-     <section anchor="section_dhcp" title="DHCP Server">
-       <t>
-         A standard for providing a portal URI is described in <xref target="RFC7710"/>.
-         The CAPPORT architecture expects this URI to access the API described
-         in <xref target="section_api"/>.
-       </t>
-       <t>
-         Although it is not clear from RFC7710  what protocol should be executed
-         at the specified URI, it may have been assumed to be an HTML page,
-         and hence there may be User Equipment assuming a browser should open this URI.
-         For backwards compatibility, it might be necessary for the server
-         to check Agent-Id when serving the URI.
-       </t>
+     <section anchor="section_provisioning" title="Provisioning Service">
+       <section anchor="section_dhcp" title="DHCP or Router Advertisements">
+         <t>
+           A standard for providing a portal URI using DHCP or Router
+           Advertisements is described in <xref target="RFC7710"/>.  The
+           CAPPORT architecture expects this URI to access the API described in
+           <xref target="section_api"/>.
+         </t>
+         <t>
+           Although it is not clear from RFC7710  what protocol should be
+           executed at the specified URI, it may have been assumed to be an
+           HTML page, and hence there may be User Equipment assuming a browser
+           should open this URI.  For backwards compatibility, it might be
+           necessary for the server to check Agent-Id when serving the URI.
+         </t>
+       </section>
+       <section anchor="section_pvd" title="Provisioning Domains">
+         <t>
+           Although still a work in progress,
+           <xref target="I-D.bruneau-intarea-provisioning-domains"/>
+           proposes a mechanism for User Equipment to be provided with PvD
+           Bootstrap Information containing the URI for a JSON file containing
+           key-value pairs to be downloaded over HTTPS.
+           This JSON file fills the role of the Captive Portal API.
+         </t>
+         <t>
+           One key-value pair can be used to indicate the network
+           has restricted access, requiring captive portal navigation by a user.
+           E.g., key="captivePortal" and value=&lt;URI of portal&gt;.
+         </t>
+         <t>
+           This mechanism is extensible, allowing new key-value pairs
+           to indicate such things as network access expiry time,
+           URI for API access by IOT devices, etc.
+         </t>
+         <t>
+           If the User Equipment receives (and validates) an ICMP
+           Captive Portal message, it would again retrieve the
+           JSON file and check captive portal information.
+         </t>
+       </section>
      </section>
 
      <section anchor="section_api" title="Captive Portal API Server">
        <t>
-         The User Equipment performs GET at the DHCP-specified URI.
-         The API is implemented at the CAPPORT API Server.
-         The response is a JSON document. The following information
-         should be available in the response document, allowing
-         User Equipment devices to choose the next step:
-         <list style="symbols">
-          <t>Quota information (remaining time/bytes/etc.)</t>
-          <t>Whether the device is allowed through captive portal or blocked.</t>
-          <t>Method of providing credentials to gain access.</t>
-          <t>Describe the required credentials to gain access.</t>
-          <t>URL of a web page for devices with browsers and humans.</t>
-          <t>A token used to verify later ICMP messages are valid.</t>
-         </list>
+         The purpose of a Captive Portal API is to permit a query of Captive
+         Portal state without interrupting the user.  This API thereby removes
+         the need for a device to perform clear-text HTTP queries to check for
+         response tampering.
+       </t>
+       <t>
+         This URI will have been provisioned to the User Equipment. (Refer to
+         <xref target="section_provisioning"/>).
+       </t>
+       <t>
+         The API would be queried when user equipment attaches to the network
+         and any time thereafter.
+       </t>
+       <t>
+         At minimum the API provides: (1) the state of captivity and (2) a URI
+         for a browser to present to the user.
+       </t>
+       <t>
+         When user equipment receives (and validates) ICMP Captive Portal
+         alerts, the user equipment should query the API to check the state.
+         The User Equipment should rate-limit these API queries in the event of
+         ICMP flooding by an attacker. (See <xref target="Security"/>.)
+       </t>
+       <t>
+         The API should be extensible to support future use-cases by allowing
+         extensible information elements. Suggestions include quota information,
+         expiry time, method of providing credentials, security token for
+         validating ICMP messages.
+       </t>
+       <t>
+         This document does not specify the details of the API.
        </t>
         <t>
-          The CAPPORT API is intended to provide information and a menu of choices
-          to support options for interactive or non-interactive User Equipment.
-        </t>
-        <t>
           The CAPPORT API should support TLS for privacy.
-          [Does this API need to be secure, or do we place security at the
-          interfaces it points to?]
+          [Does this API need to be authenticated?]
         </t>
      </section>
+
      <section anchor="section_capport_enforcement" title="Captive Portal Enforcement">
       <t>
         The Captive Portal Enforcement component restricts network access to 
         User Equipment according to site-specific policy. Typically User Equipment
-        is denied network access until it has performed some action.
+        is permitted access to a small number of services and
+        is denied general network access until it has performed some action.
       </t>
       <t>
        The Captive Portal Enforcement component:
        <list style="symbols">
         <t>Allows traffic through for allowed User Equipment.</t>
-        <t>Blocks traffic and sends ICMP notifications for disallowed User Equipment.</t>
+        <t>Blocks (discards) traffic and sends ICMP notifications for disallowed User Equipment.</t>
         <t>Permits disallowed User Equipment to access necessary APIs and web pages to
            fulfill requirements of exiting captivity.</t>
-        <t>May modify responses to canary URLs, or perform other methods of notification.</t>
-        <t>Updates policy per User Equipment in response to operations from the Captive Portal API.</t>
+        <t>Updates captive state per User Equipment in response to operations
+           from the Captive Portal API.</t>
        </list>
+      </t>
+      <t>
+        As an upgrade path, captive portals may continue to support methods
+        that work today, such as modification of port-80 HTTP responses to
+        redirect users to the portal.  Various user-equipment vendors probe
+        canary URLs to identify the state captivity [reference Mariko
+        Kobayashi's survey]. While doing so, ICMP messages should also be sent,
+        to activate work-flows in supporting devices.
       </t>
      </section>
      <section anchor="section_icmp" title="ICMP/ICMP6">
        <t>
+         ICMP messages have been selected for indicating to a sender that
+         packets could not be delivered for reason of a network policy (in
+         particular, captive portal). ICMP is already used to indicate reasons
+         that packets could not be delivered (network unreachable, port
+         unreachable, packet too large, etc.).
+       </t>
+       <t>
          A mechanism to trigger captive portal work-flows in the User Equipment
-         is proposed earlier in <xref target="I-D.wkumari-capport-icmp-unreach"/>.
-         Additionally, the Unreachable message carries a token to prove
-         it is a valid notification.
+         is proposed in <xref target="I-D.wkumari-capport-icmp-unreach"/>.
        </t>
        <t>
          The Captive Portal Enforcement function is required to send such
@@ -285,13 +402,7 @@
          are only sent to the User Equipment.
        </t>
        <t>
-         The User Equipment MUST verify that the token matches the token
-         received earlier via the CAPPORT API. If tokens do not match,
-         the ICMP message MUST be discarded with no further impact.
-         (It MAY be counted.)
-       </t>
-       <t>
-         The User Equipment does not necessarily deliver the impact of the ICMP message
+         The User Equipment operating system does not necessarily deliver the impact of the ICMP message
          to the application that triggered it. The User Equipment may be
          able to satisfy the Captive Portal requirements quickly enough
          that existing transport connections are not impacted.
@@ -304,59 +415,75 @@
             The following diagram shows the communication between each component.
            </preamble>
            <artwork><![CDATA[
-o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
-. CAPTIVE NETWORK                                                       .
-.                                              +---------------+        .
-.  +-------------+   CAPPORT API URI           |  DHCP Server  |        .
-.  |             | <-------------------------+ +---------------+        .
-.  |    User     |                                                      .
-.  |  Equipment  |   Request Access/Information +--------------------+  .
-.  |             | +--------------------------> | CAPPORT API Server |  .
-.  +-------------+                              +--------------------+  .
-.         ^  |  Connection Attempt                       |              .
-.         |  +-------------------> +---------------+  Allow/Deny Access . 
-.         |                        |               |     |              . 
-.         |   ICMP Unreachable     | Captive Portal|     |              .
-.         +----------------------+ | Enforcement   | <---+              .
-.                                  +---------------+                    .
-.                                         |                             .
-.                              To/from external network                 .
-.                                         |                             .
-.                                         |                             .
-o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
-EXTERNAL NETWORK
+o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
+. CAPTIVE NETWORK                                                     .
+.                                              +---------------+      .
+.  +-------------+   Provision API URI         |  DHCP Server  |      .
+.  |             | <-------------------------+ +---------------+      .
+.  |    User     |                                                    .
+.  |  Equipment  |   Query CAPPORT status;     +--------------------+ .
+.  |             |   Experience user interface | CAPPORT API Server | .
+.  |             | +-------------------------> |                    | .
+.  +-------------+                             +--------------------+ .
+.         ^  |  Connection Attempt                       |            .
+.         |  |  to prohibited service.                   |            .
+.         |  +------------------> +---------------+  Allow/Deny Rules . 
+.         |                       |               |     |             . 
+.         |   ICMP Unreachable    | Captive Portal|     |             .
+.         +---------------------+ | Enforcement   | <---+             .
+.                                 +---------------+                   .
+.                                         |                           .
+.                              To/from external network               .
+.                                         |                           .
+.                                         |                           .
+o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
+                                    EXTERNAL NETWORK
 
         Figure 1: Captive Portal Architecture Component Diagram
            ]]></artwork>
        </figure>
         In the diagram:
              <list style="symbols">
-              <t>The User Equipment communicates with the DHCP Server to get access to the captive network, and learn about the CAPPORT API URI.</t>
-              <t>The User Equipment attempts to communicate through the captive portal enforcement device.</t>
-              <t>The Captive Portal Enforcement device either lets the User Equipment's traffic through, or responds with an ICMP Unreachable</t>
-              <t>The User Equipment requests access to outside the captive network, or requests more information, from the CAPPORT API server</t>
-              <t> The CAPPORT API server directs the Captive Portal Enforcement device to either allow or deny access in response to requests
-                  from the User Equipment or quota/timing restrictions.
-              </t>
+              <t>During DHCP provisioning, the User Equipment acquires
+                 the URI for the CAPPORT API.</t>
+              <t>The User Equipment attempts to communicate to the external
+                 network through the Captive Portal enforcement device.</t>
+              <t>The Captive Portal Enforcement device either allows the User
+                 Equipment's packets to the external network, or responds with
+                 an ICMP message.</t>
+              <t>The User Equipment queries the API to learn of its state of
+                 captivity. The User Equipment presents the portal user
+                 interface to the user.</t>
+              <t>The CAPPORT API server directs the Captive Portal Enforcement
+                 device to either allow or deny external network acess for the
+                 User Equipment.</t>
              </list>
     </t>
     </section>
    </section>
 
    <section anchor="section_workflow" title="Solution Workflow">
-    <t> This section describes the general workflow of solutions adhering to the architecture. </t>
+    <t>
+      This section aims to improve understanding by describing the general
+      workflow of solutions adhering to the architecture.
+    </t>
     <section title="Initial Connection">
+    <t>
+      This section describes the work-flow when User Equipment initially joins
+      a Captive Network.
+    </t>
     <t> 
     <list style="numbers">
-      <t>The User Equipment joins the captive network by acquiring a DHCP lease</t>
-      <t>The User Equipment learns the URI for the Captive Portal API from the DHCP response
-         (<xref target="RFC7710"/>).</t>
+      <t>The User Equipment joins the Captive Network by acquiring a DHCP
+         lease, RA, or similar, acquiring provisioning information.</t>
+      <t>The User Equipment learns the URI for the Captive Portal API from the
+         provisioning information (e.g., <xref target="RFC7710"/>).</t>
       <t>The User Equipment accesses the CAPPORT API to receive parameters
-         of the Captive Network, including the token.</t>
-      <t>The User Equipment communicates with the CAPPORT API to gain
-         access to the outside network.</t>
+         of the Captive Network, including web-portal URI.</t>
+      <t>If necessary, the User navigates the web portal to gain access to the
+         external network.</t>
       <t>The Captive Portal API server indicates to the Captive Portal Enforcement
-         device that the User Equipment is allowed through</t>
+         device that the User Equipment is allowed to access the external network.</t>
       <t>The User Equipment attempts a connection outside the captive network</t>
       <t>If the requirements have been satisfied, the access is permitted;
          otherwise the "Expired" behavior occurs</t>
@@ -364,47 +491,44 @@ EXTERNAL NETWORK
     </list>
     </t>
     </section>
-    <section title="Connection About to Expire">
+    <section title="Conditions Expire">
+    <t>This section describes the work-flow when conditions expire and the user
+       must visit the portal again (e.g., low quota, or time expiry).</t>
     <t>
      <list style="numbers">
+      <t>Pre-condition: the Captive Portal Enforcement has been configured to
+         detect an expiry condition, which has now occurred.</t>
       <t>The User Equipment sends a packet to the outside network.</t>
-      <t>The Captive Portal Enforcement detects that the User Equipment's access is about to expire (low quota/time/etc)</t>
-      <t>The Captive Portal Enforcement sends an ICMP unreachable to
+      <t>The Captive Portal Enforcement detects that the packet is from an
+         expired User Equipment.</t>
+      <t>The Captive Portal Enforcement sends an ICMP message to
          the User Equipment indicating that it needs to refresh its access.
-         <xref target="I-D.wkumari-capport-icmp-unreach"/>.
-         The message contains the token given to the User Equipment earlier.</t>
-      <t>The User Equipment verifies the message, including the token</t>
-      <t>The User Equipment handles this message by invoking its captive
-         portal handling infrsatructure.</t>
-      <t>The captive portal handling infrastructure communicates with the Captive Portal API to gain access to outside the captive network</t>
+         <xref target="I-D.wkumari-capport-icmp-unreach"/>.</t>
+      <t>The User Equipment verifies the ICMP message is plausible.</t>
+      <t>The User Equipment queries the Captive Portal API to refresh
+         parameters and status of the Captive Network.</t>
+      <t>If necessary, the User once again navigates the web portal to gain
+         access to the external network.</t>
       <t>The Captive Portal API Server gives more quota (time, bytes, etc.) to
          the User Equipment by indicating to the Captive Portal Enforcement the new, extended quota.</t>
-      <t>The User Equipment continues unaffected.</t>
+      <t>The User Equipment accesses the external network.</t>
      </list>
-    </t>
-    </section>
-    <section title="Connection expired">
-    <t>
-     <list style="numbers">
-      <t>The User Equipment sends a packet to the outside network.</t>
-      <t>The Captive Portal Enforcement device detects that the User Equipment's access has expired.</t>
-      <t>The remaining workflow is that same as for the initial connection.</t>
-     </list>
-     User Equipment may attempt to maintain transport connections, leaving
-     it to the application to determine timeouts.
-    </t>
-    <t>
-     User Equipment may preemptively invoke its captive portal handling infrastructure when receiving the DHCP response indicating that it is behind a captive portal,
-     rather than waiting for the ICMP unreachable message.
     </t>
     </section>
    </section>
-<!--
+
    <section anchor="Acknowledgements" title="Acknowledgements">
-     <t>The authors thank ...
-        for their review and suggestions.</t>
+     <t>The authors thank various individuals for their feedback on
+        the mailing list and during the IETF98 hackathon: 
+        David Bird,
+        Eric Kline,
+        Alexis La Goulette,
+        Alex Roscoe,
+        Darshak Thakore,
+        and Vincent van Dam.
+     </t>
    </section>
--->
+
 
    <!-- Possibly a 'Contributors' section ... -->
 
@@ -415,13 +539,33 @@ EXTERNAL NETWORK
 
    <section anchor="Security" title="Security Considerations">
      <!--All drafts are required to have a security considerations section.  See RFC3552 -->
+     <section title="Trusting the Network">
+       <t>
+         When joining a network, some trust is placed in the network operator.
+         This is usually considered to be a decision by a user on the basis of
+         the reputation of an organization. However, once a user makes such a
+         decision, protocols can support authenticating a network is operated
+         by who claims to be operating it.  The Provisioning Domain
+         Architecture <xref target="RFC7556"/> provides some discussion on
+         authenticating an operator.
+       </t>
+       <t>
+         Given that a user is to visit a Captive Portal URI, the URI location
+         should be securly provided to the user's device. E.g., the DHCPv6 AUTH
+         option can sign this information.
+       </t>
+       <t>
+         If a user decides to incorrectly trust an attacking network, they may
+         be convinced to visit an attacking web page and unwittingly provide
+         credentials to an attacker. Browsers can authenticate servers but
+         cannot detect cleverly misspelled domains, for example.
+       </t>
+     </section>
      <section title="Authenticated APIs">
        <t>
          The solution described here assumes that when the User Equipment needs to
-         trust the API server, server authentication will be utilized.
-       </t>
-       <t>
-         TODO: this document has not specified the authentication mechanism.
+         trust the API server, server authentication will be utilized using TLS
+         mechanisms.
        </t>
      </section>
      <section title="Risk of Nuisance Captive Portal">
@@ -431,12 +575,31 @@ EXTERNAL NETWORK
          considered and addressed in the following ways:
          <list>
            <t>The ICMP packet does not carry the URL, making this method safer
-              than 307-redirect methods currently in use.
+              than HTTP 3xx-redirect methods currently in use.
+              The user-device does not have to use clear-text HTTP to solicit
+              the URL of the portal.
            </t>
-           <t>The ICMP packet carries a token that would not be available, even to an
-              on-path attacker. Although possible to guess by brute force, the 
-              impact is nuisance due to other precautions. We suggest a 32-bit token
-              would be sufficient to deter nuisance attacks.
+           <t>Because the ICMP messages will carry embedded packets sent by the
+              sender, the receiver of the ICMP message can validate that the
+              transport header is plausbly one it sent (i.e., the
+              transport-layer 5-tuple matches an open connection; there is no
+              need to save every packet it sent).
+              This validation requires an off-path attacker to guess the
+              5-tuple in order to affect a flow.
+              It is trivial for an on-path attacker to send a plausble ICMP
+              packet.  (This is not a new ICMP attack.)
+              The impact of getting a valid ICMP packet to the User Equipment
+              is that it will visit the CAPPORT API to check the status.
+              For this reason we recommend the User Equipment rate-limit these
+              requests.
+           </t>
+           <t>We considered that the ICMP packet could carry a short secret
+              token that would be known to the User Equipment and Captive
+              Portal Enforcement device but would not be available to an
+              attacker, even to an on-path attacker.
+              Although possible to guess by brute force, the impact would be at
+              worst a nuisance visit to the API.  We suggest that a 32-bit
+              token would be sufficient to deter nuisance attacks.
            </t>
            <t>Even when redirected, the User Equipment securely authenticates with API servers.
            </t>
@@ -445,10 +608,16 @@ EXTERNAL NETWORK
      </section>
      <section title="User Options">
        <t>
-         The ICMP messaging informs the end-user device it is being held captive.
-         There is no requirement that the device do something about this.
-         Devices may permit users to disable automatic reaction to captive-portal indications.
-         Hence, end-user devices may allow users to manually control captive portal interactions.
+         The ICMP messaging informs the User Equipment that it is being held
+         captive.  There is no requirement that the User Equipment do something
+         about this.
+         Devices may permit users to disable automatic reaction to
+         captive-portal indications for privacy reasons.
+         However, there is the trade-off that the user doesn't get notified
+         when network access is restricted.
+         Hence, end-user devices may allow users to manually control captive
+         portal interactions, possibly on the granularity of Provisioning
+         Domains.
        </t>
      </section>
    </section>
@@ -474,11 +643,13 @@ EXTERNAL NETWORK
      <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
      &RFC2119;
      <?rfc include="reference.RFC.7710.xml"?>
+     <?rfc include="reference.RFC.7556.xml"?>
 
    </references>
    <references title="Informative References">
      <?rfc include="reference.I-D.wkumari-capport-icmp-unreach.xml"?>
      <?rfc include="reference.I-D.nottingham-capport-problem.xml"?>
+     <?rfc include="reference.I-D.bruneau-intarea-provisioning-domains.xml"?>
    </references>
 
 <!--
