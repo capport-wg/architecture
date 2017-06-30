@@ -286,7 +286,7 @@
            executed at the specified URI, some readers might have assumed it to
            be an HTML page, and hence there might be User Equipment assuming a
            browser should open this URI.  For backwards compatibility, it is
-           RECOMMENDED that the server to check Agent-Id when serving the URI.
+           RECOMMENDED that the server check Agent-Id when serving the URI.
          </t>
        </section>
        <section anchor="section_pvd" title="Provisioning Domains">
