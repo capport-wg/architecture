@@ -1,5 +1,6 @@
 <html>
 <head>
+<meta charset="utf-8">
 <style>
 .page {
    page-break-after: always;
@@ -60,39 +61,17 @@ Document version <span class="mono">-01</span> includes feedback from last meeti
     <li>No man-in-middle of DNS, HTTP, etc.</li>
     <li>Use Internet Protocol (vs. access-specific)</li>
     <li>Notify on any protocol, not just port-80 HTTP</li>
-    <li>Machine-readable notifications, not (only) human eyeballs on web page</li>
+    <li>Explicit captivity: machine detectable</li>
     <li>Backwards compabibility, incremental deployment</li>
     <li>Facilitate trust mechanisms</li>
 </ul>
 </div>
 
 <div class="page">
-<h1>Problem Statement?</h1>
-<ul>
-    <li>We reference draft-nottingham-capport-problem-01 , which expired</li>
-    <li>Does WG want to adopt the problem statement, or include some of that text here?</li>
-    <li>The architecture document does not address all of the problems...</li>
-</ul>
-</div>
-
-<div class="page">
-<h1>Protocols in capport-architecture</h1>
-<ul>
-    <li>Notification (ICMP): replacement for HTTP or DNS modification</li>
-    <li>API: because we don't want the URI in the notification</li>
-    <li>Provisioning: to learn of the API</li>
-    <li>Web interface: to fulfil requirements of portal</li>
-</ul>
-</div>
-
-<div class="page">
-<h1>Components in capport-architecture</h1>
-<ul>
-    <li>Enforcement: Blocking access to wider network, sending ICMP</li>
-    <li>API Server: Providing Information</li>
-    <li>DHCP server, or gateway: Boot-strapping network and URI to API</li>
-    <li>Web server: User interface to navigate portal</li>
-</ul>
+<h1>Components and Protocols</h1>
+<span style="text-align: center;">
+<img src="CAPPORT_Architecture.svg" style="height: 16cm;">
+</span>
 </div>
 
 <div class="page">
@@ -111,7 +90,7 @@ Document version <span class="mono">-01</span> includes feedback from last meeti
 <h1>API</h1>
 <ul>
     <li>Expected to be an idempotent RESTful API</li>
-    <li>Basic:</li>
+    <li>Basic: Read-only</li>
     <ul>
       <li>Indicates captivity</li>
       <li>Indicates web interface URL</li>
@@ -121,8 +100,8 @@ Document version <span class="mono">-01</span> includes feedback from last meeti
       <li>Remaining bytes/time quota</li>
       <li>Financial Transacting??</li>
     </ul>
-    <li>Tangible improvement over MITM HTTP modification</li>
-    <li>Note: PvD may fill the API role</li>
+    <li>Tangible improvement over man-in-the-middle HTTP modification</li>
+    <li>Note: PvD may be a more general approach to getting the info.</li>
 </ul>
 </div>
 
@@ -135,24 +114,31 @@ Document version <span class="mono">-01</span> includes feedback from last meeti
     <ul>
         <li>But PvD draft was updated a day later to exclude CAPPORT...</li>
     </ul>
-    <li>PvD mechanism for PvD authentication is interesting</li>
+    <li>PvD mechanism for authentication is interesting</li>
     <ul>
-        <li>Trusting the portal pages</li>
+        <li>Avoid masquerading hot-spots?</li>
     </ul>
     <li>To discuss</li>
     <ul>
-      <li>Tommy Pauly is concerned it is too special-case for PvD</li>
-      <li>David Bird is concerned that probing is necessary anyhow</li>
+      <li>Is it is too special-case for PvD?</li>
+      <li>Is probing necessary anyhow?</li>
+      <li>Redundant with RFC 7710?</li>
     </ul>
 </ul>
 </div>
 
 <div class="page">
 <h1>Questions</h1>
-  <li>PvD vs. DHCP: which wins in a conflict? (Or is this
-      draft-bruneau-provisioning-domains vs. RFC 7710?)</li>
-  <li>Depth of API ?</li>
-  <li>Trust API or just try traffic? In the tussle, will devices always probe?</li>
+<p>Can we agree on anything? What advances the state of the art?</p>
+<p>If the WG adopts this document, what belongs in it?</p>
+<ul>
+    <li>Is CAPPORT ICMP useful?</li>
+    <li>Should there be an API? Read-only?</li>
+    <li>Provisioning requirements?</li>
+    <li>Discussion about trust &amp; authentication?</li>
+    <li>Keep web interface out of scope?</li>
+    <li>Keep IoT out of scope?</li>
+</ul>
 </div>
 
 
@@ -169,6 +155,15 @@ Document version <span class="mono">-01</span> includes feedback from last meeti
     <ul>
         <li>Safe to enter name and room number</li>
     </ul>
+</ul>
+</div>
+
+<div class="page">
+<h1>Problem Statement?</h1>
+<ul>
+    <li>We reference draft-nottingham-capport-problem-01 , which expired</li>
+    <li>Does WG want to adopt the problem statement, or include some of that text here?</li>
+    <li>The architecture document does not address all of the problems...</li>
 </ul>
 </div>
 
