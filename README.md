@@ -7,7 +7,7 @@ The XML format follows https://xml2rfc.tools.ietf.org/public/rfc/html/rfc2629.ht
 
 Test your XML here: https://xml2rfc.tools.ietf.org/
 
-This document is available from IETF: https://datatracker.ietf.org/doc/draft-larose-capport-architecture/
+This document is available from IETF: https://datatracker.ietf.org/doc/draft-ietf-capport-architecture/
 
 
 
