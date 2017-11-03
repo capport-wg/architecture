@@ -33,7 +33,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="info" docName="draft-ietf-capport-architecture-00" ipr="trust200902">
+<rfc category="info" docName="draft-ietf-capport-architecture-01" ipr="trust200902">
  <!-- category values: std, bcp, info, exp, and historic
     ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
        or pre5378Trust200902
@@ -159,6 +159,8 @@
             captive network when attempting to use any application on the
             network.  (Versus requiring a user to visit a clear-text HTTP
             site in order to receive a notification.)</t>
+         <t>Solutions SHOULD allow a device to learn that it is in a captive
+            network before any application attempts to use the network.</t>
          <t>The state of captivity SHOULD be explicitly available to devices
             (in contrast to modification of DNS or HTTP, which is only
             indirectly machine-detectable by the client--by comparing
@@ -174,8 +176,8 @@
      <t>
        A side-benefit of the architecture described in this document is that
        devices without user interfaces are able to identify parameters of
-       captivity.  (However, this document does not yet describe a mechanism
-       for such devices to escape captivity.)
+       captivity.  However, this document does not yet describe a mechanism
+       for such devices to escape captivity.
      </t>
      <t>
        The architecture uses the following mechanisms:
@@ -186,7 +188,7 @@
             Router-Advertisement options for this purpose are available in
             <xref target="RFC7710"/>. Other protocols (such as RADIUS),
             Provisioning Domains
-            <xref target="I-D.bruneau-intarea-provisioning-domains"/>, or
+            <xref target="I-D.ietf-intarea-provisioning-domains"/>, or
             static configuration may also be used.
             A device MAY query this API at any time to determine whether the
             network is holding the device in a captive state.
@@ -256,7 +258,7 @@
       <list style="symbols">
         <t>An example interactive User Equipment is a smart phone.</t>
         <t>SHOULD support provisioning of the URI for the Captive Portal API (e.g., by DHCP)</t>
-        <t>MAY distinguish Captive Portal API access per network interface, in the manner
+        <t>SHOULD distinguish Captive Portal API access per network interface, in the manner
            of Provisioning Domain Architecture <xref target="RFC7556"/>.</t>
         <t>SHOULD have a mechanism for notifying the user of the Captive Portal</t>
         <t>SHOULD have a web browser so that the user may navigate the Captive Portal
@@ -306,12 +308,17 @@
        <section anchor="section_pvd" title="Provisioning Domains">
          <t>
            Although still a work in progress,
-           <xref target="I-D.bruneau-intarea-provisioning-domains"/>
+           <xref target="I-D.ietf-intarea-provisioning-domains"/>
            proposes a mechanism for User Equipment to be provided with PvD
            Bootstrap Information containing the URI for a JSON file containing
            key-value pairs to be downloaded over HTTPS.
            This JSON file would fill the role of the Captive Portal API
            described in <xref target="section_api"/>.
+         </t>
+         <t>
+           The PvD security model provides secure binding between the
+           information provided by the trusted Router Advertisement and the
+           HTTPS server.
          </t>
          <t>
            One key-value pair can be used to indicate the network
@@ -375,7 +382,7 @@
          This document does not specify the details of the API.
        </t>
         <t>
-          The CAPPORT API SHOULD support TLS for privacy and server authentication.
+          The CAPPORT API MUST support TLS for privacy and server authentication.
         </t>
      </section>
 
@@ -689,7 +696,7 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
    <references title="Informative References">
      <?rfc include="reference.I-D.wkumari-capport-icmp-unreach.xml"?>
      <?rfc include="reference.I-D.nottingham-capport-problem.xml"?>
-     <?rfc include="reference.I-D.bruneau-intarea-provisioning-domains.xml"?>
+     <?rfc include="reference.I-D.ietf-intarea-provisioning-domains.xml"?>
    </references>
 
 <!--
