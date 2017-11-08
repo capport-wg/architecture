@@ -1,0 +1,87 @@
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+.page {
+   page-break-after: always;
+   border-top-style: solid;
+ }
+.mono {
+   font-family: monospace;
+}
+#titlePage {
+   text-align: center;
+}
+h1 {
+    font-size: 30pt;
+}
+h2 {
+    font-size: 26pt;
+}
+h3 {
+    font-size: 20pt;
+}
+ul,div {
+    font-size: 24pt;
+}
+li {
+    padding-bottom: 12pt;
+}
+pre {
+    font-size: 16pt;
+}
+</style>
+</head>
+<body>
+<div class="page" id="titlePage" style="padding-top:5%">
+<h1>CAPPORT Architecture</h1>
+<h1>draft-ietf-capport-architecture-00</h1>
+<h3>Authors: K. Larose, D. Dolson</h3>
+<h2>Architecture Updates and Discussion on Working Group Direction</h2>
+<h3>Presenter: ?</h3>
+</div>
+
+<div class="page">
+<h1>Updates</h1>
+<ul>
+    <li>Adopted draft version <span class="mono">-00</span> has been uploaded</li>
+    <li>Some feedback has been incorporated on github
+        <span class="mono">
+        https://github.com/capport-wg/architecture
+        </span></li>
+    <li>On github some minor changes, as discussed on mailing list.</li>
+</ul>
+</div>
+
+<div class="page">
+<h1>Issue: Provisioning Domains vs. RFC 7710</h1>
+Do we let PvD serve the role previously described by RFC 7710?
+</div>
+
+<div class="page">
+<h1>Issue: RFC 7710</h1>
+RFC 7710 is incompletely specified. Depending on adoption of PvD, either:
+<ul>
+    <li>update RFC 7710, or</li>
+    <li>deprecate RFC 7710.</li>
+</ul>
+</div>
+
+<div class="page">
+<h1>Issue: Indicate No Captive Portal</h1>
+<ul>
+    <li>Would be nice to optimize network attachment if there is no captive portal.</li>
+    <li>RFC 7710 did not provide such a method.</li>
+</ul>
+</div>
+
+<div class="page">
+<h1>Issue: Portion of packet used for Enforcement?</h1>
+<ul>
+    <li>MAC address?</li>
+    <li>IPv4/6 address?</li>
+</ul>
+</div>
+
+</body>
+</html>
