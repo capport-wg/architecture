@@ -70,24 +70,14 @@
     </author>
 
     <author fullname="David Dolson" initials="D." surname="Dolson">
-      <organization>Sandvine</organization>
       <address>
-        <postal>
-          <street>408 Albert Street</street>
-          <!-- Reorder these if your country does things differently -->
-          <city>Waterloo</city>
-          <region>ON</region>
-          <code>N2L 3V3</code>
-          <country>Canada</country>
-        </postal>
-        <phone>+1 519 880 2400</phone>
-        <email>ddolson@sandvine.com</email>
+        <email>ddolson@acm.org</email>
         <!-- uri and facsimile elements may also be added -->
       </address>
     </author>
 
 
-    <date year="2017" />
+    <date year="2018" />
 
    <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
         in the current day for you. If only the current year is specified, xml2rfc will fill 
