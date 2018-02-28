@@ -372,7 +372,7 @@
          This document does not specify the details of the API.
        </t>
         <t>
-          The CAPPORT API MUST support TLS for privacy and server authentication.
+         The CAPPORT API MUST use TLS for privacy and server authentication.
         </t>
      </section>
 
@@ -601,8 +601,16 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
      <section title="Authenticated APIs">
        <t>
          The solution described here assumes that when the User Equipment needs to
-         trust the API server, server authentication will be utilized using TLS
+         trust the API server, server authentication will be performed using TLS
          mechanisms.
+       </t>
+     </section>
+     <section title="Secure APIs">
+       <t>
+           The solution described here requires that the API be secured using TLS.
+           This requirement follows from the fact that the user equipment may provide
+           secrets to the API. The API must ensure the integrity of this information,
+           as well as its confidentiality.
        </t>
      </section>
      <section title="Risk of Nuisance Captive Portal">
