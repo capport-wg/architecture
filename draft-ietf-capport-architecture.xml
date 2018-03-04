@@ -496,6 +496,189 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
     </section>
    </section>
 
+   <section anchor="ue_identity" title="User Equipment Identity">
+       <t>
+           Multiple components in the architecture interact with both the User
+           Equipment and each other. Since the User Equipment is the focus of
+           these interactions, the components must be able to both identify the
+           user equipment from their interactions with it, and be able to agree
+           on the identify of the user equipment when interacting with each
+           other.
+       </t>
+       <t>
+           The methods by which the components interact restrict the type of
+           information that may be used as an identifying charactertics. This
+           section discusses the identifying charactersitics.
+       </t>
+       <section anchor="id_identifiers" title="Identifiers">
+           <t>
+               An Identifier is an identifying chatacteristics of the User
+               Equipment used by the components of a Captive Portal to
+               uniquely determine which specific User Equipment is interacting
+               with them. An Identifier MAY be a field contained in packets
+               sent by the User Equipment to the External Network. Or, an
+               Identifier MAY be an ephemeral property not contained in packets
+               destined for the External Network, but instead correlated with
+               such information through knowledge available to the different
+               components.
+           </t>
+       </section>
+       <section anchor="id_recommended_props" title="Recommended Properties">
+        <t>
+           The set of possible identifiers is quite large. However, in order
+           to be considered a good identifer, an identifier SHOULD meet the
+           following criteria. Note that the optimal identifier will likely
+           change depending on the positino of the components in the network
+           as well as the information available to them.
+
+           An identifier SHOULD:
+           <list style="symbols">
+               <t>Uniquely Identify the User Equipment</t>
+               <t>Be Hard to Spoof</t>
+               <t>Be Visible to the API</t>
+               <t>Be Visible to the Enforcement Device</t>
+           </list>
+        </t>
+        <section anchor="id_recommended_unique" title="Uniquely Identify User Equipment">
+            <t>
+                In order to uniquely identify the User Equipment, at most one user equipment
+                interacting with the other components of the Captive Portal MUST have a given
+                value of the identifier.
+            </t>
+            <t>
+                Over time, the user equipment identified by the value MAY change. Allowing the
+                identified device to change over time ensures that the space of possible
+                identifying vallues need not be overly large.
+            </t>
+            <t>
+                Independent Captive Portals MAY use the same identifying value to identify
+                different User Equipment. Allowing indendent captive portals to reuse
+                identifying values allows the identifier to be a property of the local
+                network, expanding the space of possible identifiers.
+            </t>
+        </section>
+        <section anchor="id_recommended_hard" title="Hard to Spoof">
+            <t>
+                A good identifier does not lend itself to being easily spoofed. At no time
+                should it be simple or straightforward for one User Equipment to
+                pretend to be another User Equipment, regardless of whether both are active
+                at the same time. This property is particularly important when the user
+                equipment is extended externally to devices such as billing systems, or where
+                the identity of the User Equipment could imply liability.
+            </t>
+        </section>
+        <section anchor="id_recommended_visible_api" title="Visible to the API">
+            <t>
+                Since the API will need to perform operations which rely on the identify
+                of the user equipment, such as query whether it is captive, the API
+                needs to be able to relate requests to the User Equipment making the
+                request.
+            </t>
+        </section>
+        <section anchor="id_recommended_visible_ed" title="Visible to the Enforcement Device">
+            <t>
+                The Enforcement Device will decide on a per packet basis whether it
+                should be permitted to communicate with the external network. Since
+                this decision depends on which User Equipment sent the packet, the
+                Enforcement Device requires that it be able to map the packet to its
+                concept of the User Equipment.
+            </t>
+        </section>
+       </section>
+       <section anchor="id_evaluating" title="Evaluating an Identifier">
+           <t>
+               To evaluate whether an identifer is appropriate, one should consider
+               every recommended property from the perspective of interactions among 
+               the components in the architecture. When comparing identifiers, choose
+               the one which best satifies all of the recommended properties. The
+               architecture does not provide an exact measure of how well an identifier
+               satisfies a given property; care should be taken in performing the
+               evaluation.
+           </t>
+       </section>
+       <section anchor="id_examples" title="Examples of an Identifier">
+           <t>
+               This section provides some examples of identifiers, along with some
+               evaluation of whether they are good identifiers. The list of identifiers
+               is not exhaustive. Other identifiers may be used. An important point to note
+               is that whether the identifiers are good depends heavily on the capabilities
+               of the components and where in the network the components exist.
+           </t>
+           <section anchor="id_example_interface" title="Physical Interface">
+            <t>
+               The physical interface by which the User Equipment is attached to the
+               network can be used to identify the User Equipment. This identifier has
+               the property of being extremely difficult to spoof: the User Equipment is
+               unaware of the property; one User Equipment cannot manipulate its
+               interactions to appear as though it is another.
+           </t>
+
+            <t>
+               Further, if only a single User Equipment is attatched to a given physical
+               interface, then the identifier will be unique. If multiple User Equipment
+               is attached to the network on the same physical interface, then this property
+               is not appropriate.
+           </t>
+
+            <t>
+               Another consideration related to uniqueness of the User Equipment is that
+               if the attached User Equipment changes, both the API server and the
+               Enforcement Device must invalidate their state related to the User Equipment.
+           </t>
+
+            <t>
+
+               The Enforcement Device needs to be aware of the physical interface,
+               which constrains the environment: it must either be part of the device providing
+               physical access (e.g.. implemented in firmware), or packets traversing the network
+               must be extended to include information about the source physical interface (e.g.
+               a tunnel).
+           </t>
+
+            <t>
+               The API server faces a similar problem, implying that it should co-exist with the
+               Enforcement Device, or that the enforcement device should extend requests to it
+               with the identifying information.
+            </t>
+           </section>
+           <section anchor="id_example_IP_address" title="IP Address">
+            <t>
+                A natural identifier to consider is the IP address of the User Equipment.
+                At any given time, no device on the network can have the same IP address
+                without causing the network to malfunction, so it is appropriate from the
+                perpsective of uniqueness.
+            </t>
+
+            <t>
+                However, it may be possible to spoof the IP address, particularly for
+                malicious reasons where proper funtioning of the network is not necessary
+                for the malicious actor. Consequently, any solution using the IP address
+                should proactively try to prevent spoofing of the IP address. Similarily,
+                if the mapping of IP address to User Equipment is changed, the components
+                of the architecture must remove or update their mapping to prevent spoofing.
+            </t>
+
+            <t>
+                Since the IP address may traverse multiple segments of the network, more
+                flexibility is afforded to the Enforcement Device and the API server: they
+                simply must exist on a segment of the network where the IP address is still
+                unique. However, consider that a NAT may be deployed between the User Equipment
+                and the Enforcement Device. In such cases, it is possible for the components
+                to still uniquely identify the device if they are aware of the port mapping.
+            </t>
+
+            <t>
+                In some situtations, the User Equipment may have multiple IP addresses, while
+                still satisfying all of the recommended properties. This raises some challenges
+                to the components of the network. For example, if the user equipment tries
+                to access the network with multiple IP addresses, should the enforcement device
+                and API server treat each IP address as a unique User Equipment, or should it
+                tie the multiple addresses together into one view of the subscriber?
+                An implementation MAY do either.
+            </t>
+           </section>
+       </section>
+   </section>
    <section anchor="section_workflow" title="Solution Workflow">
     <t>
       This section aims to improve understanding by describing a possible
