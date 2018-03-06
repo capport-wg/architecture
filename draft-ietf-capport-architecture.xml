@@ -368,12 +368,14 @@
          expiry time, method of providing credentials, security token for
          validating ICMP messages.
        </t>
+        <t>
+         The API MUST use TLS for privacy and server authentication.
+         The implementation of the API MUST ensure both privacy and integrity of
+         any information provided by or required by it.
+        </t>
        <t>
          This document does not specify the details of the API.
        </t>
-        <t>
-          The CAPPORT API MUST support TLS for privacy and server authentication.
-        </t>
      </section>
 
      <section anchor="section_capport_enforcement" title="Captive Portal Enforcement">
@@ -601,8 +603,16 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
      <section title="Authenticated APIs">
        <t>
          The solution described here assumes that when the User Equipment needs to
-         trust the API server, server authentication will be utilized using TLS
+         trust the API server, server authentication will be performed using TLS
          mechanisms.
+       </t>
+     </section>
+     <section title="Secure APIs">
+       <t>
+           The solution described here requires that the API be secured using TLS.
+           This is required to allow the user equipment and API server to exchange
+           secrets which can be used to validate future interactions. The API must
+           ensure the integrity of this information, as well as its confidentiality.
        </t>
      </section>
      <section title="Risk of Nuisance Captive Portal">
