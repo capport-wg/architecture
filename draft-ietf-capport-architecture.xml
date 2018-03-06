@@ -3,14 +3,14 @@
     which is available here: http://xml.resource.org. -->
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
 <!-- One method to get references from the online citation libraries.
-    There has to be one entity for each item to be referenced. 
+    There has to be one entity for each item to be referenced.
     An alternate method (rfc include) is described in the references. -->
 
 <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <!-- used by XSLT processors -->
-<!-- For a complete list and description of processing instructions (PIs), 
+<!-- For a complete list and description of processing instructions (PIs),
     please see http://xml.resource.org/authoring/README.html. -->
 <!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
     (Here they are set differently than their defaults in xml2rfc v1.32) -->
@@ -26,7 +26,7 @@
 <!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
 <?rfc sortrefs="yes" ?>
 <!-- sort the reference entries alphabetically -->
-<!-- control vertical white space 
+<!-- control vertical white space
     (using these PIs as follows is recommended by the RFC Editor) -->
 <?rfc compact="yes" ?>
 <!-- do not start each main section on a new page -->
@@ -37,13 +37,13 @@
  <!-- category values: std, bcp, info, exp, and historic
     ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
        or pre5378Trust200902
-    you can add the attributes updates="NNNN" and obsoletes="NNNN" 
+    you can add the attributes updates="NNNN" and obsoletes="NNNN"
     they will automatically be output with "(if approved)" -->
 
  <!-- ***** FRONT MATTER ***** -->
 
  <front>
-   <!-- The abbreviated title is used in the page header - it is only necessary if the 
+   <!-- The abbreviated title is used in the page header - it is only necessary if the
         full title is longer than 39 characters -->
 
    <title abbrev="CAPPORT Architecture">CAPPORT Architecture</title>
@@ -79,11 +79,11 @@
 
     <date year="2018" />
 
-   <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
-        in the current day for you. If only the current year is specified, xml2rfc will fill 
-	 in the current day and month for you. If the year is not the current one, it is 
-	 necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the 
-	 purpose of calculating the expiry date).  With drafts it is normally sufficient to 
+   <!-- If the month and year are both specified and are the current ones, xml2rfc will fill
+        in the current day for you. If only the current year is specified, xml2rfc will fill
+	 in the current day and month for you. If the year is not the current one, it is
+	 necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the
+	 purpose of calculating the expiry date).  With drafts it is normally sufficient to
 	 specify just the year. -->
 
    <!-- Meta-data Declarations -->
@@ -93,7 +93,7 @@
    <workgroup>Internet Engineering Task Force</workgroup>
 
    <!-- WG name at the upperleft corner of the doc,
-        IETF is fine for individual submissions.  
+        IETF is fine for individual submissions.
 	 If this element is not present, the default is "Network Working Group",
         which is used by the RFC Editor as a nod to the history of the IETF. -->
 
@@ -192,7 +192,7 @@
          </t>
          <t>
             Receipt of the ICMP/ICMP6 messages informs an end-user device that
-            it is captive. 
+            it is captive.
             In response, the device SHOULD query the provisioned API to obtain
             information about the network state.
             The device MAY take immediate action to satisfy the portal
@@ -378,7 +378,7 @@
 
      <section anchor="section_capport_enforcement" title="Captive Portal Enforcement">
       <t>
-        The Captive Portal Enforcement component restricts network access to 
+        The Captive Portal Enforcement component restricts network access to
         User Equipment according to site-specific policy. Typically User Equipment
         is permitted access to a small number of services and
         is denied general network access until it has performed some action.
@@ -457,8 +457,8 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
 . +------------+                             | web portal  |    .
 .       ^  |  Connection Attempt             +-------------+    .
 .       |  |  to prohibited service.                   |        .
-.       |  +------------------> +---------------+  Allow/Deny   . 
-.       |                       |               |    Rules      . 
+.       |  +------------------> +---------------+  Allow/Deny   .
+.       |                       |               |    Rules      .
 .       |   ICMP Unreachable    | Captive Portal|     |         .
 .       +---------------------+ | Enforcement   | <---+         .
 .                               +---------------+               .
@@ -512,10 +512,10 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
        </t>
        <section anchor="id_identifiers" title="Identifiers">
            <t>
-               An Identifier is an identifying chatacteristics of the User
-               Equipment used by the components of a Captive Portal to
-               uniquely determine which specific User Equipment is interacting
-               with them. An Identifier MAY be a field contained in packets
+               An Identifier is a chatacteristic of the User Equipment used by
+               the components of a Captive Portal to uniquely determine which
+               specific User Equipment is interacting with them.
+               An Identifier MAY be a field contained in packets
                sent by the User Equipment to the External Network. Or, an
                Identifier MAY be an ephemeral property not contained in packets
                destined for the External Network, but instead correlated with
@@ -588,7 +588,7 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
        <section anchor="id_evaluating" title="Evaluating an Identifier">
            <t>
                To evaluate whether an identifer is appropriate, one should consider
-               every recommended property from the perspective of interactions among 
+               every recommended property from the perspective of interactions among
                the components in the architecture. When comparing identifiers, choose
                the one which best satifies all of the recommended properties. The
                architecture does not provide an exact measure of how well an identifier
@@ -630,7 +630,7 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
 
                The Enforcement Device needs to be aware of the physical interface,
                which constrains the environment: it must either be part of the device providing
-               physical access (e.g.. implemented in firmware), or packets traversing the network
+               physical access (e.g., implemented in firmware), or packets traversing the network
                must be extended to include information about the source physical interface (e.g.
                a tunnel).
            </t>
@@ -646,16 +646,20 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
                 A natural identifier to consider is the IP address of the User Equipment.
                 At any given time, no device on the network can have the same IP address
                 without causing the network to malfunction, so it is appropriate from the
-                perpsective of uniqueness.
+                perspective of uniqueness.
             </t>
 
             <t>
                 However, it may be possible to spoof the IP address, particularly for
-                malicious reasons where proper funtioning of the network is not necessary
+                malicious reasons where proper functioning of the network is not necessary
                 for the malicious actor. Consequently, any solution using the IP address
                 should proactively try to prevent spoofing of the IP address. Similarily,
                 if the mapping of IP address to User Equipment is changed, the components
                 of the architecture must remove or update their mapping to prevent spoofing.
+                Demonstrations of return routeability, such as that required for TCP
+                connection establishment, might be sufficient defense against spoofing,
+                though this might not be sufficient in networks that use broadcast media
+                (such as some wireless networks).
             </t>
 
             <t>
@@ -674,7 +678,10 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
                 to access the network with multiple IP addresses, should the enforcement device
                 and API server treat each IP address as a unique User Equipment, or should it
                 tie the multiple addresses together into one view of the subscriber?
-                An implementation MAY do either.
+                An implementation MAY do either. Attention should be paid to IPv6 and the fact
+                that it is expected for a device to have multiple IPv6 addresses on a single
+                link. In such cases, idenfication could be performed by subnet, such as the /64
+                to which the IP belongs.
             </t>
            </section>
        </section>
@@ -689,7 +696,7 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
       This section describes a possible work-flow when User Equipment initially
       joins a Captive Network.
     </t>
-    <t> 
+    <t>
     <list style="numbers">
       <t>The User Equipment joins the Captive Network by acquiring a DHCP
          lease, RA, or similar, acquiring provisioning information.</t>
@@ -739,7 +746,7 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
 
    <section anchor="Acknowledgements" title="Acknowledgements">
      <t>The authors thank various individuals for their feedback on
-        the mailing list and during the IETF98 hackathon: 
+        the mailing list and during the IETF98 hackathon:
         David Bird,
         Eric Kline,
         Alexis La Goulette,
