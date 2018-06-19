@@ -53,18 +53,9 @@
    <!-- Another author who claims to be an editor -->
 
     <author fullname="Kyle Larose" initials="K." surname="Larose">
-      <organization>Sandvine</organization>
+      <organization>Agilicus</organization>
       <address>
-        <postal>
-          <street>408 Albert Street</street>
-          <!-- Reorder these if your country does things differently -->
-          <city>Waterloo</city>
-          <region>ON</region>
-          <code>N2L 3V3</code>
-          <country>Canada</country>
-        </postal>
-        <phone>+1 519 880 2400</phone>
-        <email>klarose@sandvine.com</email>
+        <email>kyle@agilicus.com</email>
         <!-- uri and facsimile elements may also be added -->
       </address>
     </author>
