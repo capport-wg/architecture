@@ -72,10 +72,10 @@
 
    <!-- If the month and year are both specified and are the current ones, xml2rfc will fill
         in the current day for you. If only the current year is specified, xml2rfc will fill
-	 in the current day and month for you. If the year is not the current one, it is
-	 necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the
-	 purpose of calculating the expiry date).  With drafts it is normally sufficient to
-	 specify just the year. -->
+        in the current day and month for you. If the year is not the current one, it is
+        necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the
+        purpose of calculating the expiry date).  With drafts it is normally sufficient to
+        specify just the year. -->
 
    <!-- Meta-data Declarations -->
 
@@ -85,7 +85,7 @@
 
    <!-- WG name at the upperleft corner of the doc,
         IETF is fine for individual submissions.
-	 If this element is not present, the default is "Network Working Group",
+        If this element is not present, the default is "Network Working Group",
         which is used by the RFC Editor as a nod to the history of the IETF. -->
 
    <keyword>plus</keyword>
@@ -97,7 +97,7 @@
 
    <abstract>
      <t>This document aims to document consensus on the CAPPORT architecture.
-        DHCP or Router Advertisements, ICMP, and an HTTP API are used to
+        DHCP or Router Advertisements, an optional signalling protocol, and an HTTP API are used to
         provide the solution. The role of Provisioning Domains (PvDs) is
         described.
      </t>
@@ -174,15 +174,15 @@
             A device MAY query this API at any time to determine whether the
             network is holding the device in a captive state.
          </t>
-         <t>End-user devices are notified of captivity with ICMP/ICMP6 messages
-            in response to traffic.
-            This notification can work with any Internet protocol, not just
+         <t>End-user devices are notified of captivity with Captival Portal Signals
+            in response to traffic. This notification should  work with any Internet protocol, not just
             clear-text HTTP. This notification does not carry the portal URI;
             rather it provides a notification to the User Equipment that it
-            is in a captive state.
+            is in a captive state. This document will specify requirements for the signalling
+        protocol which will generate Captive Portal Signals.
          </t>
          <t>
-            Receipt of the ICMP/ICMP6 messages informs an end-user device that
+            Receipt of a Captive Portal Signal informs an end-user device that
             it is captive.
             In response, the device SHOULD query the provisioned API to obtain
             information about the network state.
@@ -217,6 +217,10 @@
        <t>Captive Portal Server: The web server providing a user interface for
           assisting the user in satisfying the conditions to escape
           captivity.</t>
+       <t>Captive Portal Signalling Protocol: Also known as Signalling Protocl. 
+          A protocol used by the Enforcement device to signal the User Equipment
+          information about the state of its captivity.
+       </t>
      </section>
 
    </section>
@@ -244,8 +248,8 @@
         <t>SHOULD have a mechanism for notifying the user of the Captive Portal</t>
         <t>SHOULD have a web browser so that the user may navigate the Captive Portal
            user interface.</t>
-        <t>SHOULD be able to receive and validate the Captive Portal ICMP message
-           types, and to access the Captive Portal API in response.</t>
+        <t>SHOULD be able to receive and validate the Captive Portal Signal,
+          and to access the Captive Portal API in response.</t>
         <t>MAY restrict application access to networks not granting full
            network access. E.g., a device connected to a mobile network may
            be connecting to a WiFi network; the operating system MAY
@@ -317,8 +321,8 @@
            The PvD server MUST support multiple (repeated) queries from each
            User Equipment, always returning the current captive portal
            information.  The User Equipment is expected to make this query upon
-           receiving (and validating) an ICMP Captive Portal message
-           (see <xref target="section_icmp"/>).
+           receiving (and validating) a Captive Portal Signal
+           (see <xref target="section_signal"/>).
          </t>
        </section>
      </section>
@@ -338,7 +342,7 @@
          This architecture expects the User Equipment to query the API when the
          User Equipment attaches to the network and multiple times thereafter.
          Therefore the API MUST support multiple repeated queries from the same
-         User Equipment, returning current state of captivity for the
+         User Equipment, returning the current state of captivity for the
          equipment.
        </t>
        <t>
@@ -348,16 +352,16 @@
          the present architecture.
        </t>
        <t>
-         When user equipment receives (and validates) ICMP Captive Portal
-         alerts, the user equipment SHOULD query the API to check the state.
+         When user equipment receives (and validates) Captive Portal Signals,
+         the user equipment SHOULD query the API to check the state.
          The User Equipment SHOULD rate-limit these API queries in the event of
-         ICMP flooding by an attacker. (See <xref target="Security"/>.)
+         the signal being flooded. (See <xref target="Security"/>.)
        </t>
        <t>
          The API MUST be extensible to support future use-cases by allowing
          extensible information elements. Suggestions include quota information,
          expiry time, method of providing credentials, security token for
-         validating ICMP messages.
+         validating Captive Portal Signals.
        </t>
         <t>
          The API MUST use TLS for privacy and server authentication.
@@ -380,7 +384,9 @@
        The Captive Portal Enforcement component:
        <list style="symbols">
         <t>Allows traffic through for allowed User Equipment.</t>
-        <t>Blocks (discards) traffic and sends ICMP notifications for disallowed User Equipment.</t>
+        <t>Blocks (discards) traffic for disallowed User Equipment.</t>
+        <t>May signal User Equipment using the Captive Portal Signalling protocol
+           if traffic is blocked.</t>
         <t>Permits disallowed User Equipment to access necessary APIs and web pages to
            fulfill requirements of exiting captivity.</t>
         <t>Updates allow/block rules per User Equipment in response to operations
@@ -392,18 +398,54 @@
         that work today, such as modification of port-80 HTTP responses to
         redirect users to the portal.  Various user-equipment vendors probe
         canary URLs to identify the state captivity [reference Mariko
-        Kobayashi's survey]. While doing so, ICMP messages SHOULD also be sent,
+        Kobayashi's survey]. While doing so, Captive Portal Signals SHOULD also be sent,
         to activate work-flows in supporting devices.
         [TODO: give some thought to precise recommendations for backwards compatibility.]
       </t>
      </section>
-     <section anchor="section_icmp" title="ICMP/ICMP6">
+     <section anchor="section_signal" title="Captive Portal Signal">
        <t>
-         ICMP messages have been selected for indicating to a sender that
-         packets could not be delivered for reason of a network policy (in
-         particular, captive portal). ICMP is already used to indicate reasons
-         that packets could not be delivered (network unreachable, port
-         unreachable, packet too large, etc.).
+        User Equipment may send traffic outside the captive network prior to the Enforcement
+        device granting it access. The Enforcement Device rightly blocks or resets these
+        requests. However, lacking a signal from the Enforcement Device, the User Equipment
+        can only guess at whether it is captive. Consequently, allowing the Enforcement Device
+        to signal to the User Equipment that there is a problem with its connectivity may
+        improve the user's experience.
+       </t>
+       <t>
+        An Enforcement Device may also want to inform the User Equipment of a pending expiry
+        of its access to the external network, so providing the Enforcement Device the ability
+        to preemptively signal may be desireable.
+       </t>
+       <t>
+        A specific Captive Portal Signalling Protocol is out of scope for this document.
+        However, in order to ensure that future protocols fit into the architecture,
+        requirements for a Captive Portal Signalling Protocl follow:
+          <list style="numbers">  
+            <t>The notification SHOULD NOT be easy to spoof.
+               If an attacker can send spoofed notifications to the User Equipment,
+               they can cause the User Equipment to unnecessarily access the API. Rather than
+               relying solely on rate limits to prevent problems, a good protocol will strive
+               to limit the feasibility of such attacks.
+            </t>
+            <t>It SHOULD be possible to send the notification before the captive portal closes.
+               This will help ensure seemless connectivity for the user, as the User Equipment
+               will not need to wait for a network failure to refresh its login. On receipt of
+               preemptive notication, the User Equipment can prompt the user to refresh.
+             </t>
+             <t>The signal SHOULD be a simple binary protocol indicating that the user equipment
+                is either captive or soon to be captive.
+             </t>
+             <t>
+                It is NOT REQUIRED that the signalling protocol be reliable.
+             </t>
+             <t>
+                The protocol SHOULD continue to send signals as long as the state which triggered
+                the first signal holds, subject to reasonable rate limiting. This is necessary to
+                handle network loss or rate limits between the Enforcement Device and the User
+                Equipment.
+             </t>
+          </list>
        </t>
        <t>
          A mechanism to trigger captive portal work-flows in the User Equipment
