@@ -53,18 +53,9 @@
    <!-- Another author who claims to be an editor -->
 
     <author fullname="Kyle Larose" initials="K." surname="Larose">
-      <organization>Sandvine</organization>
+      <organization>Agilicus</organization>
       <address>
-        <postal>
-          <street>408 Albert Street</street>
-          <!-- Reorder these if your country does things differently -->
-          <city>Waterloo</city>
-          <region>ON</region>
-          <code>N2L 3V3</code>
-          <country>Canada</country>
-        </postal>
-        <phone>+1 519 880 2400</phone>
-        <email>klarose@sandvine.com</email>
+        <email>kyle@agilicus.com</email>
         <!-- uri and facsimile elements may also be added -->
       </address>
     </author>
@@ -81,10 +72,10 @@
 
    <!-- If the month and year are both specified and are the current ones, xml2rfc will fill
         in the current day for you. If only the current year is specified, xml2rfc will fill
-	 in the current day and month for you. If the year is not the current one, it is
-	 necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the
-	 purpose of calculating the expiry date).  With drafts it is normally sufficient to
-	 specify just the year. -->
+        in the current day and month for you. If the year is not the current one, it is
+        necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the
+        purpose of calculating the expiry date).  With drafts it is normally sufficient to
+        specify just the year. -->
 
    <!-- Meta-data Declarations -->
 
@@ -94,7 +85,7 @@
 
    <!-- WG name at the upperleft corner of the doc,
         IETF is fine for individual submissions.
-	 If this element is not present, the default is "Network Working Group",
+        If this element is not present, the default is "Network Working Group",
         which is used by the RFC Editor as a nod to the history of the IETF. -->
 
    <keyword>plus</keyword>
@@ -106,7 +97,7 @@
 
    <abstract>
      <t>This document aims to document consensus on the CAPPORT architecture.
-        DHCP or Router Advertisements, ICMP, and an HTTP API are used to
+        DHCP or Router Advertisements, an optional signaling protocol, and an HTTP API are used to
         provide the solution. The role of Provisioning Domains (PvDs) is
         described.
      </t>
@@ -119,7 +110,7 @@
        In this document, "Captive Portal" is used to describe a network to
        which a device may be voluntarily attached, such that network access is
        limited until some requirements have been fulfilled.  Typically a user
-       is required to use a web browser to fulfil requirements imposed by the
+       is required to use a web browser to fulfill requirements imposed by the
        network operator, such as reading advertisements, accepting an
        acceptable-use policy, or providing some form of credentials.
      </t>
@@ -183,15 +174,15 @@
             A device MAY query this API at any time to determine whether the
             network is holding the device in a captive state.
          </t>
-         <t>End-user devices are notified of captivity with ICMP/ICMP6 messages
-            in response to traffic.
-            This notification can work with any Internet protocol, not just
+         <t>End-user devices are notified of captivity with Captive Portal Signals
+            in response to traffic. This notification should  work with any Internet protocol, not just
             clear-text HTTP. This notification does not carry the portal URI;
             rather it provides a notification to the User Equipment that it
-            is in a captive state.
+            is in a captive state. This document will specify requirements for the signaling
+        protocol which will generate Captive Portal Signals.
          </t>
          <t>
-            Receipt of the ICMP/ICMP6 messages informs an end-user device that
+            Receipt of a Captive Portal Signal informs an end-user device that
             it is captive.
             In response, the device SHOULD query the provisioned API to obtain
             information about the network state.
@@ -226,6 +217,10 @@
        <t>Captive Portal Server: The web server providing a user interface for
           assisting the user in satisfying the conditions to escape
           captivity.</t>
+       <t>Captive Portal Signaling Protocol: Also known as Signaling Protocol.
+          A protocol used by the Enforcement device to signal the User Equipment
+          information about the state of its captivity.
+       </t>
      </section>
 
    </section>
@@ -253,8 +248,8 @@
         <t>SHOULD have a mechanism for notifying the user of the Captive Portal</t>
         <t>SHOULD have a web browser so that the user may navigate the Captive Portal
            user interface.</t>
-        <t>SHOULD be able to receive and validate the Captive Portal ICMP message
-           types, and to access the Captive Portal API in response.</t>
+        <t>SHOULD be able to receive and validate the Captive Portal Signal,
+          and to access the Captive Portal API in response.</t>
         <t>MAY restrict application access to networks not granting full
            network access. E.g., a device connected to a mobile network may
            be connecting to a WiFi network; the operating system MAY
@@ -326,8 +321,8 @@
            The PvD server MUST support multiple (repeated) queries from each
            User Equipment, always returning the current captive portal
            information.  The User Equipment is expected to make this query upon
-           receiving (and validating) an ICMP Captive Portal message
-           (see <xref target="section_icmp"/>).
+           receiving (and validating) a Captive Portal Signal
+           (see <xref target="section_signal"/>).
          </t>
        </section>
      </section>
@@ -347,7 +342,7 @@
          This architecture expects the User Equipment to query the API when the
          User Equipment attaches to the network and multiple times thereafter.
          Therefore the API MUST support multiple repeated queries from the same
-         User Equipment, returning current state of captivity for the
+         User Equipment, returning the current state of captivity for the
          equipment.
        </t>
        <t>
@@ -357,16 +352,16 @@
          the present architecture.
        </t>
        <t>
-         When user equipment receives (and validates) ICMP Captive Portal
-         alerts, the user equipment SHOULD query the API to check the state.
+         When user equipment receives (and validates) Captive Portal Signals,
+         the user equipment SHOULD query the API to check the state.
          The User Equipment SHOULD rate-limit these API queries in the event of
-         ICMP flooding by an attacker. (See <xref target="Security"/>.)
+         the signal being flooded. (See <xref target="Security"/>.)
        </t>
        <t>
          The API MUST be extensible to support future use-cases by allowing
          extensible information elements. Suggestions include quota information,
          expiry time, method of providing credentials, security token for
-         validating ICMP messages.
+         validating Captive Portal Signals.
        </t>
         <t>
          The API MUST use TLS for privacy and server authentication.
@@ -389,7 +384,9 @@
        The Captive Portal Enforcement component:
        <list style="symbols">
         <t>Allows traffic through for allowed User Equipment.</t>
-        <t>Blocks (discards) traffic and sends ICMP notifications for disallowed User Equipment.</t>
+        <t>Blocks (discards) traffic for disallowed User Equipment.</t>
+        <t>May signal User Equipment using the Captive Portal Signaling protocol
+           if traffic is blocked.</t>
         <t>Permits disallowed User Equipment to access necessary APIs and web pages to
            fulfill requirements of exiting captivity.</t>
         <t>Updates allow/block rules per User Equipment in response to operations
@@ -401,39 +398,61 @@
         that work today, such as modification of port-80 HTTP responses to
         redirect users to the portal.  Various user-equipment vendors probe
         canary URLs to identify the state captivity [reference Mariko
-        Kobayashi's survey]. While doing so, ICMP messages SHOULD also be sent,
+        Kobayashi's survey]. While doing so, Captive Portal Signals SHOULD also be sent,
         to activate work-flows in supporting devices.
         [TODO: give some thought to precise recommendations for backwards compatibility.]
       </t>
      </section>
-     <section anchor="section_icmp" title="ICMP/ICMP6">
+     <section anchor="section_signal" title="Captive Portal Signal">
        <t>
-         ICMP messages have been selected for indicating to a sender that
-         packets could not be delivered for reason of a network policy (in
-         particular, captive portal). ICMP is already used to indicate reasons
-         that packets could not be delivered (network unreachable, port
-         unreachable, packet too large, etc.).
+        User Equipment may send traffic outside the captive network prior to the Enforcement
+        device granting it access. The Enforcement Device rightly blocks or resets these
+        requests. However, lacking a signal from the Enforcement Device, the User Equipment
+        can only guess at whether it is captive. Consequently, allowing the Enforcement Device
+        to signal to the User Equipment that there is a problem with its connectivity may
+        improve the user's experience.
        </t>
        <t>
-         A mechanism to trigger captive portal work-flows in the User Equipment
-         is proposed in <xref target="I-D.wkumari-capport-icmp-unreach"/>.
+        An Enforcement Device may also want to inform the User Equipment of a pending expiry
+        of its access to the external network, so providing the Enforcement Device the ability
+        to preemptively signal may be desirable.
        </t>
        <t>
-         The Captive Portal Enforcement function is REQUIRED to send such
-         ICMP messages when disallowed User Equipment attempts to send
-         to the network.
-         These ICMP messages MUST be rate-limited to a configurable rate.
+        A specific Captive Portal Signaling Protocol is out of scope for this document.
+        However, in order to ensure that future protocols fit into the architecture,
+        requirements for a Captive Portal Signaling Protocol follow:
+          <list style="numbers">
+            <t>The notification SHOULD NOT be easy to spoof.
+               If an attacker can send spoofed notifications to the User Equipment,
+               they can cause the User Equipment to unnecessarily access the API. Rather than
+               relying solely on rate limits to prevent problems, a good protocol will strive
+               to limit the feasibility of such attacks.
+            </t>
+            <t>It SHOULD be possible to send the notification before the captive portal closes.
+               This will help ensure seamless connectivity for the user, as the User Equipment
+               will not need to wait for a network failure to refresh its login. On receipt of
+               preemptive notification, the User Equipment can prompt the user to refresh.
+             </t>
+             <t>The protocol SHOULD have a method of identifying the source of signals.</t>
+             <t>The signal SHOULD NOT include any information other than a prompt to contact the API,
+                and any information necessary for validation.</t>
+             <t>
+                There is no requirement that the protocol be reliable.
+                Thus, The protocol SHOULD continue to send signals as long as the state which
+                triggered the first signal holds, subject to reasonable rate limiting.
+                This is necessary to handle network loss or rate limits between the Enforcement
+                Device and the User Equipment.
+             </t>
+          </list>
        </t>
        <t>
-         The ICMP messages MUST NOT be sent to the Internet devices. The indications
+	       The Captive Portal Enforcement function SHOULD send Captive Portal Signals when disallowed
+	       User Equipment attempts to send to the network.
+         These signals MUST be rate-limited to a configurable rate.
+       </t>
+       <t>
+         The signals MUST NOT be sent to the Internet devices. The indications
          are only sent to the User Equipment.
-       </t>
-       <t>
-         The User Equipment operating system is NOT REQUIRED to deliver the
-         impact of the ICMP message to the application that triggered it.
-         The User Equipment might be able to satisfy the Captive Portal
-         requirements quickly enough that existing transport connections are
-         not impacted.
        </t>
      </section>
      <section title="Component Diagram">
@@ -461,7 +480,7 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
 .       |  |  to prohibited service.                   |        .
 .       |  +------------------> +---------------+  Allow/Deny   .
 .       |                       |               |    Rules      .
-.       |   ICMP Unreachable    | Captive Portal|     |         .
+.       |   CAPPORT Signal      | Captive Portal|     |         .
 .       +---------------------+ | Enforcement   | <---+         .
 .                               +---------------+               .
 .                                       |                       .
@@ -485,196 +504,196 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
                  network through the Captive Portal enforcement device.</t>
               <t>The Captive Portal Enforcement device either allows the User
                  Equipment's packets to the external network, or responds with
-                 an ICMP message.</t>
+                   a Captive Portal Signal.</t>
               <t>The CAPPORT web portal server directs the Captive Portal
                  Enforcement device to either allow or deny external network
                  access for the User Equipment.</t>
              </list>
-    </t>
-    <t>
-      Although the provisioning, API, and web portal functions are shown as
-      discrete blocks, they could of course be combined into a single element.
-    </t>
-    </section>
-   </section>
+      </t>
+      <t>
+        Although the provisioning, API, and web portal functions are shown as
+        discrete blocks, they could of course be combined into a single element.
+      </t>
+      </section>
+     </section>
 
-   <section anchor="ue_identity" title="User Equipment Identity">
-       <t>
-           Multiple components in the architecture interact with both the User
-           Equipment and each other. Since the User Equipment is the focus of
-           these interactions, the components must be able to both identify the
-           user equipment from their interactions with it, and be able to agree
-           on the identify of the user equipment when interacting with each
-           other.
-       </t>
-       <t>
-           The methods by which the components interact restrict the type of
-           information that may be used as an identifying characteristics. This
-           section discusses the identifying characteristics.
-       </t>
-       <section anchor="id_identifiers" title="Identifiers">
-           <t>
-               An Identifier is a chatacteristic of the User Equipment used by
-               the components of a Captive Portal to uniquely determine which
-               specific User Equipment is interacting with them.
-               An Identifier MAY be a field contained in packets
-               sent by the User Equipment to the External Network. Or, an
-               Identifier MAY be an ephemeral property not contained in packets
-               destined for the External Network, but instead correlated with
-               such information through knowledge available to the different
-               components.
-           </t>
-       </section>
-       <section anchor="id_recommended_props" title="Recommended Properties">
-        <t>
-           The set of possible identifiers is quite large. However, in order
-           to be considered a good identifier, an identifier SHOULD meet the
-           following criteria. Note that the optimal identifier will likely
-           change depending on the position of the components in the network
-           as well as the information available to them.
+     <section anchor="ue_identity" title="User Equipment Identity">
+         <t>
+             Multiple components in the architecture interact with both the User
+             Equipment and each other. Since the User Equipment is the focus of
+             these interactions, the components must be able to both identify the
+             user equipment from their interactions with it, and be able to agree
+             on the identify of the user equipment when interacting with each
+             other.
+         </t>
+         <t>
+             The methods by which the components interact restrict the type of
+             information that may be used as an identifying characteristics. This
+             section discusses the identifying characteristics.
+         </t>
+         <section anchor="id_identifiers" title="Identifiers">
+             <t>
+                 An Identifier is a characteristic of the User Equipment used by
+                 the components of a Captive Portal to uniquely determine which
+                 specific User Equipment is interacting with them.
+                 An Identifier MAY be a field contained in packets
+                 sent by the User Equipment to the External Network. Or, an
+                 Identifier MAY be an ephemeral property not contained in packets
+                 destined for the External Network, but instead correlated with
+                 such information through knowledge available to the different
+                 components.
+             </t>
+         </section>
+         <section anchor="id_recommended_props" title="Recommended Properties">
+          <t>
+             The set of possible identifiers is quite large. However, in order
+             to be considered a good identifier, an identifier SHOULD meet the
+             following criteria. Note that the optimal identifier will likely
+             change depending on the position of the components in the network
+             as well as the information available to them.
 
-           An identifier SHOULD:
-           <list style="symbols">
-               <t>Uniquely Identify the User Equipment</t>
-               <t>Be Hard to Spoof</t>
-               <t>Be Visible to the API</t>
-               <t>Be Visible to the Enforcement Device</t>
-           </list>
-        </t>
-        <section anchor="id_recommended_unique" title="Uniquely Identify User Equipment">
-            <t>
-                In order to uniquely identify the User Equipment, at most one user equipment
-                interacting with the other components of the Captive Portal MUST have a given
-                value of the identifier.
-            </t>
-            <t>
-                Over time, the user equipment identified by the value MAY change. Allowing the
-                identified device to change over time ensures that the space of possible
-                identifying vallues need not be overly large.
-            </t>
-            <t>
-                Independent Captive Portals MAY use the same identifying value to identify
-                different User Equipment. Allowing indendent captive portals to reuse
-                identifying values allows the identifier to be a property of the local
-                network, expanding the space of possible identifiers.
-            </t>
-        </section>
-        <section anchor="id_recommended_hard" title="Hard to Spoof">
-            <t>
-                A good identifier does not lend itself to being easily spoofed. At no time
-                should it be simple or straightforward for one User Equipment to
-                pretend to be another User Equipment, regardless of whether both are active
-                at the same time. This property is particularly important when the user
-                equipment is extended externally to devices such as billing systems, or where
-                the identity of the User Equipment could imply liability.
-            </t>
-        </section>
-        <section anchor="id_recommended_visible_api" title="Visible to the API">
-            <t>
-                Since the API will need to perform operations which rely on the identify
-                of the user equipment, such as query whether it is captive, the API
-                needs to be able to relate requests to the User Equipment making the
-                request.
-            </t>
-        </section>
-        <section anchor="id_recommended_visible_ed" title="Visible to the Enforcement Device">
-            <t>
-                The Enforcement Device will decide on a per packet basis whether it
-                should be permitted to communicate with the external network. Since
-                this decision depends on which User Equipment sent the packet, the
-                Enforcement Device requires that it be able to map the packet to its
-                concept of the User Equipment.
-            </t>
-        </section>
-       </section>
-       <section anchor="id_evaluating" title="Evaluating an Identifier">
-           <t>
-               To evaluate whether an identifer is appropriate, one should consider
-               every recommended property from the perspective of interactions among
-               the components in the architecture. When comparing identifiers, choose
-               the one which best satifies all of the recommended properties. The
-               architecture does not provide an exact measure of how well an identifier
-               satisfies a given property; care should be taken in performing the
-               evaluation.
-           </t>
-       </section>
-       <section anchor="id_examples" title="Examples of an Identifier">
-           <t>
-               This section provides some examples of identifiers, along with some
-               evaluation of whether they are good identifiers. The list of identifiers
-               is not exhaustive. Other identifiers may be used. An important point to note
-               is that whether the identifiers are good depends heavily on the capabilities
-               of the components and where in the network the components exist.
-           </t>
-           <section anchor="id_example_interface" title="Physical Interface">
-            <t>
-               The physical interface by which the User Equipment is attached to the
-               network can be used to identify the User Equipment. This identifier has
-               the property of being extremely difficult to spoof: the User Equipment is
-               unaware of the property; one User Equipment cannot manipulate its
-               interactions to appear as though it is another.
-           </t>
+             An identifier SHOULD:
+             <list style="symbols">
+                 <t>Uniquely Identify the User Equipment</t>
+                 <t>Be Hard to Spoof</t>
+                 <t>Be Visible to the API</t>
+                 <t>Be Visible to the Enforcement Device</t>
+             </list>
+          </t>
+          <section anchor="id_recommended_unique" title="Uniquely Identify User Equipment">
+              <t>
+                  In order to uniquely identify the User Equipment, at most one user equipment
+                  interacting with the other components of the Captive Portal MUST have a given
+                  value of the identifier.
+              </t>
+              <t>
+                  Over time, the user equipment identified by the value MAY change. Allowing the
+                  identified device to change over time ensures that the space of possible
+                  identifying values need not be overly large.
+              </t>
+              <t>
+                  Independent Captive Portals MAY use the same identifying value to identify
+                  different User Equipment. Allowing independent captive portals to reuse
+                  identifying values allows the identifier to be a property of the local
+                  network, expanding the space of possible identifiers.
+              </t>
+          </section>
+          <section anchor="id_recommended_hard" title="Hard to Spoof">
+              <t>
+                  A good identifier does not lend itself to being easily spoofed. At no time
+                  should it be simple or straightforward for one User Equipment to
+                  pretend to be another User Equipment, regardless of whether both are active
+                  at the same time. This property is particularly important when the user
+                  equipment is extended externally to devices such as billing systems, or where
+                  the identity of the User Equipment could imply liability.
+              </t>
+          </section>
+          <section anchor="id_recommended_visible_api" title="Visible to the API">
+              <t>
+                  Since the API will need to perform operations which rely on the identify
+                  of the user equipment, such as query whether it is captive, the API
+                  needs to be able to relate requests to the User Equipment making the
+                  request.
+              </t>
+          </section>
+          <section anchor="id_recommended_visible_ed" title="Visible to the Enforcement Device">
+              <t>
+                  The Enforcement Device will decide on a per packet basis whether it
+                  should be permitted to communicate with the external network. Since
+                  this decision depends on which User Equipment sent the packet, the
+                  Enforcement Device requires that it be able to map the packet to its
+                  concept of the User Equipment.
+              </t>
+          </section>
+         </section>
+         <section anchor="id_evaluating" title="Evaluating an Identifier">
+             <t>
+                 To evaluate whether an identifier is appropriate, one should consider
+                 every recommended property from the perspective of interactions among
+                 the components in the architecture. When comparing identifiers, choose
+                 the one which best satisfies all of the recommended properties. The
+                 architecture does not provide an exact measure of how well an identifier
+                 satisfies a given property; care should be taken in performing the
+                 evaluation.
+             </t>
+         </section>
+         <section anchor="id_examples" title="Examples of an Identifier">
+             <t>
+                 This section provides some examples of identifiers, along with some
+                 evaluation of whether they are good identifiers. The list of identifiers
+                 is not exhaustive. Other identifiers may be used. An important point to note
+                 is that whether the identifiers are good depends heavily on the capabilities
+                 of the components and where in the network the components exist.
+             </t>
+             <section anchor="id_example_interface" title="Physical Interface">
+              <t>
+                 The physical interface by which the User Equipment is attached to the
+                 network can be used to identify the User Equipment. This identifier has
+                 the property of being extremely difficult to spoof: the User Equipment is
+                 unaware of the property; one User Equipment cannot manipulate its
+                 interactions to appear as though it is another.
+             </t>
 
-            <t>
-               Further, if only a single User Equipment is attatched to a given physical
-               interface, then the identifier will be unique. If multiple User Equipment
-               is attached to the network on the same physical interface, then this property
-               is not appropriate.
-           </t>
+              <t>
+                 Further, if only a single User Equipment is attached to a given physical
+                 interface, then the identifier will be unique. If multiple User Equipment
+                 is attached to the network on the same physical interface, then this property
+                 is not appropriate.
+             </t>
 
-            <t>
-               Another consideration related to uniqueness of the User Equipment is that
-               if the attached User Equipment changes, both the API server and the
-               Enforcement Device must invalidate their state related to the User Equipment.
-           </t>
+              <t>
+                 Another consideration related to uniqueness of the User Equipment is that
+                 if the attached User Equipment changes, both the API server and the
+                 Enforcement Device must invalidate their state related to the User Equipment.
+             </t>
 
-            <t>
+              <t>
 
-               The Enforcement Device needs to be aware of the physical interface,
-               which constrains the environment: it must either be part of the device providing
-               physical access (e.g., implemented in firmware), or packets traversing the network
-               must be extended to include information about the source physical interface (e.g.
-               a tunnel).
-           </t>
+                 The Enforcement Device needs to be aware of the physical interface,
+                 which constrains the environment: it must either be part of the device providing
+                 physical access (e.g., implemented in firmware), or packets traversing the network
+                 must be extended to include information about the source physical interface (e.g.
+                 a tunnel).
+             </t>
 
-            <t>
-               The API server faces a similar problem, implying that it should co-exist with the
-               Enforcement Device, or that the enforcement device should extend requests to it
-               with the identifying information.
-            </t>
-           </section>
-           <section anchor="id_example_IP_address" title="IP Address">
-            <t>
-                A natural identifier to consider is the IP address of the User Equipment.
-                At any given time, no device on the network can have the same IP address
-                without causing the network to malfunction, so it is appropriate from the
-                perspective of uniqueness.
-            </t>
+              <t>
+                 The API server faces a similar problem, implying that it should co-exist with the
+                 Enforcement Device, or that the enforcement device should extend requests to it
+                 with the identifying information.
+              </t>
+             </section>
+             <section anchor="id_example_IP_address" title="IP Address">
+              <t>
+                  A natural identifier to consider is the IP address of the User Equipment.
+                  At any given time, no device on the network can have the same IP address
+                  without causing the network to malfunction, so it is appropriate from the
+                  perspective of uniqueness.
+              </t>
 
-            <t>
-                However, it may be possible to spoof the IP address, particularly for
-                malicious reasons where proper functioning of the network is not necessary
-                for the malicious actor. Consequently, any solution using the IP address
-                should proactively try to prevent spoofing of the IP address. Similarily,
-                if the mapping of IP address to User Equipment is changed, the components
-                of the architecture must remove or update their mapping to prevent spoofing.
-                Demonstrations of return routeability, such as that required for TCP
-                connection establishment, might be sufficient defense against spoofing,
-                though this might not be sufficient in networks that use broadcast media
-                (such as some wireless networks).
-            </t>
+              <t>
+                  However, it may be possible to spoof the IP address, particularly for
+                  malicious reasons where proper functioning of the network is not necessary
+                  for the malicious actor. Consequently, any solution using the IP address
+                  should proactively try to prevent spoofing of the IP address. Similarly,
+                  if the mapping of IP address to User Equipment is changed, the components
+                  of the architecture must remove or update their mapping to prevent spoofing.
+                  Demonstrations of return routeability, such as that required for TCP
+                  connection establishment, might be sufficient defense against spoofing,
+                  though this might not be sufficient in networks that use broadcast media
+                  (such as some wireless networks).
+              </t>
 
-            <t>
-                Since the IP address may traverse multiple segments of the network, more
-                flexibility is afforded to the Enforcement Device and the API server: they
-                simply must exist on a segment of the network where the IP address is still
-                unique. However, consider that a NAT may be deployed between the User Equipment
-                and the Enforcement Device. In such cases, it is possible for the components
-                to still uniquely identify the device if they are aware of the port mapping.
-            </t>
+              <t>
+                  Since the IP address may traverse multiple segments of the network, more
+                  flexibility is afforded to the Enforcement Device and the API server: they
+                  simply must exist on a segment of the network where the IP address is still
+                  unique. However, consider that a NAT may be deployed between the User Equipment
+                  and the Enforcement Device. In such cases, it is possible for the components
+                  to still uniquely identify the device if they are aware of the port mapping.
+              </t>
 
-            <t>
-                In some situtations, the User Equipment may have multiple IP addresses, while
+              <t>
+                In some situations, the User Equipment may have multiple IP addresses, while
                 still satisfying all of the recommended properties. This raises some challenges
                 to the components of the network. For example, if the user equipment tries
                 to access the network with multiple IP addresses, should the enforcement device
@@ -682,7 +701,7 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
                 tie the multiple addresses together into one view of the subscriber?
                 An implementation MAY do either. Attention should be paid to IPv6 and the fact
                 that it is expected for a device to have multiple IPv6 addresses on a single
-                link. In such cases, idenfication could be performed by subnet, such as the /64
+                link. In such cases, identification could be performed by subnet, such as the /64
                 to which the IP belongs.
             </t>
            </section>
@@ -725,15 +744,14 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
      </t>
     <t>
      <list style="numbers">
-      <t>Pre-condition: the Captive Portal Enforcement has been configured to
+      <t>Precondition: the Captive Portal Enforcement has been configured to
          detect an expiry condition, which has now occurred.</t>
       <t>The User Equipment sends a packet to the outside network.</t>
       <t>The Captive Portal Enforcement detects that the packet is from an
          expired User Equipment.</t>
-      <t>The Captive Portal Enforcement sends an ICMP message to
-         the User Equipment indicating that it needs to refresh its access.
-         <xref target="I-D.wkumari-capport-icmp-unreach"/>.</t>
-      <t>The User Equipment verifies the ICMP message is plausible.</t>
+      <t>The Captive Portal Enforcement sends a Captive Portal Signal to
+         the User Equipment indicating that it needs to refresh its access.</t>
+      <t>The User Equipment verifies the signal is plausible.</t>
       <t>The User Equipment queries the Captive Portal API to refresh
          parameters and status of the Captive Network.</t>
       <t>If necessary, the User once again navigates the web portal to gain
@@ -746,11 +764,13 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
     </section>
    </section>
 
-   <section anchor="Acknowledgements" title="Acknowledgements">
+   <section anchor="Acknowledgments" title="Acknowledgments">
+     <t>The authors thank Lorenzo Colitti for providing the majority of the content
+         for the Captive Portal Signal requirements.</t>
      <t>The authors thank various individuals for their feedback on
         the mailing list and during the IETF98 hackathon:
         David Bird,
-        Eric Kline,
+        Erik Kline,
         Alexis La Goulette,
         Alex Roscoe,
         Darshak Thakore,
@@ -807,45 +827,22 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
      </section>
      <section title="Risk of Nuisance Captive Portal">
        <t>
-         It is possible for any user on the Internet to send ICMP packets in an attempt
+         It is possible for any user on the Internet to send signals in attempt
          to cause the receiving equipment to go to the captive portal. This has been
          considered and addressed in the following ways:
          <list>
-           <t>The ICMP packet does not carry the URL, making this method safer
-              than HTTP 3xx-redirect methods currently in use.
-              The User Equipment does not have to use clear-text HTTP to solicit
-              the URL of the portal.
-           </t>
-           <t>Because the ICMP messages will carry embedded packets sent by the
-              sender, the receiver of the ICMP message can validate that the
-              transport header is plausibly one it sent (i.e., the
-              transport-layer 5-tuple matches an open connection; there is no
-              need to save every packet it sent).
-              This validation requires an off-path attacker to guess the
-              5-tuple in order to affect a flow.
-              It is trivial for an on-path attacker to send a plausible ICMP
-              packet.  (This is not a new ICMP attack.)
-              The impact of getting a valid ICMP packet to the User Equipment
-              is that it will visit the CAPPORT API to check the status.
-              For this reason we recommend the User Equipment rate-limit these
-              requests to the API.
-           </t>
-           <t>We considered that the ICMP packet could carry a short secret
-              token that would be known to the User Equipment and Captive
-              Portal Enforcement device but would not be available to an
-              attacker, even to an on-path attacker.
-              Although possible to guess by brute force, the impact would be at
-              worst a nuisance visit to the API.  We suggest that a 32-bit
-              token would be sufficient to deter nuisance attacks.
-           </t>
-           <t>Even when redirected, the User Equipment securely authenticates with API servers.
-           </t>
+           <t>The signal only informs the User Equipment to query the API. It does not
+              carry any information which may mislead or misdirect the User Equipment.</t>
+           <t>Even when responding to the signal, the User Equipment securely authenticates
+               with API servers.</t>
+           <t>Accesses to the API server are rate limited, limiting the impact of a repeated
+              attack.</t>
          </list>
        </t>
      </section>
      <section title="User Options">
        <t>
-         The ICMP messaging informs the User Equipment that it is being held
+         The Signal informs the User Equipment that it is being held
          captive.  There is no requirement that the User Equipment do something
          about this.
          Devices MAY permit users to disable automatic reaction to
@@ -884,7 +881,6 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
 
    </references>
    <references title="Informative References">
-     <?rfc include="reference.I-D.wkumari-capport-icmp-unreach.xml"?>
      <?rfc include="reference.I-D.nottingham-capport-problem.xml"?>
      <?rfc include="reference.I-D.ietf-intarea-provisioning-domains.xml"?>
    </references>
