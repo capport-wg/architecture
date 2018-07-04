@@ -523,7 +523,7 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
              Equipment and each other. Since the User Equipment is the focus of
              these interactions, the components must be able to both identify the
              user equipment from their interactions with it, and be able to agree
-             on the identify of the user equipment when interacting with each
+             on the identity of the user equipment when interacting with each
              other.
          </t>
          <t>
@@ -590,7 +590,7 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
           </section>
           <section anchor="id_recommended_visible_api" title="Visible to the API">
               <t>
-                  Since the API will need to perform operations which rely on the identify
+                  Since the API will need to perform operations which rely on the identity
                   of the user equipment, such as query whether it is captive, the API
                   needs to be able to relate requests to the User Equipment making the
                   request.
