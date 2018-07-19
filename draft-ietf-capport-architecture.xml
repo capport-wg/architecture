@@ -136,10 +136,9 @@
          <t>Solutions MUST operate at the layer of Internet Protocol (IP) or
             above, not being specific to any particular access technology such
             as Cable, WiFi or 3GPP.</t>
-         <t>Solutions SHOULD allow a device to be alerted that it is in a
+         <t>Solutions MAY allow a device to be alerted that it is in a
             captive network when attempting to use any application on the
-            network.  (Versus requiring a user to visit a clear-text HTTP
-            site in order to receive a notification.)</t>
+            network.</t>
          <t>Solutions SHOULD allow a device to learn that it is in a captive
             network before any application attempts to use the network.</t>
          <t>The state of captivity SHOULD be explicitly available to devices
@@ -149,9 +148,6 @@
          <t>The architecture MUST provide a path of incremental migration,
             acknowledging a huge variety of portals and end-user device
             implementations and software versions.</t>
-         <t>The architecture SHOULD improve security by providing mechanisms
-            for trust, allowing alerts from trusted network operators to be
-            distinguished from attacks from untrusted agents.</t>
        </list>
      </t>
      <t>
@@ -174,17 +170,17 @@
             A device MAY query this API at any time to determine whether the
             network is holding the device in a captive state.
          </t>
-         <t>End-user devices are notified of captivity with Captive Portal Signals
-            in response to traffic. This notification should  work with any Internet protocol, not just
-            clear-text HTTP. This notification does not carry the portal URI;
-            rather it provides a notification to the User Equipment that it
-            is in a captive state. This document will specify requirements for the signaling
-        protocol which will generate Captive Portal Signals.
+         <t>End-user devices may be notified of captivity with Captive Portal Signals
+            in response to traffic.  This notification should work with any Internet
+            protocol, not just clear-text HTTP. This notification does not carry the
+            portal URI; rather it provides a notification to the User Equipment that
+            it is in a captive state. This document will specify requirements for
+            a signaling protocol which could generate Captive Portal Signals.
          </t>
          <t>
             Receipt of a Captive Portal Signal informs an end-user device that
             it is captive.
-            In response, the device SHOULD query the provisioned API to obtain
+            In response, the device MAY query the provisioned API to obtain
             information about the network state.
             The device MAY take immediate action to satisfy the portal
             (according to its configuration/policy).
@@ -209,8 +205,7 @@
        <t>Captive Portal Conditions: site-specific requirements that a user
           or device must satisfy in order to gain access to the wider network.</t>
        <t>Captive Portal Enforcement: The network equipment which enforces the
-          traffic restriction and notifies the User Equipment it is in a captive
-          state.</t>
+          traffic restriction.</t>
        <t>Captive Portal User Equipment: Also known as User Equipment. A device
           which has voluntarily joined a network for purposes of communicating
           beyond the constraints of the captive network.</t>
@@ -218,8 +213,8 @@
           assisting the user in satisfying the conditions to escape
           captivity.</t>
        <t>Captive Portal Signaling Protocol: Also known as Signaling Protocol.
-          A protocol used by the Enforcement device to signal the User Equipment
-          information about the state of its captivity.
+          A protocol used to signal the User Equipment information about the
+          state of its captivity.
        </t>
      </section>
 
@@ -248,8 +243,6 @@
         <t>SHOULD have a mechanism for notifying the user of the Captive Portal</t>
         <t>SHOULD have a web browser so that the user may navigate the Captive Portal
            user interface.</t>
-        <t>SHOULD be able to receive and validate the Captive Portal Signal,
-          and to access the Captive Portal API in response.</t>
         <t>MAY restrict application access to networks not granting full
            network access. E.g., a device connected to a mobile network may
            be connecting to a WiFi network; the operating system MAY
@@ -352,16 +345,14 @@
          the present architecture.
        </t>
        <t>
-         When user equipment receives (and validates) Captive Portal Signals,
-         the user equipment SHOULD query the API to check the state.
+         When user equipment receives Captive Portal Signals, the user equipment
+         MAY query the API to check the state.
          The User Equipment SHOULD rate-limit these API queries in the event of
          the signal being flooded. (See <xref target="Security"/>.)
        </t>
        <t>
          The API MUST be extensible to support future use-cases by allowing
-         extensible information elements. Suggestions include quota information,
-         expiry time, method of providing credentials, security token for
-         validating Captive Portal Signals.
+         extensible information elements.
        </t>
         <t>
          The API MUST use TLS for privacy and server authentication.
@@ -393,24 +384,15 @@
            from the Captive Portal back-end.</t>
        </list>
       </t>
-      <t>
-        As an upgrade path, captive portals MAY continue to support methods
-        that work today, such as modification of port-80 HTTP responses to
-        redirect users to the portal.  Various user-equipment vendors probe
-        canary URLs to identify the state captivity [reference Mariko
-        Kobayashi's survey]. While doing so, Captive Portal Signals SHOULD also be sent,
-        to activate work-flows in supporting devices.
-        [TODO: give some thought to precise recommendations for backwards compatibility.]
-      </t>
      </section>
      <section anchor="section_signal" title="Captive Portal Signal">
        <t>
         User Equipment may send traffic outside the captive network prior to the Enforcement
         device granting it access. The Enforcement Device rightly blocks or resets these
-        requests. However, lacking a signal from the Enforcement Device, the User Equipment
-        can only guess at whether it is captive. Consequently, allowing the Enforcement Device
-        to signal to the User Equipment that there is a problem with its connectivity may
-        improve the user's experience.
+        requests. However, lacking a signal from the Enforcement Device or a visit
+        to the API, the User Equipment can only guess at whether it is captive. Consequently,
+        allowing the Enforcement Device to signal to the User Equipment that there is a
+        problem with its connectivity may improve the user's experience.
        </t>
        <t>
         An Enforcement Device may also want to inform the User Equipment of a pending expiry
@@ -433,22 +415,13 @@
                will not need to wait for a network failure to refresh its login. On receipt of
                preemptive notification, the User Equipment can prompt the user to refresh.
              </t>
-             <t>The protocol SHOULD have a method of identifying the source of signals.</t>
-             <t>The signal SHOULD NOT include any information other than a prompt to contact the API,
-                and any information necessary for validation.</t>
-             <t>
-                There is no requirement that the protocol be reliable.
-                Thus, The protocol SHOULD continue to send signals as long as the state which
-                triggered the first signal holds, subject to reasonable rate limiting.
-                This is necessary to handle network loss or rate limits between the Enforcement
-                Device and the User Equipment.
-             </t>
+             <t>The signal SHOULD NOT include any information other than a prompt to contact
+                the API.</t>
           </list>
        </t>
-       <t>
-	       The Captive Portal Enforcement function SHOULD send Captive Portal Signals when disallowed
-	       User Equipment attempts to send to the network.
-         These signals MUST be rate-limited to a configurable rate.
+       <t>The Captive Portal Enforcement function MAY send Captive Portal Signals when disallowed
+	  User Equipment attempts to send to the network.  These signals MUST be rate-limited to a
+          configurable rate.
        </t>
        <t>
          The signals MUST NOT be sent to the Internet devices. The indications
@@ -480,8 +453,8 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
 .       |  |  to prohibited service.                   |        .
 .       |  +------------------> +---------------+  Allow/Deny   .
 .       |                       |               |    Rules      .
-.       |   CAPPORT Signal      | Captive Portal|     |         .
-.       +---------------------+ | Enforcement   | <---+         .
+.       |   (optional) Signal   | Captive Portal|      |        .
+.       +---------------------+ | Enforcement   | <----+        .
 .                               +---------------+               .
 .                                       |                       .
 .                            To/from external network           .
@@ -503,8 +476,8 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
               <t>The User Equipment attempts to communicate to the external
                  network through the Captive Portal enforcement device.</t>
               <t>The Captive Portal Enforcement device either allows the User
-                 Equipment's packets to the external network, or responds with
-                   a Captive Portal Signal.</t>
+                 Equipment's packets to the external network, or if a signal has
+                 been implemented, responds with a Captive Portal Signal.</t>
               <t>The CAPPORT web portal server directs the Captive Portal
                  Enforcement device to either allow or deny external network
                  access for the User Equipment.</t>
@@ -737,28 +710,22 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
     </list>
     </t>
     </section>
-    <section title="Conditions Expire">
+    <section title="Conditions About to Expire">
     <t>
-      This section describes a possible work-flow when conditions expire and
-      the user visits the portal again (e.g., low quota, or time expiry).
+      This section describes a possible work-flow when access is about to expire.
      </t>
     <t>
      <list style="numbers">
-      <t>Precondition: the Captive Portal Enforcement has been configured to
-         detect an expiry condition, which has now occurred.</t>
-      <t>The User Equipment sends a packet to the outside network.</t>
-      <t>The Captive Portal Enforcement detects that the packet is from an
-         expired User Equipment.</t>
-      <t>The Captive Portal Enforcement sends a Captive Portal Signal to
-         the User Equipment indicating that it needs to refresh its access.</t>
-      <t>The User Equipment verifies the signal is plausible.</t>
-      <t>The User Equipment queries the Captive Portal API to refresh
-         parameters and status of the Captive Network.</t>
-      <t>If necessary, the User once again navigates the web portal to gain
-         access to the external network.</t>
-      <t>The Captive Portal API Server gives more quota (time, bytes, etc.) to
-         the User Equipment by indicating to the Captive Portal Enforcement the new, extended quota.</t>
-      <t>The User Equipment accesses the external network.</t>
+      <t>Precondition: the API server has provided the User Equipment with a duration
+         over which its access is valid</t>
+      <t>The User Equipment is communicating with the outside network</t>
+      <t>The User Equipment's UI indicates that the length of time left for its access
+         has fallen below a threshold</t>
+      <t>The User Equipment visits the API again to validate the expiry time</t>
+      <t>If expiry is still imminent, the User Equipment prompts the user to access the
+         web-portal URI again</t>
+      <t>The User extends their access through the web-portal</t>
+      <t>The User Equipment's access to the outside network continues uninterrupted</t>
      </list>
     </t>
     </section>
@@ -827,10 +794,11 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
      </section>
      <section title="Risk of Nuisance Captive Portal">
        <t>
-         It is possible for any user on the Internet to send signals in attempt
-         to cause the receiving equipment to go to the captive portal. This has been
-         considered and addressed in the following ways:
-         <list>
+         If a Signalling Protocol is implemented, it may be possible for any user on
+         the Internet to send signals in attempt to cause the receiving equipment to
+         go to the captive portal. This has been considered, and implementations may
+         address it in the following ways:
+         <list style="symbols">
            <t>The signal only informs the User Equipment to query the API. It does not
               carry any information which may mislead or misdirect the User Equipment.</t>
            <t>Even when responding to the signal, the User Equipment securely authenticates
@@ -842,7 +810,7 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
      </section>
      <section title="User Options">
        <t>
-         The Signal informs the User Equipment that it is being held
+         The Signal may inform the User Equipment that it is being held
          captive.  There is no requirement that the User Equipment do something
          about this.
          Devices MAY permit users to disable automatic reaction to
