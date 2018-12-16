@@ -169,7 +169,7 @@
             Router-Advertisement options for this purpose are available in
             <xref target="RFC7710"/>. Other protocols (such as RADIUS),
             Provisioning Domains
-            <xref target="I-D.ietf-intarea-provisioning-domains"/>, or
+            <xref target="I-D.pfister-capport-pvd"/>, or
             static configuration may also be used.
             A device MAY query this API at any time to determine whether the
             network is holding the device in a captive state.
@@ -293,36 +293,15 @@
        <section anchor="section_pvd" title="Provisioning Domains">
          <t>
            Although still a work in progress,
-           <xref target="I-D.ietf-intarea-provisioning-domains"/>
+           <xref target="I-D.pfister-capport-pvd"/>
            proposes a mechanism for User Equipment to be provided with PvD
-           Bootstrap Information containing the URI for a JSON file containing
-           key-value pairs to be downloaded over HTTPS.
-           This JSON file would fill the role of the Captive Portal API
+           Bootstrap Information containing the URI for the JSON-based API
            described in <xref target="section_api"/>.
          </t>
          <t>
            The PvD security model provides secure binding between the
            information provided by the trusted Router Advertisement and the
            HTTPS server.
-         </t>
-         <t>
-           One key-value pair can be used to indicate the network
-           has restricted access, requiring captive portal navigation by a user.
-           E.g., key="captivePortal" and value=&lt;URI of portal&gt;.
-           The key-value pair should provide a different result when
-           access is not restricted. E.g., key="captivePortal" and value="".
-         </t>
-         <t>
-           This JSON file is extensible, allowing new key-value pairs
-           to indicate such things as network access expiry time,
-           URI for API access by IOT devices, etc.
-         </t>
-         <t>
-           The PvD server MUST support multiple (repeated) queries from each
-           User Equipment, always returning the current captive portal
-           information.  The User Equipment is expected to make this query upon
-           receiving (and validating) a Captive Portal Signal
-           (see <xref target="section_signal"/>).
          </t>
        </section>
      </section>
@@ -882,7 +861,7 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
    </references>
    <references title="Informative References">
      <?rfc include="reference.I-D.nottingham-capport-problem.xml"?>
-     <?rfc include="reference.I-D.ietf-intarea-provisioning-domains.xml"?>
+     <?rfc include="reference.I-D.pfister-capport-pvd.xml"?>
    </references>
 
 <!--
