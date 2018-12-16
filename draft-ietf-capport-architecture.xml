@@ -170,7 +170,7 @@
             A device MAY query this API at any time to determine whether the
             network is holding the device in a captive state.
          </t>
-         <t>End-user devices may be notified of captivity with Captive Portal Signals
+         <t>End-user devices can be notified of captivity with Captive Portal Signals
             in response to traffic.  This notification should work with any Internet
             protocol, not just clear-text HTTP. This notification does not carry the
             portal URI; rather it provides a notification to the User Equipment that
@@ -212,9 +212,11 @@
        <t>Captive Portal Server: The web server providing a user interface for
           assisting the user in satisfying the conditions to escape
           captivity.</t>
-       <t>Captive Portal Signaling Protocol: Also known as Signaling Protocol.
-          A protocol used to signal the User Equipment information about the
-          state of its captivity.
+       <t>Captive Portal Signal: A notification from the network used to inform the User Equipment
+          that the state of its captivity may have changed.
+       </t>
+       <t>Captive Portal Signaling Protocol: Also known as Signaling Protocol. The protocol for
+          communicating Captive Portal Signals.
        </t>
      </section>
 
@@ -389,8 +391,8 @@
        <t>
         User Equipment may send traffic outside the captive network prior to the Enforcement
         device granting it access. The Enforcement Device rightly blocks or resets these
-        requests. However, lacking a signal from the Enforcement Device or a visit
-        to the API, the User Equipment can only guess at whether it is captive. Consequently,
+        requests. However, lacking a signal from the Enforcement Device or interaction with the
+        API server, the User Equipment can only guess at whether it is captive. Consequently,
         allowing the Enforcement Device to signal to the User Equipment that there is a
         problem with its connectivity may improve the user's experience.
        </t>
@@ -415,8 +417,8 @@
                will not need to wait for a network failure to refresh its login. On receipt of
                preemptive notification, the User Equipment can prompt the user to refresh.
              </t>
-             <t>The signal SHOULD NOT include any information other than a prompt to contact
-                the API.</t>
+             <t>The signal SHOULD NOT include any information other than an indication that traffic
+                is restricted, which can be used as a prompt to contact the API.</t>
           </list>
        </t>
        <t>The Captive Portal Enforcement function MAY send Captive Portal Signals when disallowed
@@ -796,7 +798,7 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
        <t>
          If a Signalling Protocol is implemented, it may be possible for any user on
          the Internet to send signals in attempt to cause the receiving equipment to
-         go to the captive portal. This has been considered, and implementations may
+         communicate with the Captive Portal API. This has been considered, and implementations may
          address it in the following ways:
          <list style="symbols">
            <t>The signal only informs the User Equipment to query the API. It does not
