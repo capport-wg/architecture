@@ -457,7 +457,7 @@
      </section>
      <section title="Component Diagram">
      <t>
-       <figure>
+       <figure anchor="components" title="Captive Portal Architecture Component Diagram">
            <preamble>
             The following diagram shows the communication between each component.
            </preamble>
@@ -468,30 +468,29 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
 . +------------+   Provision API URI         | Provisioning |   .
 . |            |<---------------------------+|  Service     |   .
 . |   User     |                             +--------------+   .
-. | Equipment  |   Query CAPPORT status;     +-------------+    .
+. | Equipment  |   Query CAPPORT status      +-------------+    .
 . |            |+--------------------------->| CAPPORT API |    .
 . |            |                             |  Server     |    .
 . |            |                             +------+------+    .
-. |            |                                    |Status     .
+. |            |                                    | Status    .
 . |            |   Portal user interface     +------+------+    .
-. |            |+--------------------------> | CAPPORT     |    .
+. |            |+--------------------------->| CAPPORT     |    .
 . +------------+                             | web portal  |    .
-.       ^  |  Connection Attempt             +-------------+    .
-.       |  |  to prohibited service.                   |        .
-.       |  +------------------> +---------------+  Allow/Deny   .
-.       |                       |               |    Rules      .
-.       |   CAPPORT Signal      | Captive Portal|     |         .
-.       +---------------------+ | Enforcement   | <---+         .
-.                               +---------------+               .
-.                                       |                       .
-.                            To/from external network           .
-.                                       |                       .
-.                                       |                       .
-o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
+.     ^   ^ |                                +-------------+    .
+.     |   | |   Data                                  |         .
+.     |   | +-----------------> +---------------+  Allow/Deny   .
+.     |   +--------------------+|               |    Rules      .
+.     |                         | Captive Portal|     |         .
+.     |   CAPPORT Signal        | Enforcement   | <---+         .
+.     +-------------------------+---------------+               .
+.                                      ^ |                      .
+.                                      | |                      .
+.                          Data to/from external network        .
+.                                      | |                      .
+o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
+                                       | v
                                   EXTERNAL NETWORK
-
-        Figure 1: Captive Portal Architecture Component Diagram
-           ]]></artwork>
+	   ]]></artwork>
        </figure>
         In the diagram:
              <list style="symbols">
