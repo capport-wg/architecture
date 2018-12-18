@@ -445,10 +445,9 @@
              </t>
           </list>
 
-        Future specifications of a Captive Portal Signaling Protocol will not provide mechanisms for
-        communicating selective blocking. That is, the protocol will not provide mechanisms to block
-        some portions of the external network, but not others. Note that this does not preclude a
-        captive portal deployment from using a walled garden.
+       The Captive Portal Signaling Protocol does not provide any means of indicating that the
+       network prevents access to some destinations. The intent is to rely on the Captive Portal API
+       and the web portal to which it points to communicate local network policies.
        </t>
        <t>
 	       The Captive Portal Enforcement function SHOULD send Captive Portal Signals when disallowed
