@@ -558,6 +558,9 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                  <t>Be Visible to the API</t>
                  <t>Be Visible to the Enforcement Device</t>
              </list>
+
+             An identifier might only apply to the current point of network attachment. If the
+             device moves to a different network location its identity could change.
           </t>
           <section anchor="id_recommended_unique" title="Uniquely Identify User Equipment">
               <t>
