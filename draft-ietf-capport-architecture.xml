@@ -560,9 +560,8 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
                  <t>Be Visible to the Enforcement Device</t>
              </list>
 
-             An identifier only needs to apply to the current point of network attachment. If the
-             device moves elsewhere in the network, thus changing its identifier, its identity from
-             the perspective of other components MAY change.
+             An identifier might only apply to the current point of network attachment. If the
+             device moves to a different network location its identity could change.```
           </t>
           <section anchor="id_recommended_unique" title="Uniquely Identify User Equipment">
               <t>
