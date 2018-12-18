@@ -812,7 +812,7 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
      </section>
      <section title="User Options">
        <t>
-         The Signal may inform the User Equipment that it is being held
+         The Signal could inform the User Equipment that it is being held
          captive.  There is no requirement that the User Equipment do something
          about this.
          Devices MAY permit users to disable automatic reaction to
