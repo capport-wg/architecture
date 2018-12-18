@@ -179,7 +179,7 @@
          </t>
          <t>
             Receipt of a Captive Portal Signal informs an end-user device that
-            it is captive.
+            it could be captive.
             In response, the device MAY query the provisioned API to obtain
             information about the network state.
             The device MAY take immediate action to satisfy the portal
@@ -213,7 +213,7 @@
           assisting the user in satisfying the conditions to escape
           captivity.</t>
        <t>Captive Portal Signal: A notification from the network used to inform the User Equipment
-          that the state of its captivity may have changed.
+          that the state of its captivity could have changed.
        </t>
        <t>Captive Portal Signaling Protocol: Also known as Signaling Protocol. The protocol for
           communicating Captive Portal Signals.
@@ -795,7 +795,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
      </section>
      <section title="Risk of Nuisance Captive Portal">
        <t>
-         If a Signalling Protocol is implemented, it may be possible for any user on
+         If a Signaling Protocol is implemented, it may be possible for any user on
          the Internet to send signals in attempt to cause the receiving equipment to
          communicate with the Captive Portal API. This has been considered, and implementations may
          address it in the following ways:
