@@ -420,6 +420,10 @@
              <t>The signal SHOULD NOT include any information other than an indication that traffic
                 is restricted, which can be used as a prompt to contact the API.</t>
           </list>
+
+       The Captive Portal Signaling Protocol does not provide any means of indicating that the
+       network prevents access to some destinations. The intent is to rely on the Captive Portal API
+       and the web portal to which it points to communicate local network policies.
        </t>
        <t>The Captive Portal Enforcement function MAY send Captive Portal Signals when disallowed
 	  User Equipment attempts to send to the network.  These signals MUST be rate-limited to a
