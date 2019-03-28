@@ -867,7 +867,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
        network connectivity is established to determine if the device is
        attached to a network with a captive portal present. A common method is
        to attempt to make a HTTP request to a known, vendor hosted endpoint with
-       an expected response. This check should not be secured with TLS, as a
+       an expected response. This check is typically not secured with TLS, as a
        network with a captive portal may intercept the connection, leading to a
        host name mismatch.
 
