@@ -861,10 +861,27 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
      <?rfc include="reference.I-D.ietf-intarea-provisioning-domains.xml"?>
    </references>
 
-<!--
-   <section anchor="app-additional" title="Additional Stuff">
-     <t>This becomes an Appendix.</t>
+   <section anchor="app-additional" title="Existing captive portal detection implementations">
+     <t>
+       Operating systems and user applications may perform various tests when
+       network connectivity is established to determine if the device is
+       attached to a network with a captive portal present. A common method is
+       attempt to make a HTTP request to a known, vendor hosted endpoint with an
+       expected response. This check should not be secured with TLS, as a network
+       with a captive portal may intercept the connection, leading to a host
+       name mismatch.
+
+       Another test that can be performed is a DNS lookup to a known address
+       with an expected answer. Such tests may be less reliable as the captive
+       portal may only be intercepting TCP traffic and deliberately excluding
+       the interception of DNS queries. DNS queries not using UDP may
+       potentially fail this test if operating over TCP or DNS over HTTP.
+
+       Malicious or misconfigured networks with a captive portal present may
+       not intercept these requests and choose to pass them through or decide to
+       impersonate, leading to the device having a false negative.
+     </t>
    </section>
--->
+
  </back>
 </rfc>
