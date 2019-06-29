@@ -33,7 +33,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="info" docName="draft-ietf-capport-architecture-03" ipr="trust200902">
+<rfc category="info" docName="draft-ietf-capport-architecture-04" ipr="trust200902">
  <!-- category values: std, bcp, info, exp, and historic
     ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
        or pre5378Trust200902
@@ -68,7 +68,7 @@
     </author>
 
 
-    <date year="2018" />
+    <date year="2019" />
 
    <!-- If the month and year are both specified and are the current ones, xml2rfc will fill
         in the current day for you. If only the current year is specified, xml2rfc will fill
