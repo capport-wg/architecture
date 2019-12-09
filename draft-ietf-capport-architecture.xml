@@ -737,6 +737,19 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
      </list>
     </t>
     </section>
+    <section title="Handling of Changes in Portal URI">
+    <t>A different Captive Portal API URI could be returned in the following cases:</t>
+    <t>
+      <list style="symbols">
+        <t>If DHCP is used, a lease renewal/rebind may return a different Captive
+          Portal API URI.</t>
+        <t>If RA is used, a new Captive Portal API URI may be specified in a new RA
+          message received by end user equipment.</t>
+      </list>
+    </t>
+    <t>Whenever a new Portal URI is received by end user equipment, it SHOULD discard
+      the old URI and use the new one for future requests to the API.</t>
+    </section>
    </section>
 
    <section anchor="Acknowledgments" title="Acknowledgments">
