@@ -800,7 +800,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
            ensure the integrity of this information, as well as its confidentiality.
        </t>
      </section>
-     <section title="Risk of Nuisance Captive Portal">
+     <section title="Risks Associated with the Signaling Protocol">
        <t>
          If a Signaling Protocol is implemented, it may be possible for any user on
          the Internet to send signals in attempt to cause the receiving equipment to
