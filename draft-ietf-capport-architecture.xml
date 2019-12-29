@@ -212,6 +212,12 @@
        <t>Captive Portal Server: The web server providing a user interface for
           assisting the user in satisfying the conditions to escape
           captivity.</t>
+       <t>Captive Portal API: Also known as API. An HTTP API allowing User Equipment
+          to query its state of captivity within the Captive Portal.
+       </t>
+       <t>Captive Portal API Server: Also known as API Server. A server hosting the
+          Captive Portal API.
+       </t>
        <t>Captive Portal Signal: A notification from the network used to inform the User Equipment
           that the state of its captivity could have changed.
        </t>
@@ -447,20 +453,20 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
 . +------------+   Provision API URI         | Provisioning |   .
 . |            |<---------------------------+|  Service     |   .
 . |   User     |                             +--------------+   .
-. | Equipment  |   Query CAPPORT status      +-------------+    .
-. |            |+--------------------------->| CAPPORT API |    .
+. | Equipment  |   Query captivity status    +-------------+    .
+. |            |+--------------------------->|  API        |    .
 . |            |                             |  Server     |    .
 . |            |                             +------+------+    .
 . |            |                                    | Status    .
 . |            |   Portal user interface     +------+------+    .
-. |            |+--------------------------->| CAPPORT     |    .
-. +------------+                             | web portal  |    .
+. |            |+--------------------------->|  Web Portal |    .
+. +------------+                             |  Server     |    .
 .     ^   ^ |                                +-------------+    .
 .     |   | |   Data                                  |         .
 .     |   | +-----------------> +---------------+  Allow/Deny   .
 .     |   +--------------------+|               |    Rules      .
 .     |                         | Captive Portal|     |         .
-.     |   CAPPORT Signal        | Enforcement   | <---+         .
+.     |   Captive Portal Signal | Enforcement   | <---+         .
 .     +-------------------------+---------------+               .
 .                                      ^ |                      .
 .                                      | |                      .
@@ -474,7 +480,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         In the diagram:
              <list style="symbols">
               <t>During provisioning (e.g., DHCP), the User Equipment acquires
-                 the URI for the CAPPORT API.</t>
+                 the URI for the Captive Portal API.</t>
               <t>The User Equipment queries the API to learn of its state of
                  captivity. If captive, the User Equipment presents the portal
                  user interface to the user.</t>
@@ -483,14 +489,14 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
               <t>The Captive Portal Enforcement device either allows the User
                  Equipment's packets to the external network, or if a signal has
                  been implemented, responds with a Captive Portal Signal.</t>
-              <t>The CAPPORT web portal server directs the Captive Portal
+              <t>The Web Portal Server directs the Captive Portal
                  Enforcement device to either allow or deny external network
                  access for the User Equipment.</t>
              </list>
       </t>
       <t>
-        Although the provisioning, API, and web portal functions are shown as
-        discrete blocks, they could of course be combined into a single element.
+        Although the Provisioning Service, API Server, and Web Portal Server functions
+        are shown as discrete blocks, they could of course be combined into a single element.
       </t>
       </section>
      </section>
@@ -534,7 +540,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
              <list style="symbols">
                  <t>Uniquely Identify the User Equipment</t>
                  <t>Be Hard to Spoof</t>
-                 <t>Be Visible to the API</t>
+                 <t>Be Visible to the API Server</t>
                  <t>Be Visible to the Enforcement Device</t>
              </list>
 
@@ -569,10 +575,10 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                   the identity of the User Equipment could imply liability.
               </t>
           </section>
-          <section anchor="id_recommended_visible_api" title="Visible to the API">
+          <section anchor="id_recommended_visible_api" title="Visible to the API Server">
               <t>
-                  Since the API will need to perform operations which rely on the identity
-                  of the user equipment, such as query whether it is captive, the API
+                  Since the API Server will need to perform operations which rely on the identity
+                  of the user equipment, such as query whether it is captive, the API Server
                   needs to be able to relate requests to the User Equipment making the
                   request.
               </t>
@@ -624,7 +630,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
 
               <t>
                  Another consideration related to uniqueness of the User Equipment is that
-                 if the attached User Equipment changes, both the API server and the
+                 if the attached User Equipment changes, both the API Server and the
                  Enforcement Device must invalidate their state related to the User Equipment.
              </t>
 
@@ -638,7 +644,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
              </t>
 
               <t>
-                 The API server faces a similar problem, implying that it should co-exist with the
+                 The API Server faces a similar problem, implying that it should co-exist with the
                  Enforcement Device, or that the enforcement device should extend requests to it
                  with the identifying information.
               </t>
@@ -666,7 +672,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
 
               <t>
                   Since the IP address may traverse multiple segments of the network, more
-                  flexibility is afforded to the Enforcement Device and the API server: they
+                  flexibility is afforded to the Enforcement Device and the API Server: they
                   simply must exist on a segment of the network where the IP address is still
                   unique. However, consider that a NAT may be deployed between the User Equipment
                   and the Enforcement Device. In such cases, it is possible for the components
@@ -678,7 +684,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                 still satisfying all of the recommended properties. This raises some challenges
                 to the components of the network. For example, if the user equipment tries
                 to access the network with multiple IP addresses, should the enforcement device
-                and API server treat each IP address as a unique User Equipment, or should it
+                and API Server treat each IP address as a unique User Equipment, or should it
                 tie the multiple addresses together into one view of the subscriber?
                 An implementation MAY do either. Attention should be paid to IPv6 and the fact
                 that it is expected for a device to have multiple IPv6 addresses on a single
@@ -704,7 +710,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
          lease, RA, or similar, acquiring provisioning information.</t>
       <t>The User Equipment learns the URI for the Captive Portal API from the
          provisioning information (e.g., <xref target="RFC7710"/>).</t>
-      <t>The User Equipment accesses the CAPPORT API to receive parameters
+      <t>The User Equipment accesses the Captive Portal API to receive parameters
          of the Captive Network, including web-portal URI. (This step replaces
          the clear-text query to a canary URL.)</t>
       <t>If necessary, the User navigates the web portal to gain access to the
@@ -724,7 +730,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
      </t>
     <t>
      <list style="numbers">
-      <t>Precondition: the API server has provided the User Equipment with a duration
+      <t>Precondition: the API has provided the User Equipment with a duration
          over which its access is valid</t>
       <t>The User Equipment is communicating with the outside network</t>
       <t>The User Equipment's UI indicates that the length of time left for its access
@@ -795,7 +801,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
      <section title="Secure APIs">
        <t>
            The solution described here requires that the API be secured using TLS.
-           This is required to allow the user equipment and API server to exchange
+           This is required to allow the user equipment and API Server to exchange
            secrets which can be used to validate future interactions. The API must
            ensure the integrity of this information, as well as its confidentiality.
        </t>
@@ -810,8 +816,8 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
            <t>The signal only informs the User Equipment to query the API. It does not
               carry any information which may mislead or misdirect the User Equipment.</t>
            <t>Even when responding to the signal, the User Equipment securely authenticates
-               with API servers.</t>
-           <t>Accesses to the API server are rate limited, limiting the impact of a repeated
+               with API Servers.</t>
+           <t>Accesses to the API Server are rate limited, limiting the impact of a repeated
               attack.</t>
          </list>
        </t>
