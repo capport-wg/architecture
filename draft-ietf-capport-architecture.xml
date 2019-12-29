@@ -287,7 +287,6 @@
        </section>
        <section anchor="section_pvd" title="Provisioning Domains">
          <t>
-           Although still a work in progress,
            <xref target="I-D.ietf-intarea-provisioning-domains"/>
            proposes a mechanism for User Equipment to be provided with PvD
            Bootstrap Information containing the URI for a JSON file containing
