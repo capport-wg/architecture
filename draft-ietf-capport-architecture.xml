@@ -699,14 +699,16 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
          <section anchor="context_free_url" title="Context-free URL">
            <t>
              The URLs provided in the API SHOULD contain all the information necessary to render
-             the resources requested: they should be context free so it does not depend on ambient
-             information, such as remote address on the connection. This is to ensure that User
-             Equipment can access URLs from a network other than the one that contains the captive
-             portal. One possible approach is to include the identification of the User Equipment
-             in the URLs.
+	     the resources requested: the resources should not depend on ambient
+	     information, such as remote address on the connection. This is to
+	     ensure that the content served from these URLs is correct and
+	     meaningful to the User Equipment, even when accessed from a network
+	     other than the one that contains the captive portal. One possible
+	     approach is to include some means of identifying the User Equipment
+	     in the URLs.
            </t>
            <t>
-             The URLs provided in the API are recommended to be resolved using public DNS, so they
+             The URLs provided in the API are expected to be resolved using public DNS, so they
              can be rendered in case User Equipment is making request from a different network.
            </t>
            <t>
