@@ -264,15 +264,6 @@
            CAPPORT architecture expects this URI to indicate the API described
            in <xref target="section_api"/>.
           </t>
-          <t>
-           Although it is not clear from RFC7710  what protocol should be
-           executed at the specified URI, some readers might have assumed it to
-           be an HTML page, and hence there might be User Equipment assuming a
-           browser should open this URI.  For backwards compatibility, it is
-           RECOMMENDED that the server check the "Accept" field when serving
-           the URI, and serve HTML pages for "text/html" and serve the API for
-           "application/json". [REVISIT: are these details appropriate?]
-          </t>
         </section>
         <section anchor="section_pvd">
           <name>Provisioning Domains</name>
@@ -282,11 +273,6 @@
            proposes a mechanism for User Equipment to be provided with PvD
            Bootstrap Information containing the URI for the JSON-based API
            described in <xref target="section_api"/>.
-          </t>
-          <t>
-           The PvD security model provides secure binding between the
-           information provided by the trusted Router Advertisement and the
-           HTTPS server.
           </t>
         </section>
       </section>
