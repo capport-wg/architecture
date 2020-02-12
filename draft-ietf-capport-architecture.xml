@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!-- This template is for creating an Internet Draft using xml2rfc,
     which is available here: http://xml.resource.org. -->
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
@@ -26,25 +26,22 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="info" docName="draft-ietf-capport-architecture-05" ipr="trust200902">
- <!-- category values: std, bcp, info, exp, and historic
+<!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent">
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="info" docName="draft-ietf-capport-architecture-05" ipr="trust200902" tocInclude="true" tocDepth="4" symRefs="true" sortRefs="true" version="3">
+  <!-- xml2rfc v2v3 conversion 2.37.2 -->
+  <!-- category values: std, bcp, info, exp, and historic
     ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
        or pre5378Trust200902
     you can add the attributes updates="NNNN" and obsoletes="NNNN"
     they will automatically be output with "(if approved)" -->
-
- <!-- ***** FRONT MATTER ***** -->
-
- <front>
-   <!-- The abbreviated title is used in the page header - it is only necessary if the
+  <!-- ***** FRONT MATTER ***** -->
+  <front>
+    <!-- The abbreviated title is used in the page header - it is only necessary if the
         full title is longer than 39 characters -->
-
-   <title abbrev="CAPPORT Architecture">CAPPORT Architecture</title>
-
-   <!-- add 'role="editor"' below for the editors if appropriate -->
-
-   <!-- Another author who claims to be an editor -->
-
+    <title abbrev="CAPPORT Architecture">CAPPORT Architecture</title>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-capport-architecture-05"/>
+    <!-- add 'role="editor"' below for the editors if appropriate -->
+    <!-- Another author who claims to be an editor -->
     <author fullname="Kyle Larose" initials="K." surname="Larose">
       <organization>Agilicus</organization>
       <address>
@@ -52,112 +49,102 @@
         <!-- uri and facsimile elements may also be added -->
       </address>
     </author>
-
     <author fullname="David Dolson" initials="D." surname="Dolson">
       <address>
         <email>ddolson@acm.org</email>
         <!-- uri and facsimile elements may also be added -->
       </address>
     </author>
-
     <author fullname="Heng Liu" initials="H." surname="Liu">
       <address>
         <email>liucougar@google.com</email>
       </address>
     </author>
-
-    <date year="2020" />
-
-   <!-- If the month and year are both specified and are the current ones, xml2rfc will fill
+    <date year="2020"/>
+    <!-- If the month and year are both specified and are the current ones, xml2rfc will fill
         in the current day for you. If only the current year is specified, xml2rfc will fill
         in the current day and month for you. If the year is not the current one, it is
         necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the
         purpose of calculating the expiry date).  With drafts it is normally sufficient to
         specify just the year. -->
-
-   <!-- Meta-data Declarations -->
-
-   <area>art</area>
-
-   <workgroup>Internet Engineering Task Force</workgroup>
-
-   <!-- WG name at the upperleft corner of the doc,
+    <!-- Meta-data Declarations -->
+    <area>art</area>
+    <workgroup>Internet Engineering Task Force</workgroup>
+    <!-- WG name at the upperleft corner of the doc,
         IETF is fine for individual submissions.
         If this element is not present, the default is "Network Working Group",
         which is used by the RFC Editor as a nod to the history of the IETF. -->
-
-   <keyword>plus</keyword>
-
-   <!-- Keywords will be incorporated into HTML output
+    <keyword>plus</keyword>
+    <!-- Keywords will be incorporated into HTML output
         files in a meta tag but they have no effect on text or nroff
         output. If you submit your draft to the RFC Editor, the
         keywords will be used for the search engine. -->
-
-   <abstract>
-     <t>This document aims to document consensus on the CAPPORT architecture.
+    <abstract>
+      <t>This document aims to document consensus on the CAPPORT architecture.
         DHCP or Router Advertisements, an optional signaling protocol, and an HTTP API are used to
         provide the solution. The role of Provisioning Domains (PvDs) is
         described.
-     </t>
-   </abstract>
- </front>
-
- <middle>
-   <section title="Introduction">
-     <t>
+      </t>
+    </abstract>
+  </front>
+  <middle>
+    <section>
+      <name>Introduction</name>
+      <t>
        In this document, "Captive Portal" is used to describe a network to
        which a device may be voluntarily attached, such that network access is
        limited until some requirements have been fulfilled.  Typically a user
        is required to use a web browser to fulfill requirements imposed by the
        network operator, such as reading advertisements, accepting an
        acceptable-use policy, or providing some form of credentials.
-     </t>
-     <t>
+      </t>
+      <t>
        Implementations generally require a web server, some method to
        allow/block traffic, and some method to alert the user.  Common methods
        of alerting the user involve modifying HTTP or DNS traffic.
-     </t>
-     <t>
+      </t>
+      <t>
        Problems with captive portal implementations have been described in
        <xref target="I-D.nottingham-capport-problem"/>. [If that document
        cannot be published, consider putting its best parts into an appendix of
        this document.]
-     </t>
-     <t>
+      </t>
+      <t>
        This document standardizes an architecture for implementing captive portals
        that provides tools for addressing most of those problems. We are guided
        by these principles:
-       <list style="symbols">
-         <t>Solutions SHOULD NOT require the forging of responses from DNS or
+      </t>
+      <ul spacing="normal">
+        <li>Solutions SHOULD NOT require the forging of responses from DNS or
             HTTP servers, or any other protocol.  In particular, solutions
-            SHOULD NOT require man-in-the-middle proxy of TLS traffic.</t>
-         <t>Solutions MUST operate at the layer of Internet Protocol (IP) or
+            SHOULD NOT require man-in-the-middle proxy of TLS traffic.</li>
+        <li>Solutions MUST operate at the layer of Internet Protocol (IP) or
             above, not being specific to any particular access technology such
-            as Cable, WiFi or 3GPP.</t>
-         <t>Solutions MAY allow a device to be alerted that it is in a
+            as Cable, WiFi or 3GPP.</li>
+        <li>Solutions MAY allow a device to be alerted that it is in a
             captive network when attempting to use any application on the
-            network.</t>
-         <t>Solutions SHOULD allow a device to learn that it is in a captive
-            network before any application attempts to use the network.</t>
-         <t>The state of captivity SHOULD be explicitly available to devices
+            network.</li>
+        <li>Solutions SHOULD allow a device to learn that it is in a captive
+            network before any application attempts to use the network.</li>
+        <li>The state of captivity SHOULD be explicitly available to devices
             (in contrast to modification of DNS or HTTP, which is only
             indirectly machine-detectable by the client--by comparing
-            responses to well-known queries with expected responses).</t>
-         <t>The architecture MUST provide a path of incremental migration,
+            responses to well-known queries with expected responses).</li>
+        <li>The architecture MUST provide a path of incremental migration,
             acknowledging a huge variety of portals and end-user device
-            implementations and software versions.</t>
-       </list>
-     </t>
-     <t>
+            implementations and software versions.</li>
+      </ul>
+      <t>
        A side-benefit of the architecture described in this document is that
        devices without user interfaces are able to identify parameters of
        captivity.  However, this document does not yet describe a mechanism
        for such devices to escape captivity.
-     </t>
-     <t>
+      </t>
+      <t>
        The architecture uses the following mechanisms:
-       <list style="symbols">
-         <t>Network provisioning protocols provide end-user devices with a
+      </t>
+      <ul spacing="normal">
+        <li>Network provisioning protocols provide end-user devices with a
             URI for the API that end-user devices query for information about
             what is required to escape captivity. DHCP, DHCPv6, and
             Router-Advertisement options for this purpose are available in
@@ -167,119 +154,117 @@
             static configuration may also be used.
             A device MAY query this API at any time to determine whether the
             network is holding the device in a captive state.
-         </t>
-         <t>End-user devices can be notified of captivity with Captive Portal Signals
+         </li>
+        <li>End-user devices can be notified of captivity with Captive Portal Signals
             in response to traffic.  This notification should work with any Internet
             protocol, not just clear-text HTTP. This notification does not carry the
             portal URI; rather it provides a notification to the User Equipment that
             it is in a captive state. This document will specify requirements for
             a signaling protocol which could generate Captive Portal Signals.
-         </t>
-         <t>
+         </li>
+        <li>
             Receipt of a Captive Portal Signal informs an end-user device that
             it could be captive.
             In response, the device MAY query the provisioned API to obtain
             information about the network state.
             The device MAY take immediate action to satisfy the portal
             (according to its configuration/policy).
-         </t>
-       </list>
-     </t>
-     <t>
+         </li>
+      </ul>
+      <t>
        The architecture attempts to provide privacy, authentication, and safety mechanisms
        to the extent possible.
-     </t>
-     <section title="Requirements Language">
-       <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      </t>
+      <section>
+        <name>Requirements Language</name>
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
        "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-       document are to be interpreted as described in <xref
-       target="RFC2119">RFC 2119</xref>.</t>
-     </section>
-     <section title="Terminology">
-       <t>Captive Network: A network which limits communication of attached
+       document are to be interpreted as described in <xref target="RFC2119">RFC 2119</xref>.</t>
+      </section>
+      <section>
+        <name>Terminology</name>
+        <t>Captive Network: A network which limits communication of attached
           devices to restricted hosts until the user has satisfied
           Captive Portal Conditions, after which access is permitted to a wider
           set of hosts (typically the internet).</t>
-       <t>Captive Portal Conditions: site-specific requirements that a user
+        <t>Captive Portal Conditions: site-specific requirements that a user
           or device must satisfy in order to gain access to the wider network.</t>
-       <t>Captive Portal Enforcement: The network equipment which enforces the
+        <t>Captive Portal Enforcement: The network equipment which enforces the
           traffic restriction.</t>
-       <t>Captive Portal User Equipment: Also known as User Equipment. A device
+        <t>Captive Portal User Equipment: Also known as User Equipment. A device
           which has voluntarily joined a network for purposes of communicating
           beyond the constraints of the captive network.</t>
-       <t>Captive Portal Server: The web server providing a user interface for
+        <t>Captive Portal Server: The web server providing a user interface for
           assisting the user in satisfying the conditions to escape
           captivity.</t>
-       <t>Captive Portal API: Also known as API. An HTTP API allowing User Equipment
+        <t>Captive Portal API: Also known as API. An HTTP API allowing User Equipment
           to query its state of captivity within the Captive Portal.
-       </t>
-       <t>Captive Portal API Server: Also known as API Server. A server hosting the
+        </t>
+        <t>Captive Portal API Server: Also known as API Server. A server hosting the
           Captive Portal API.
-       </t>
-       <t>Captive Portal Signal: A notification from the network used to inform the User Equipment
+        </t>
+        <t>Captive Portal Signal: A notification from the network used to inform the User Equipment
           that the state of its captivity could have changed.
-       </t>
-       <t>Captive Portal Signaling Protocol: Also known as Signaling Protocol. The protocol for
+        </t>
+        <t>Captive Portal Signaling Protocol: Also known as Signaling Protocol. The protocol for
           communicating Captive Portal Signals.
-       </t>
-     </section>
-
-   </section>
-
-   <section title="Components">
-
-     <section anchor="section_client" title="User Equipment">
-      <t>
+        </t>
+      </section>
+    </section>
+    <section>
+      <name>Components</name>
+      <section anchor="section_client">
+        <name>User Equipment</name>
+        <t>
        The User Equipment is the device that a user desires to be attached to
        a network with full access to all hosts on the network (e.g., to have
        Internet access). The User Equipment communication is typically
        restricted by the Captive Portal Enforcement, described in <xref target="section_capport_enforcement"/>,
        until site-specific requirements have been met.
-      </t>
-      <t>
+        </t>
+        <t>
         At this time we consider only devices with web browsers, with web
         applications being the means of satisfying Captive Portal Conditions.
-      </t>
-      <t>
-      <list style="symbols">
-        <t>An example interactive User Equipment is a smart phone.</t>
-        <t>SHOULD support provisioning of the URI for the Captive Portal API (e.g., by DHCP)</t>
-        <t>SHOULD distinguish Captive Portal API access per network interface, in the manner
-           of Provisioning Domain Architecture <xref target="RFC7556"/>.</t>
-        <t>SHOULD have a mechanism for notifying the user of the Captive Portal</t>
-        <t>SHOULD have a web browser so that the user may navigate the Captive Portal
-           user interface.</t>
-        <t>MAY restrict application access to networks not granting full
+        </t>
+        <ul spacing="normal">
+          <li>An example interactive User Equipment is a smart phone.</li>
+          <li>SHOULD support provisioning of the URI for the Captive Portal API (e.g., by DHCP)</li>
+          <li>SHOULD distinguish Captive Portal API access per network interface, in the manner
+           of Provisioning Domain Architecture <xref target="RFC7556"/>.</li>
+          <li>SHOULD have a mechanism for notifying the user of the Captive Portal</li>
+          <li>SHOULD have a web browser so that the user may navigate the Captive Portal
+           user interface.</li>
+          <li>MAY restrict application access to networks not granting full
            network access. E.g., a device connected to a mobile network may
            be connecting to a WiFi network; the operating system MAY
            avoid updating the default route until network access restrictions
            have been lifted (excepting access to the Captive Portal server).
-           This has been termed "make before break".</t>
-      </list>
-      </t>
-      <t>
+           This has been termed "make before break".</li>
+        </ul>
+        <t>
         None of the above requirements are mandatory because (a) we do not wish
         to say users or devices must seek access beyond the captive network,
         (b) the requirements may be fulfilled by manually visiting the captive
         portal web application, and (c) legacy devices must continue to be
         supported.
-      </t>
-     </section>
-
-     <section anchor="section_provisioning" title="Provisioning Service">
-       <t>
+        </t>
+      </section>
+      <section anchor="section_provisioning">
+        <name>Provisioning Service</name>
+        <t>
          Here we discuss candidate mechanisms for provisioning the User
          Equipment with the URI of the API to query captive portal state and
          navigate the portal.
-       </t>
-       <section anchor="section_dhcp" title="DHCP or Router Advertisements">
-         <t>
+        </t>
+        <section anchor="section_dhcp">
+          <name>DHCP or Router Advertisements</name>
+          <t>
            A standard for providing a portal URI using DHCP or Router
            Advertisements is described in <xref target="RFC7710"/>.  The
            CAPPORT architecture expects this URI to indicate the API described
            in <xref target="section_api"/>.
-         </t>
-         <t>
+          </t>
+          <t>
            Although it is not clear from RFC7710  what protocol should be
            executed at the specified URI, some readers might have assumed it to
            be an HTML page, and hence there might be User Equipment assuming a
@@ -287,143 +272,148 @@
            RECOMMENDED that the server check the "Accept" field when serving
            the URI, and serve HTML pages for "text/html" and serve the API for
            "application/json". [REVISIT: are these details appropriate?]
-         </t>
-       </section>
-       <section anchor="section_pvd" title="Provisioning Domains">
-         <t>
+          </t>
+        </section>
+        <section anchor="section_pvd">
+          <name>Provisioning Domains</name>
+          <t>
            Although still a work in progress,
            <xref target="I-D.pfister-capport-pvd"/>
            proposes a mechanism for User Equipment to be provided with PvD
            Bootstrap Information containing the URI for the JSON-based API
            described in <xref target="section_api"/>.
-         </t>
-         <t>
+          </t>
+          <t>
            The PvD security model provides secure binding between the
            information provided by the trusted Router Advertisement and the
            HTTPS server.
-         </t>
-       </section>
-     </section>
-
-     <section anchor="section_api" title="Captive Portal API Server">
-       <t>
+          </t>
+        </section>
+      </section>
+      <section anchor="section_api">
+        <name>Captive Portal API Server</name>
+        <t>
          The purpose of a Captive Portal API is to permit a query of Captive
          Portal state without interrupting the user.  This API thereby removes
          the need for a device to perform clear-text "canary" HTTP queries to
          check for response tampering.
-       </t>
-       <t>
+        </t>
+        <t>
          The URI of this API will have been provisioned to the User Equipment.
          (Refer to <xref target="section_provisioning"/>).
-       </t>
-       <t>
+        </t>
+        <t>
          This architecture expects the User Equipment to query the API when the
          User Equipment attaches to the network and multiple times thereafter.
          Therefore the API MUST support multiple repeated queries from the same
          User Equipment, returning the current state of captivity for the
          equipment.
-       </t>
-       <t>
+        </t>
+        <t>
          At minimum the API MUST provide: (1) the state of captivity and (2) a URI
          for a browser to present the portal application to the user.
          The API SHOULD provide evidence to the caller that it supports
          the present architecture.
-       </t>
-       <t>
+        </t>
+        <t>
          When user equipment receives Captive Portal Signals, the user equipment
          MAY query the API to check the state.
          The User Equipment SHOULD rate-limit these API queries in the event of
          the signal being flooded. (See <xref target="Security"/>.)
-       </t>
-       <t>
+        </t>
+        <t>
          The API MUST be extensible to support future use-cases by allowing
          extensible information elements.
-       </t>
+        </t>
         <t>
          The API MUST use TLS for privacy and server authentication.
          The implementation of the API MUST ensure both privacy and integrity of
          any information provided by or required by it.
         </t>
-       <t>
+        <t>
          This document does not specify the details of the API.
-       </t>
-     </section>
-
-     <section anchor="section_capport_enforcement" title="Captive Portal Enforcement">
-      <t>
+        </t>
+      </section>
+      <section anchor="section_capport_enforcement">
+        <name>Captive Portal Enforcement</name>
+        <t>
         The Captive Portal Enforcement component restricts network access to
         User Equipment according to site-specific policy. Typically User Equipment
         is permitted access to a small number of services and
         is denied general network access until it has performed some action.
-      </t>
-      <t>
+        </t>
+        <t>
        The Captive Portal Enforcement component:
-       <list style="symbols">
-        <t>Allows traffic through for allowed User Equipment.</t>
-        <t>Blocks (discards) traffic for disallowed User Equipment.</t>
-        <t>May signal User Equipment using the Captive Portal Signaling protocol
-           if traffic is blocked.</t>
-        <t>Permits disallowed User Equipment to access necessary APIs and web pages to
-           fulfill requirements of exiting captivity.</t>
-        <t>Updates allow/block rules per User Equipment in response to operations
-           from the Captive Portal back-end.</t>
-       </list>
-      </t>
-     </section>
-     <section anchor="section_signal" title="Captive Portal Signal">
-       <t>
+        </t>
+        <ul spacing="normal">
+          <li>Allows traffic through for allowed User Equipment.</li>
+          <li>Blocks (discards) traffic for disallowed User Equipment.</li>
+          <li>May signal User Equipment using the Captive Portal Signaling protocol
+           if traffic is blocked.</li>
+          <li>Permits disallowed User Equipment to access necessary APIs and web pages to
+           fulfill requirements of exiting captivity.</li>
+          <li>Updates allow/block rules per User Equipment in response to operations
+           from the Captive Portal back-end.</li>
+        </ul>
+      </section>
+      <section anchor="section_signal">
+        <name>Captive Portal Signal</name>
+        <t>
         User Equipment may send traffic outside the captive network prior to the Enforcement
         device granting it access. The Enforcement Device rightly blocks or resets these
         requests. However, lacking a signal from the Enforcement Device or interaction with the
         API server, the User Equipment can only guess at whether it is captive. Consequently,
         allowing the Enforcement Device to signal to the User Equipment that there is a
         problem with its connectivity may improve the user's experience.
-       </t>
-       <t>
+        </t>
+        <t>
         An Enforcement Device may also want to inform the User Equipment of a pending expiry
         of its access to the external network, so providing the Enforcement Device the ability
         to preemptively signal may be desirable.
-       </t>
-       <t>
+        </t>
+        <t>
         A specific Captive Portal Signaling Protocol is out of scope for this document.
         However, in order to ensure that future protocols fit into the architecture,
         requirements for a Captive Portal Signaling Protocol follow:
-          <list style="numbers">
-            <t>The notification SHOULD NOT be easy to spoof.
+        </t>
+        <ol spacing="normal" type="1">
+          <li>The notification SHOULD NOT be easy to spoof.
                If an attacker can send spoofed notifications to the User Equipment,
                they can cause the User Equipment to unnecessarily access the API. Rather than
                relying solely on rate limits to prevent problems, a good protocol will strive
                to limit the feasibility of such attacks.
-            </t>
-            <t>It SHOULD be possible to send the notification before the captive portal closes.
+            </li>
+          <li>It SHOULD be possible to send the notification before the captive portal closes.
                This will help ensure seamless connectivity for the user, as the User Equipment
                will not need to wait for a network failure to refresh its login. On receipt of
                preemptive notification, the User Equipment can prompt the user to refresh.
-             </t>
-             <t>The signal SHOULD NOT include any information other than an indication that traffic
-                is restricted, which can be used as a prompt to contact the API.</t>
-          </list>
+             </li>
+          <li>The signal SHOULD NOT include any information other than an indication that traffic
+                is restricted, which can be used as a prompt to contact the API.</li>
+        </ol>
+        <t>
 
        The Captive Portal Signaling Protocol does not provide any means of indicating that the
        network prevents access to some destinations. The intent is to rely on the Captive Portal API
        and the web portal to which it points to communicate local network policies.
-       </t>
-       <t>The Captive Portal Enforcement function MAY send Captive Portal Signals when disallowed
+        </t>
+        <t>The Captive Portal Enforcement function MAY send Captive Portal Signals when disallowed
 	  User Equipment attempts to send to the network.  These signals MUST be rate-limited to a
           configurable rate.
-       </t>
-       <t>
+        </t>
+        <t>
          The signals MUST NOT be sent to the Internet devices. The indications
          are only sent to the User Equipment.
-       </t>
-     </section>
-     <section title="Component Diagram">
-     <t>
-       <figure anchor="components" title="Captive Portal Architecture Component Diagram">
-           <preamble>
+        </t>
+      </section>
+      <section>
+        <name>Component Diagram</name>
+        <t>
             The following diagram shows the communication between each component.
-           </preamble>
-           <artwork><![CDATA[
+        </t>
+        <figure anchor="components">
+          <name>Captive Portal Architecture Component Diagram</name>
+          <artwork><![CDATA[
 o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
 . CAPTIVE NETWORK                                               .
 .                                            +--------------+   .
@@ -453,47 +443,49 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                                        | v
                                   EXTERNAL NETWORK
 	   ]]></artwork>
-       </figure>
+        </figure>
+        <t>
         In the diagram:
-             <list style="symbols">
-              <t>During provisioning (e.g., DHCP), the User Equipment acquires
-                 the URI for the Captive Portal API.</t>
-              <t>The User Equipment queries the API to learn of its state of
+        </t>
+        <ul spacing="normal">
+          <li>During provisioning (e.g., DHCP), the User Equipment acquires
+                 the URI for the Captive Portal API.</li>
+          <li>The User Equipment queries the API to learn of its state of
                  captivity. If captive, the User Equipment presents the portal
-                 user interface to the user.</t>
-              <t>The User Equipment attempts to communicate to the external
-                 network through the Captive Portal enforcement device.</t>
-              <t>The Captive Portal Enforcement device either allows the User
+                 user interface to the user.</li>
+          <li>The User Equipment attempts to communicate to the external
+                 network through the Captive Portal enforcement device.</li>
+          <li>The Captive Portal Enforcement device either allows the User
                  Equipment's packets to the external network, or if a signal has
-                 been implemented, responds with a Captive Portal Signal.</t>
-              <t>The Web Portal Server directs the Captive Portal
+                 been implemented, responds with a Captive Portal Signal.</li>
+          <li>The Web Portal Server directs the Captive Portal
                  Enforcement device to either allow or deny external network
-                 access for the User Equipment.</t>
-             </list>
-      </t>
-      <t>
+                 access for the User Equipment.</li>
+        </ul>
+        <t>
         Although the Provisioning Service, API Server, and Web Portal Server functions
         are shown as discrete blocks, they could of course be combined into a single element.
-      </t>
+        </t>
       </section>
-     </section>
-
-     <section anchor="ue_identity" title="User Equipment Identity">
-         <t>
+    </section>
+    <section anchor="ue_identity">
+      <name>User Equipment Identity</name>
+      <t>
              Multiple components in the architecture interact with both the User
              Equipment and each other. Since the User Equipment is the focus of
              these interactions, the components must be able to both identify the
              user equipment from their interactions with it, and be able to agree
              on the identity of the user equipment when interacting with each
              other.
-         </t>
-         <t>
+      </t>
+      <t>
              The methods by which the components interact restrict the type of
              information that may be used as an identifying characteristics. This
              section discusses the identifying characteristics.
-         </t>
-         <section anchor="id_identifiers" title="Identifiers">
-             <t>
+      </t>
+      <section anchor="id_identifiers">
+        <name>Identifiers</name>
+        <t>
                  An Identifier is a characteristic of the User Equipment used by
                  the components of a Captive Portal to uniquely determine which
                  specific User Equipment is interacting with them.
@@ -503,10 +495,11 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                  destined for the External Network, but instead correlated with
                  such information through knowledge available to the different
                  components.
-             </t>
-         </section>
-         <section anchor="id_recommended_props" title="Recommended Properties">
-          <t>
+        </t>
+      </section>
+      <section anchor="id_recommended_props">
+        <name>Recommended Properties</name>
+        <t>
              The set of possible identifiers is quite large. However, in order
              to be considered a good identifier, an identifier SHOULD meet the
              following criteria. Note that the optimal identifier will likely
@@ -514,64 +507,71 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
              as well as the information available to them.
 
              An identifier SHOULD:
-             <list style="symbols">
-                 <t>Uniquely Identify the User Equipment</t>
-                 <t>Be Hard to Spoof</t>
-                 <t>Be Visible to the API Server</t>
-                 <t>Be Visible to the Enforcement Device</t>
-             </list>
+        </t>
+        <ul spacing="normal">
+          <li>Uniquely Identify the User Equipment</li>
+          <li>Be Hard to Spoof</li>
+          <li>Be Visible to the API Server</li>
+          <li>Be Visible to the Enforcement Device</li>
+        </ul>
+        <t>
 
              An identifier might only apply to the current point of network attachment. If the
              device moves to a different network location its identity could change.
-          </t>
-          <section anchor="id_recommended_unique" title="Uniquely Identify User Equipment">
-              <t>
+        </t>
+        <section anchor="id_recommended_unique">
+          <name>Uniquely Identify User Equipment</name>
+          <t>
                   In order to uniquely identify the User Equipment, at most one user equipment
                   interacting with the other components of the Captive Portal MUST have a given
                   value of the identifier.
-              </t>
-              <t>
+          </t>
+          <t>
                   Over time, the user equipment identified by the value MAY change. Allowing the
                   identified device to change over time ensures that the space of possible
                   identifying values need not be overly large.
-              </t>
-              <t>
+          </t>
+          <t>
                   Independent Captive Portals MAY use the same identifying value to identify
                   different User Equipment. Allowing independent captive portals to reuse
                   identifying values allows the identifier to be a property of the local
                   network, expanding the space of possible identifiers.
-              </t>
-          </section>
-          <section anchor="id_recommended_hard" title="Hard to Spoof">
-              <t>
+          </t>
+        </section>
+        <section anchor="id_recommended_hard">
+          <name>Hard to Spoof</name>
+          <t>
                   A good identifier does not lend itself to being easily spoofed. At no time
                   should it be simple or straightforward for one User Equipment to
                   pretend to be another User Equipment, regardless of whether both are active
                   at the same time. This property is particularly important when the user
                   equipment is extended externally to devices such as billing systems, or where
                   the identity of the User Equipment could imply liability.
-              </t>
-          </section>
-          <section anchor="id_recommended_visible_api" title="Visible to the API Server">
-              <t>
+          </t>
+        </section>
+        <section anchor="id_recommended_visible_api">
+          <name>Visible to the API Server</name>
+          <t>
                   Since the API Server will need to perform operations which rely on the identity
                   of the user equipment, such as query whether it is captive, the API Server
                   needs to be able to relate requests to the User Equipment making the
                   request.
-              </t>
-          </section>
-          <section anchor="id_recommended_visible_ed" title="Visible to the Enforcement Device">
-              <t>
+          </t>
+        </section>
+        <section anchor="id_recommended_visible_ed">
+          <name>Visible to the Enforcement Device</name>
+          <t>
                   The Enforcement Device will decide on a per packet basis whether it
                   should be permitted to communicate with the external network. Since
                   this decision depends on which User Equipment sent the packet, the
                   Enforcement Device requires that it be able to map the packet to its
                   concept of the User Equipment.
-              </t>
-          </section>
-         </section>
-         <section anchor="id_evaluating" title="Evaluating an Identifier">
-             <t>
+          </t>
+        </section>
+      </section>
+      <section anchor="id_evaluating">
+        <name>Evaluating an Identifier</name>
+        <t>
                  To evaluate whether an identifier is appropriate, one should consider
                  every recommended property from the perspective of interactions among
                  the components in the architecture. When comparing identifiers, choose
@@ -579,62 +579,60 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                  architecture does not provide an exact measure of how well an identifier
                  satisfies a given property; care should be taken in performing the
                  evaluation.
-             </t>
-         </section>
-         <section anchor="id_examples" title="Examples of an Identifier">
-             <t>
+        </t>
+      </section>
+      <section anchor="id_examples">
+        <name>Examples of an Identifier</name>
+        <t>
                  This section provides some examples of identifiers, along with some
                  evaluation of whether they are good identifiers. The list of identifiers
                  is not exhaustive. Other identifiers may be used. An important point to note
                  is that whether the identifiers are good depends heavily on the capabilities
                  of the components and where in the network the components exist.
-             </t>
-             <section anchor="id_example_interface" title="Physical Interface">
-              <t>
+        </t>
+        <section anchor="id_example_interface">
+          <name>Physical Interface</name>
+          <t>
                  The physical interface by which the User Equipment is attached to the
                  network can be used to identify the User Equipment. This identifier has
                  the property of being extremely difficult to spoof: the User Equipment is
                  unaware of the property; one User Equipment cannot manipulate its
                  interactions to appear as though it is another.
-             </t>
-
-              <t>
+          </t>
+          <t>
                  Further, if only a single User Equipment is attached to a given physical
                  interface, then the identifier will be unique. If multiple User Equipment
                  is attached to the network on the same physical interface, then this property
                  is not appropriate.
-             </t>
-
-              <t>
+          </t>
+          <t>
                  Another consideration related to uniqueness of the User Equipment is that
                  if the attached User Equipment changes, both the API Server and the
                  Enforcement Device must invalidate their state related to the User Equipment.
-             </t>
-
-              <t>
+          </t>
+          <t>
 
                  The Enforcement Device needs to be aware of the physical interface,
                  which constrains the environment: it must either be part of the device providing
                  physical access (e.g., implemented in firmware), or packets traversing the network
                  must be extended to include information about the source physical interface (e.g.
                  a tunnel).
-             </t>
-
-              <t>
+          </t>
+          <t>
                  The API Server faces a similar problem, implying that it should co-exist with the
                  Enforcement Device, or that the enforcement device should extend requests to it
                  with the identifying information.
-              </t>
-             </section>
-             <section anchor="id_example_IP_address" title="IP Address">
-              <t>
+          </t>
+        </section>
+        <section anchor="id_example_IP_address">
+          <name>IP Address</name>
+          <t>
                   A natural identifier to consider is the IP address of the User Equipment.
                   At any given time, no device on the network can have the same IP address
                   without causing the network to malfunction, so it is appropriate from the
                   perspective of uniqueness.
-              </t>
-
-              <t>
+          </t>
+          <t>
                   However, it may be possible to spoof the IP address, particularly for
                   malicious reasons where proper functioning of the network is not necessary
                   for the malicious actor. Consequently, any solution using the IP address
@@ -645,18 +643,16 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                   connection establishment, might be sufficient defense against spoofing,
                   though this might not be sufficient in networks that use broadcast media
                   (such as some wireless networks).
-              </t>
-
-              <t>
+          </t>
+          <t>
                   Since the IP address may traverse multiple segments of the network, more
                   flexibility is afforded to the Enforcement Device and the API Server: they
                   simply must exist on a segment of the network where the IP address is still
                   unique. However, consider that a NAT may be deployed between the User Equipment
                   and the Enforcement Device. In such cases, it is possible for the components
                   to still uniquely identify the device if they are aware of the port mapping.
-              </t>
-
-              <t>
+          </t>
+          <t>
                 In some situations, the User Equipment may have multiple IP addresses, while
                 still satisfying all of the recommended properties. This raises some challenges
                 to the components of the network. For example, if the user equipment tries
@@ -667,10 +663,11 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                 that it is expected for a device to have multiple IPv6 addresses on a single
                 link. In such cases, identification could be performed by subnet, such as the /64
                 to which the IP belongs.
-            </t>
-         </section>
-         <section anchor="context_free_url" title="Context-free URL">
-           <t>
+          </t>
+        </section>
+        <section anchor="context_free_url">
+          <name>Context-free URL</name>
+          <t>
 	     The URLs provided in the API SHOULD contain all the information
 	     necessary to render the resources requested: the resources should
 	     not depend on ambient information, such as remote address on the
@@ -679,92 +676,90 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
 	     accessed from a network other than the one that contains the
 	     captive portal.  One consequence of this is that URLs provided in
 	     the API are expected to be resolved using public DNS.
-           </t>
-           <t>
+          </t>
+          <t>
 	     Though a URL might still correctly resolve when the UE makes the
 	     request from a different network, it is possible that some
 	     functions could be limited to when the UE makes requests using the
 	     captive network. For example, payment options could be absent or a
 	     warning could be displayed to indicate the payment is not for the
 	     current connection.
-           </t>
-           <t>
+          </t>
+          <t>
 	     URLs could include some means of identifying the User Equipment in
 	     the URLs.  However, including unauthenticated User Equipment
 	     identifiers in the URL may expose the service to spoofing or replay
 	     attacks.
-           </t>
-         </section>
-       </section>
-   </section>
-   <section anchor="section_workflow" title="Solution Workflow">
-    <t>
+          </t>
+        </section>
+      </section>
+    </section>
+    <section anchor="section_workflow">
+      <name>Solution Workflow</name>
+      <t>
       This section aims to improve understanding by describing a possible
       workflow of solutions adhering to the architecture.
-    </t>
-    <section title="Initial Connection">
-    <t>
+      </t>
+      <section>
+        <name>Initial Connection</name>
+        <t>
       This section describes a possible work-flow when User Equipment initially
       joins a Captive Network.
-    </t>
-    <t>
-    <list style="numbers">
-      <t>The User Equipment joins the Captive Network by acquiring a DHCP
-         lease, RA, or similar, acquiring provisioning information.</t>
-      <t>The User Equipment learns the URI for the Captive Portal API from the
-         provisioning information (e.g., <xref target="RFC7710"/>).</t>
-      <t>The User Equipment accesses the Captive Portal API to receive parameters
+        </t>
+        <ol spacing="normal" type="1">
+          <li>The User Equipment joins the Captive Network by acquiring a DHCP
+         lease, RA, or similar, acquiring provisioning information.</li>
+          <li>The User Equipment learns the URI for the Captive Portal API from the
+         provisioning information (e.g., <xref target="RFC7710"/>).</li>
+          <li>The User Equipment accesses the Captive Portal API to receive parameters
          of the Captive Network, including web-portal URI. (This step replaces
-         the clear-text query to a canary URL.)</t>
-      <t>If necessary, the User navigates the web portal to gain access to the
-         external network.</t>
-      <t>The Captive Portal API server indicates to the Captive Portal Enforcement
-         device that the User Equipment is allowed to access the external network.</t>
-      <t>The User Equipment attempts a connection outside the captive network</t>
-      <t>If the requirements have been satisfied, the access is permitted;
-         otherwise the "Expired" behavior occurs.</t>
-      <t>The User Equipment accesses the network until conditions Expire.</t>
-    </list>
-    </t>
-    </section>
-    <section title="Conditions About to Expire">
-    <t>
+         the clear-text query to a canary URL.)</li>
+          <li>If necessary, the User navigates the web portal to gain access to the
+         external network.</li>
+          <li>The Captive Portal API server indicates to the Captive Portal Enforcement
+         device that the User Equipment is allowed to access the external network.</li>
+          <li>The User Equipment attempts a connection outside the captive network</li>
+          <li>If the requirements have been satisfied, the access is permitted;
+         otherwise the "Expired" behavior occurs.</li>
+          <li>The User Equipment accesses the network until conditions Expire.</li>
+        </ol>
+      </section>
+      <section>
+        <name>Conditions About to Expire</name>
+        <t>
       This section describes a possible work-flow when access is about to expire.
-     </t>
-    <t>
-     <list style="numbers">
-      <t>Precondition: the API has provided the User Equipment with a duration
-         over which its access is valid</t>
-      <t>The User Equipment is communicating with the outside network</t>
-      <t>The User Equipment's UI indicates that the length of time left for its access
-         has fallen below a threshold</t>
-      <t>The User Equipment visits the API again to validate the expiry time</t>
-      <t>If expiry is still imminent, the User Equipment prompts the user to access the
-         web-portal URI again</t>
-      <t>The User extends their access through the web-portal</t>
-      <t>The User Equipment's access to the outside network continues uninterrupted</t>
-     </list>
-    </t>
-    </section>
-    <section title="Handling of Changes in Portal URI">
-    <t>A different Captive Portal API URI could be returned in the following cases:</t>
-    <t>
-      <list style="symbols">
-        <t>If DHCP is used, a lease renewal/rebind may return a different Captive
-          Portal API URI.</t>
-        <t>If RA is used, a new Captive Portal API URI may be specified in a new RA
-          message received by end user equipment.</t>
-      </list>
-    </t>
-    <t>Whenever a new Portal URI is received by end user equipment, it SHOULD discard
+        </t>
+        <ol spacing="normal" type="1">
+          <li>Precondition: the API has provided the User Equipment with a duration
+         over which its access is valid</li>
+          <li>The User Equipment is communicating with the outside network</li>
+          <li>The User Equipment's UI indicates that the length of time left for its access
+         has fallen below a threshold</li>
+          <li>The User Equipment visits the API again to validate the expiry time</li>
+          <li>If expiry is still imminent, the User Equipment prompts the user to access the
+         web-portal URI again</li>
+          <li>The User extends their access through the web-portal</li>
+          <li>The User Equipment's access to the outside network continues uninterrupted</li>
+        </ol>
+      </section>
+      <section>
+        <name>Handling of Changes in Portal URI</name>
+        <t>A different Captive Portal API URI could be returned in the following cases:</t>
+        <ul spacing="normal">
+          <li>If DHCP is used, a lease renewal/rebind may return a different Captive
+          Portal API URI.</li>
+          <li>If RA is used, a new Captive Portal API URI may be specified in a new RA
+          message received by end user equipment.</li>
+        </ul>
+        <t>Whenever a new Portal URI is received by end user equipment, it SHOULD discard
       the old URI and use the new one for future requests to the API.</t>
+      </section>
     </section>
-   </section>
-
-   <section anchor="Acknowledgments" title="Acknowledgments">
-     <t>The authors thank Lorenzo Colitti for providing the majority of the content
+    <section anchor="Acknowledgments">
+      <name>Acknowledgments</name>
+      <t>The authors thank Lorenzo Colitti for providing the majority of the content
          for the Captive Portal Signal requirements.</t>
-     <t>The authors thank various individuals for their feedback on
+      <t>The authors thank various individuals for their feedback on
         the mailing list and during the IETF98 hackathon:
         David Bird,
         Erik Kline,
@@ -772,21 +767,19 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         Alex Roscoe,
         Darshak Thakore,
         and Vincent van Dam.
-     </t>
-   </section>
-
-
-   <!-- Possibly a 'Contributors' section ... -->
-
-   <section anchor="IANA" title="IANA Considerations">
-     <t>This memo includes no request to IANA.</t>
-
-   </section>
-
-   <section anchor="Security" title="Security Considerations">
-     <!--All drafts are required to have a security considerations section.  See RFC3552 -->
-     <section title="Trusting the Network">
-       <t>
+      </t>
+    </section>
+    <!-- Possibly a 'Contributors' section ... -->
+    <section anchor="IANA">
+      <name>IANA Considerations</name>
+      <t>This memo includes no request to IANA.</t>
+    </section>
+    <section anchor="Security">
+      <name>Security Considerations</name>
+      <!--All drafts are required to have a security considerations section.  See RFC3552 -->
+      <section>
+        <name>Trusting the Network</name>
+        <t>
          When joining a network, some trust is placed in the network operator.
          This is usually considered to be a decision by a user on the basis of
          the reputation of an organization. However, once a user makes such a
@@ -794,52 +787,56 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
          by who claims to be operating it.  The Provisioning Domain
          Architecture <xref target="RFC7556"/> provides some discussion on
          authenticating an operator.
-       </t>
-       <t>
+        </t>
+        <t>
          Given that a user chooses to visit a Captive Portal URI, the URI location
          SHOULD be securely provided to the user's device. E.g., the DHCPv6 AUTH
          option can sign this information.
-       </t>
-       <t>
+        </t>
+        <t>
          If a user decides to incorrectly trust an attacking network, they might
          be convinced to visit an attacking web page and unwittingly provide
          credentials to an attacker. Browsers can authenticate servers but
          cannot detect cleverly misspelled domains, for example.
-       </t>
-     </section>
-     <section title="Authenticated APIs">
-       <t>
+        </t>
+      </section>
+      <section>
+        <name>Authenticated APIs</name>
+        <t>
          The solution described here assumes that when the User Equipment needs to
          trust the API server, server authentication will be performed using TLS
          mechanisms.
-       </t>
-     </section>
-     <section title="Secure APIs">
-       <t>
+        </t>
+      </section>
+      <section>
+        <name>Secure APIs</name>
+        <t>
            The solution described here requires that the API be secured using TLS.
            This is required to allow the user equipment and API Server to exchange
            secrets which can be used to validate future interactions. The API must
            ensure the integrity of this information, as well as its confidentiality.
-       </t>
-     </section>
-     <section title="Risks Associated with the Signaling Protocol">
-       <t>
+        </t>
+      </section>
+      <section>
+        <name>Risks Associated with the Signaling Protocol</name>
+        <t>
          If a Signaling Protocol is implemented, it may be possible for any user on
          the Internet to send signals in attempt to cause the receiving equipment to
          communicate with the Captive Portal API. This has been considered, and implementations may
          address it in the following ways:
-         <list style="symbols">
-           <t>The signal only informs the User Equipment to query the API. It does not
-              carry any information which may mislead or misdirect the User Equipment.</t>
-           <t>Even when responding to the signal, the User Equipment securely authenticates
-               with API Servers.</t>
-           <t>Accesses to the API Server are rate limited, limiting the impact of a repeated
-              attack.</t>
-         </list>
-       </t>
-     </section>
-     <section title="User Options">
-       <t>
+        </t>
+        <ul spacing="normal">
+          <li>The signal only informs the User Equipment to query the API. It does not
+              carry any information which may mislead or misdirect the User Equipment.</li>
+          <li>Even when responding to the signal, the User Equipment securely authenticates
+               with API Servers.</li>
+          <li>Accesses to the API Server are rate limited, limiting the impact of a repeated
+              attack.</li>
+        </ul>
+      </section>
+      <section>
+        <name>User Options</name>
+        <t>
          The Signal could inform the User Equipment that it is being held
          captive.  There is no requirement that the User Equipment do something
          about this.
@@ -850,17 +847,14 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
          Hence, end-user devices MAY allow users to manually control captive
          portal interactions, possibly on the granularity of Provisioning
          Domains.
-       </t>
-     </section>
-   </section>
- </middle>
-
- <!--  *****BACK MATTER ***** -->
-
- <back>
-   <!-- References split into informative and normative -->
-
-   <!-- There are 2 ways to insert reference entries from the citation libraries:
+        </t>
+      </section>
+    </section>
+  </middle>
+  <!--  *****BACK MATTER ***** -->
+  <back>
+    <!-- References split into informative and normative -->
+    <!-- There are 2 ways to insert reference entries from the citation libraries:
     1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
     2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
        (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
@@ -870,20 +864,100 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
     directory as the including file. You can also define the XML_LIBRARY environment variable
     with a value containing a set of directories to search.  These can be either in the local
     filing system or remote ones accessed by http (http://domain/dir/... ).-->
-
-   <references title="Normative References">
-     <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
-     <?rfc include="reference.RFC.7710.xml"?>
-     <?rfc include="reference.RFC.7556.xml"?>
-
-   </references>
-   <references title="Informative References">
-     <?rfc include="reference.I-D.nottingham-capport-problem.xml"?>
-     <?rfc include="reference.I-D.pfister-capport-pvd.xml"?>
-   </references>
-
-   <section anchor="app-additional" title="Existing captive portal detection implementations">
-     <t>
+    <references>
+      <name>References</name>
+      <references>
+        <name>Normative References</name>
+        <reference anchor="RFC2119" target="https://www.rfc-editor.org/info/rfc2119">
+          <front>
+            <title>Key words for use in RFCs to Indicate Requirement Levels</title>
+            <seriesInfo name="DOI" value="10.17487/RFC2119"/>
+            <seriesInfo name="RFC" value="2119"/>
+            <seriesInfo name="BCP" value="14"/>
+            <author initials="S." surname="Bradner" fullname="S. Bradner">
+              <organization/>
+            </author>
+            <date year="1997" month="March"/>
+            <abstract>
+              <t>In many standards track documents several words are used to signify the requirements in the specification.  These words are often capitalized. This document defines these words as they should be interpreted in IETF documents.  This document specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements.</t>
+            </abstract>
+          </front>
+        </reference>
+        <reference anchor="RFC7710" target="https://www.rfc-editor.org/info/rfc7710" xml:base="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7710.xml">
+          <front>
+            <title>Captive-Portal Identification Using DHCP or Router Advertisements (RAs)</title>
+            <seriesInfo name="DOI" value="10.17487/RFC7710"/>
+            <seriesInfo name="RFC" value="7710"/>
+            <author initials="W." surname="Kumari" fullname="W. Kumari">
+              <organization/>
+            </author>
+            <author initials="O." surname="Gudmundsson" fullname="O. Gudmundsson">
+              <organization/>
+            </author>
+            <author initials="P." surname="Ebersman" fullname="P. Ebersman">
+              <organization/>
+            </author>
+            <author initials="S." surname="Sheng" fullname="S. Sheng">
+              <organization/>
+            </author>
+            <date year="2015" month="December"/>
+            <abstract>
+              <t>In many environments offering short-term or temporary Internet access (such as coffee shops), it is common to start new connections in a captive-portal mode.  This highly restricts what the customer can do until the customer has authenticated.</t>
+              <t>This document describes a DHCP option (and a Router Advertisement (RA) extension) to inform clients that they are behind some sort of captive-portal device and that they will need to authenticate to get Internet access.  It is not a full solution to address all of the issues that clients may have with captive portals; it is designed to be used in larger solutions.  The method of authenticating to and interacting with the captive portal is out of scope for this document.</t>
+            </abstract>
+          </front>
+        </reference>
+        <reference anchor="RFC7556" target="https://www.rfc-editor.org/info/rfc7556" xml:base="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7556.xml">
+          <front>
+            <title>Multiple Provisioning Domain Architecture</title>
+            <seriesInfo name="DOI" value="10.17487/RFC7556"/>
+            <seriesInfo name="RFC" value="7556"/>
+            <author initials="D." surname="Anipko" fullname="D. Anipko" role="editor">
+              <organization/>
+            </author>
+            <date year="2015" month="June"/>
+            <abstract>
+              <t>This document is a product of the work of the Multiple Interfaces Architecture Design team.  It outlines a solution framework for some of the issues experienced by nodes that can be attached to multiple networks simultaneously.  The framework defines the concept of a Provisioning Domain (PvD), which is a consistent set of network configuration information.  PvD-aware nodes learn PvD-specific information from the networks they are attached to and/or other sources.  PvDs are used to enable separation and configuration consistency in the presence of multiple concurrent connections.</t>
+            </abstract>
+          </front>
+        </reference>
+      </references>
+      <references>
+        <name>Informative References</name>
+        <reference anchor="I-D.nottingham-capport-problem" xml:base="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.nottingham-capport-problem.xml" target="http://www.ietf.org/internet-drafts/draft-nottingham-capport-problem-01.txt">
+          <front>
+            <title>Captive Portals Problem Statement</title>
+            <seriesInfo name="Internet-Draft" value="draft-nottingham-capport-problem-01"/>
+            <author initials="M" surname="Nottingham" fullname="Mark Nottingham">
+              <organization/>
+            </author>
+            <date month="April" day="4" year="2016"/>
+            <abstract>
+              <t>This draft attempts to establish a problem statement for "Captive Portals", in order to inform discussions of improving their operation.  Note to Readers  The issues list for this draft can be found at https://github.com/mnot/I-D/labels/capport-problem .  The most recent (often, unpublished) draft is at https://mnot.github.io/I-D/capport-problem/ .  Recent changes are listed at https://github.com/mnot/I-D/commits/gh- pages/capport-problem .</t>
+            </abstract>
+          </front>
+        </reference>
+        <reference anchor="I-D.pfister-capport-pvd" xml:base="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.pfister-capport-pvd.xml" target="http://www.ietf.org/internet-drafts/draft-pfister-capport-pvd-00.txt">
+          <front>
+            <title>Using Provisioning Domains for Captive Portal Discovery</title>
+            <seriesInfo name="Internet-Draft" value="draft-pfister-capport-pvd-00"/>
+            <author initials="P" surname="Pfister" fullname="Pierre Pfister">
+              <organization/>
+            </author>
+            <author initials="T" surname="Pauly" fullname="Tommy Pauly">
+              <organization/>
+            </author>
+            <date month="June" day="30" year="2018"/>
+            <abstract>
+              <t>Devices that connect to Captive Portals need a way to identify that the network is restricted and discover a method for opening up access.  This document defines how to use Provisioning Domain Additional Information to discover a Captive Portal API URI.</t>
+            </abstract>
+          </front>
+        </reference>
+      </references>
+    </references>
+    <section anchor="app-additional">
+      <name>Existing captive portal detection implementations</name>
+      <t>
        Operating systems and user applications may perform various tests when
        network connectivity is established to determine if the device is
        attached to a network with a captive portal present. A common method is
@@ -902,8 +976,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
        Malicious or misconfigured networks with a captive portal present may
        not intercept these requests and choose to pass them through or decide to
        impersonate, leading to the device having a false negative.
-     </t>
-   </section>
-
- </back>
+      </t>
+    </section>
+  </back>
 </rfc>
