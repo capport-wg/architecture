@@ -698,26 +698,28 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
          </section>
          <section anchor="context_free_url" title="Context-free URL">
            <t>
-             The URLs provided in the API SHOULD contain all the information necessary to render
-	     the resources requested: the resources should not depend on ambient
-	     information, such as remote address on the connection. This is to
-	     ensure that the content served from these URLs is correct and
-	     meaningful to the User Equipment, even when accessed from a network
-	     other than the one that contains the captive portal. One possible
-	     approach is to include some means of identifying the User Equipment
-	     in the URLs.
+	     The URLs provided in the API SHOULD contain all the information
+	     necessary to render the resources requested: the resources should
+	     not depend on ambient information, such as remote address on the
+	     connection. This is to ensure that the content served from these
+	     URLs is correct and meaningful to the User Equipment, even when
+	     accessed from a network other than the one that contains the
+	     captive portal.  One consequence of this is that URLs provided in
+	     the API are expected to be resolved using public DNS.
            </t>
            <t>
-             The URLs provided in the API are expected to be resolved using public DNS, so they
-             can be rendered in case User Equipment is making request from a different network.
+	     Though a URL might still correctly resolve when the UE makes the
+	     request from a different network, it is possible that some
+	     functions could be limited to when the UE makes requests using the
+	     captive network. For example, payment options could be absent or a
+	     warning could be displayed to indicate the payment is not for the
+	     current connection.
            </t>
            <t>
-             Having User Equipment identification in the URL may expose the service to spoofing or
-             replay attacks. Though a URL might still correctly resolve when the UE makes the
-             request from a different network, it is possible that some functions could be limited
-             to when the UE makes requests using the captive network. For example, payment option
-             may be absent or a warning could be displayed to indicate the payment is not for the
-             current connection.
+	     URLs could include some means of identifying the User Equipment in
+	     the URLs.  However, including unauthenticated User Equipment
+	     identifiers in the URL may expose the service to spoofing or replay
+	     attacks.
            </t>
          </section>
        </section>
