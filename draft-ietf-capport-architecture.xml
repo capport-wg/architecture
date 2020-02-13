@@ -148,7 +148,7 @@
             URI for the API that end-user devices query for information about
             what is required to escape captivity. DHCP, DHCPv6, and
             Router-Advertisement options for this purpose are available in
-            <xref target="RFC7710"/>. Other protocols (such as RADIUS),
+            <xref target="RFC7710bis"/>. Other protocols (such as RADIUS),
             Provisioning Domains
             <xref target="I-D.pfister-capport-pvd"/>, or
             static configuration may also be used.
@@ -260,18 +260,9 @@
           <name>DHCP or Router Advertisements</name>
           <t>
            A standard for providing a portal URI using DHCP or Router
-           Advertisements is described in <xref target="RFC7710"/>.  The
+           Advertisements is described in <xref target="RFC7710bis"/>.  The
            CAPPORT architecture expects this URI to indicate the API described
            in <xref target="section_api"/>.
-          </t>
-          <t>
-           Although it is not clear from RFC7710  what protocol should be
-           executed at the specified URI, some readers might have assumed it to
-           be an HTML page, and hence there might be User Equipment assuming a
-           browser should open this URI.  For backwards compatibility, it is
-           RECOMMENDED that the server check the "Accept" field when serving
-           the URI, and serve HTML pages for "text/html" and serve the API for
-           "application/json". [REVISIT: are these details appropriate?]
           </t>
         </section>
         <section anchor="section_pvd">
@@ -282,11 +273,6 @@
            proposes a mechanism for User Equipment to be provided with PvD
            Bootstrap Information containing the URI for the JSON-based API
            described in <xref target="section_api"/>.
-          </t>
-          <t>
-           The PvD security model provides secure binding between the
-           information provided by the trusted Router Advertisement and the
-           HTTPS server.
           </t>
         </section>
       </section>
@@ -710,7 +696,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
           <li>The User Equipment joins the Captive Network by acquiring a DHCP
          lease, RA, or similar, acquiring provisioning information.</li>
           <li>The User Equipment learns the URI for the Captive Portal API from the
-         provisioning information (e.g., <xref target="RFC7710"/>).</li>
+         provisioning information (e.g., <xref target="RFC7710bis"/>).</li>
           <li>The User Equipment accesses the Captive Portal API to receive parameters
          of the Captive Network, including web-portal URI. (This step replaces
          the clear-text query to a canary URL.)</li>
@@ -883,30 +869,27 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
             </abstract>
           </front>
         </reference>
-        <reference anchor="RFC7710" target="https://www.rfc-editor.org/info/rfc7710" xml:base="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7710.xml">
-          <front>
-            <title>Captive-Portal Identification Using DHCP or Router Advertisements (RAs)</title>
-            <seriesInfo name="DOI" value="10.17487/RFC7710"/>
-            <seriesInfo name="RFC" value="7710"/>
-            <author initials="W." surname="Kumari" fullname="W. Kumari">
-              <organization/>
-            </author>
-            <author initials="O." surname="Gudmundsson" fullname="O. Gudmundsson">
-              <organization/>
-            </author>
-            <author initials="P." surname="Ebersman" fullname="P. Ebersman">
-              <organization/>
-            </author>
-            <author initials="S." surname="Sheng" fullname="S. Sheng">
-              <organization/>
-            </author>
-            <date year="2015" month="December"/>
-            <abstract>
-              <t>In many environments offering short-term or temporary Internet access (such as coffee shops), it is common to start new connections in a captive-portal mode.  This highly restricts what the customer can do until the customer has authenticated.</t>
-              <t>This document describes a DHCP option (and a Router Advertisement (RA) extension) to inform clients that they are behind some sort of captive-portal device and that they will need to authenticate to get Internet access.  It is not a full solution to address all of the issues that clients may have with captive portals; it is designed to be used in larger solutions.  The method of authenticating to and interacting with the captive portal is out of scope for this document.</t>
-            </abstract>
-          </front>
-        </reference>
+	<reference anchor='RFC7710bis'>
+<front>
+<title>Captive-Portal Identification in DHCP / RA</title>
+
+<author initials='W' surname='Kumari' fullname='Warren Kumari'>
+    <organization />
+</author>
+
+<author initials='E' surname='Kline' fullname='Erik Kline'>
+    <organization />
+</author>
+
+<date month='January' day='12' year='2020' />
+
+<abstract><t>In many environments offering short-term or temporary Internet access (such as coffee shops), it is common to start new connections in a captive portal mode.  This highly restricts what the customer can do until the customer has authenticated.  This document describes a DHCP option (and a Router Advertisement (RA) extension) to inform clients that they are behind some sort of captive-portal device, and that they will need to authenticate to get Internet access.  It is not a full solution to address all of the issues that clients may have with captive portals; it is designed to be used in larger solutions.  The method of authenticating to, and interacting with the captive portal is out of scope of this document.  [ This document is being collaborated on in Github at: https://github.com/wkumari/draft-ekwk-capport-rfc7710bis.  The most recent version of the document, open issues, etc should all be available here.  The authors (gratefully) accept pull requests.  Text in square brackets will be removed before publication. ]</t></abstract>
+
+</front>
+<seriesInfo name='Internet-Draft' value='draft-ietf-capport-rfc7710bis-01' />
+<format type='TXT'
+        target='http://www.ietf.org/internet-drafts/draft-ietf-capport-rfc7710bis-01.txt' />
+</reference>
         <reference anchor="RFC7556" target="https://www.rfc-editor.org/info/rfc7556" xml:base="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7556.xml">
           <front>
             <title>Multiple Provisioning Domain Architecture</title>
