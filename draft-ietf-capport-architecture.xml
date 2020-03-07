@@ -243,7 +243,7 @@
         </ul>
         <t>
         None of the above requirements are mandatory because (a) we do not wish
-        to say users or devices must seek access beyond the captive network,
+        to say users or devices must seek full access to the captive network,
         (b) the requirements may be fulfilled by manually visiting the captive
         portal web application, and (c) legacy devices must continue to be
         supported.
@@ -339,18 +339,18 @@
           <li>Permits disallowed User Equipment to access necessary APIs and web pages to
            fulfill requirements of exiting captivity.</li>
           <li>Updates allow/block rules per User Equipment in response to operations
-           from the Captive Portal back-end.</li>
+           from the Captive Portal Server.</li>
         </ul>
       </section>
       <section anchor="section_signal">
         <name>Captive Portal Signal</name>
         <t>
-        User Equipment may send traffic outside the captive network prior to the Enforcement
+        User Equipment may send traffic to hosts blocked by the captive network prior to the Enforcement
         device granting it access. The Enforcement Device rightly blocks or resets these
         requests. However, lacking a signal from the Enforcement Device or interaction with the
         API server, the User Equipment can only guess at whether it is captive. Consequently,
-        allowing the Enforcement Device to signal to the User Equipment that there is a
-        problem with its connectivity may improve the user's experience.
+        allowing the Enforcement Device to explicitly signal to the User Equipment that the
+        traffic is being blocked may improve the user's experience.
         </t>
         <t>
         An Enforcement Device may also want to inform the User Equipment of a pending expiry
@@ -375,7 +375,7 @@
                preemptive notification, the User Equipment can prompt the user to refresh.
              </li>
           <li>The signal SHOULD NOT include any information other than an indication that traffic
-                is restricted, which can be used as a prompt to contact the API.</li>
+                is restricted, which can prompt the User Equipment to contact the API.</li>
         </ol>
         <t>
 
@@ -388,8 +388,9 @@
           configurable rate.
         </t>
         <t>
-         The signals MUST NOT be sent to the Internet devices. The indications
-         are only sent to the User Equipment.
+         The signals MUST NOT be sent to the destinations/peers that the User Equipment is
+         restricted from accessing.
+         The indications are only to be sent to the User Equipment.
         </t>
       </section>
       <section>
@@ -438,15 +439,16 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                  the URI for the Captive Portal API.</li>
           <li>The User Equipment queries the API to learn of its state of
                  captivity. If captive, the User Equipment presents the portal
-                 user interface to the user.</li>
+                 user interface from the Web Portal Server to the user.</li>
+          <li>Based on user interaction, the Web Portal Server directs the Captive Portal
+                 Enforcement device to either allow or deny external network
+                 access for the User Equipment.</li>
           <li>The User Equipment attempts to communicate to the external
                  network through the Captive Portal enforcement device.</li>
           <li>The Captive Portal Enforcement device either allows the User
-                 Equipment's packets to the external network, or if a signal has
-                 been implemented, responds with a Captive Portal Signal.</li>
-          <li>The Web Portal Server directs the Captive Portal
-                 Enforcement device to either allow or deny external network
-                 access for the User Equipment.</li>
+                 Equipment's packets to the external network, or blocks the
+                 packets. If blocking traffic and a signal has
+                 been implemented, it may respond with a Captive Portal Signal.</li>
         </ul>
         <t>
         Although the Provisioning Service, API Server, and Web Portal Server functions
@@ -769,7 +771,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
          When joining a network, some trust is placed in the network operator.
          This is usually considered to be a decision by a user on the basis of
          the reputation of an organization. However, once a user makes such a
-         decision, protocols can support authenticating a network is operated
+         decision, protocols can support authenticating that a network is operated
          by who claims to be operating it.  The Provisioning Domain
          Architecture <xref target="RFC7556"/> provides some discussion on
          authenticating an operator.
@@ -828,7 +830,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
          about this.
          Devices MAY permit users to disable automatic reaction to
          captive-portal indications for privacy reasons.
-         However, there is the trade-off that the user doesn't get notified
+         However, there would be the trade-off that the user doesn't get notified
          when network access is restricted.
          Hence, end-user devices MAY allow users to manually control captive
          portal interactions, possibly on the granularity of Provisioning
@@ -939,7 +941,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
       </references>
     </references>
     <section anchor="app-additional">
-      <name>Existing captive portal detection implementations</name>
+      <name>Existing Captive Portal Detection Implementations</name>
       <t>
        Operating systems and user applications may perform various tests when
        network connectivity is established to determine if the device is
@@ -948,14 +950,20 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
        a fixed response. Any other response is interpreted as a signal that a
        captive portal is present. This check is typically not secured with TLS,
        as a network with a captive portal may intercept the connection, leading
-       to a host name mismatch.
+       to a host name mismatch. This has been referred to as a "canary" request
+       because, like the canary in the coal mine, it can be the first sign
+       that something is wrong.
+      </t>
 
+      <t>
        Another test that can be performed is a DNS lookup to a known address
        with an expected answer. Such tests may be less reliable as the captive
        portal may only be intercepting TCP traffic and deliberately excluding
        the interception of DNS queries. DNS queries not using UDP may
        potentially fail this test if operating over TCP or DNS over HTTP.
+      </t>
 
+      <t>
        Malicious or misconfigured networks with a captive portal present may
        not intercept these requests and choose to pass them through or decide to
        impersonate, leading to the device having a false negative.
