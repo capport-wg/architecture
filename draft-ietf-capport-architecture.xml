@@ -80,7 +80,7 @@
         output. If you submit your draft to the RFC Editor, the
         keywords will be used for the search engine. -->
     <abstract>
-      <t>This document aims to document consensus on the CAPPORT architecture.
+      <t>This document describes a CAPPORT architecture.
         DHCP or Router Advertisements, an optional signaling protocol, and an HTTP API are used to
         provide the solution. The role of Provisioning Domains (PvDs) is
         described.
@@ -128,7 +128,7 @@
             network before any application attempts to use the network.</li>
         <li>The state of captivity SHOULD be explicitly available to devices
             (in contrast to modification of DNS or HTTP, which is only
-            indirectly machine-detectable by the client--by comparing
+            indirectly machine-detectable by the client when it compares
             responses to well-known queries with expected responses).</li>
         <li>The architecture MUST provide a path of incremental migration,
             acknowledging a huge variety of portals and end-user device
@@ -172,7 +172,7 @@
          </li>
       </ul>
       <t>
-       The architecture attempts to provide privacy, authentication, and safety mechanisms
+       The architecture attempts to provide confidentiality, authentication, and safety mechanisms
        to the extent possible.
       </t>
       <section>
@@ -225,21 +225,25 @@
         <t>
         At this time we consider only devices with web browsers, with web
         applications being the means of satisfying Captive Portal Conditions.
+        An example interactive User Equipment is a smart phone.
+        </t>
+        <t>
+        The User Equipment:
         </t>
         <ul spacing="normal">
-          <li>An example interactive User Equipment is a smart phone.</li>
+          <li></li>
           <li>SHOULD support provisioning of the URI for the Captive Portal API (e.g., by DHCP)</li>
           <li>SHOULD distinguish Captive Portal API access per network interface, in the manner
            of Provisioning Domain Architecture <xref target="RFC7556"/>.</li>
           <li>SHOULD have a mechanism for notifying the user of the Captive Portal</li>
           <li>SHOULD have a web browser so that the user may navigate the Captive Portal
            user interface.</li>
-          <li>MAY restrict application access to networks not granting full
+          <li>MAY prevent applications from using networks that do not grant full
            network access. E.g., a device connected to a mobile network may
-           be connecting to a WiFi network; the operating system MAY
+           be connecting to a captive WiFi network; the operating system MAY
            avoid updating the default route until network access restrictions
-           have been lifted (excepting access to the Captive Portal server).
-           This has been termed "make before break".</li>
+           have been lifted (excepting access to the Captive Portal server) in
+           the new network. This has been termed "make before break".</li>
         </ul>
         <t>
         None of the above requirements are mandatory because (a) we do not wish
@@ -281,7 +285,7 @@
         <t>
          The purpose of a Captive Portal API is to permit a query of Captive
          Portal state without interrupting the user.  This API thereby removes
-         the need for a device to perform clear-text "canary" HTTP queries to
+         the need for User Equipment to perform clear-text "canary" HTTP queries to
          check for response tampering.
         </t>
         <t>
@@ -292,12 +296,11 @@
          This architecture expects the User Equipment to query the API when the
          User Equipment attaches to the network and multiple times thereafter.
          Therefore the API MUST support multiple repeated queries from the same
-         User Equipment, returning the current state of captivity for the
-         equipment.
+         User Equipment and return the state of captivity for the equipment.
         </t>
         <t>
-         At minimum the API MUST provide: (1) the state of captivity and (2) a URI
-         for a browser to present the portal application to the user.
+         At minimum, the API MUST provide: (1) the state of captivity and (2) a URI
+         for the Captive Portal Server.
          The API SHOULD provide evidence to the caller that it supports
          the present architecture.
         </t>
@@ -312,9 +315,9 @@
          extensible information elements.
         </t>
         <t>
-         The API MUST use TLS for privacy and server authentication.
-         The implementation of the API MUST ensure both privacy and integrity of
-         any information provided by or required by it.
+         The API MUST use TLS to ensure server authentication.
+         The implementation of the API MUST ensure both confidentiality and 
+         integrity of any information provided by or required by it.
         </t>
         <t>
          This document does not specify the details of the API.
@@ -323,21 +326,23 @@
       <section anchor="section_capport_enforcement">
         <name>Captive Portal Enforcement</name>
         <t>
-        The Captive Portal Enforcement component restricts network access to
+        The Captive Portal Enforcement component restrict the network access of
         User Equipment according to site-specific policy. Typically User Equipment
-        is permitted access to a small number of services and
-        is denied general network access until it has performed some action.
+        is permitted access to a small number of services and is denied general
+        network access until it satisfies the Captive Portal Conditions.
         </t>
         <t>
        The Captive Portal Enforcement component:
         </t>
         <ul spacing="normal">
-          <li>Allows traffic through for allowed User Equipment.</li>
-          <li>Blocks (discards) traffic for disallowed User Equipment.</li>
+          <li>Allows traffic through for allowed User Equipment that has satisfied
+          the Captive Portal Conditions.</li>
+          <li>Blocks (discards) traffic according to the site-specific policy
+            for User Equipment has not yet satisfied the Captive Portal Conditions.</li>
           <li>May signal User Equipment using the Captive Portal Signaling protocol
-           if traffic is blocked.</li>
-          <li>Permits disallowed User Equipment to access necessary APIs and web pages to
-           fulfill requirements of exiting captivity.</li>
+           if certain traffic is blocked.</li>
+          <li>Permits User Equipment that has not satisfied the Captive Portal Conditions 
+          to access necessary APIs and web pages to fulfill requirements for escaping captivity.</li>
           <li>Updates allow/block rules per User Equipment in response to operations
            from the Captive Portal back-end.</li>
         </ul>
@@ -347,13 +352,13 @@
         <t>
         User Equipment may send traffic outside the captive network prior to the Enforcement
         device granting it access. The Enforcement Device rightly blocks or resets these
-        requests. However, lacking a signal from the Enforcement Device or interaction with the
+        requests. However, in the absence of a signal from the Captive Network or interaction with the
         API server, the User Equipment can only guess at whether it is captive. Consequently,
         allowing the Enforcement Device to signal to the User Equipment that there is a
         problem with its connectivity may improve the user's experience.
         </t>
         <t>
-        An Enforcement Device may also want to inform the User Equipment of a pending expiry
+        An Enforcement Device may also want to notify the User Equipment of a pending expiry
         of its access to the external network, so providing the Enforcement Device the ability
         to preemptively signal may be desirable.
         </t>
@@ -363,16 +368,17 @@
         requirements for a Captive Portal Signaling Protocol follow:
         </t>
         <ol spacing="normal" type="1">
-          <li>The notification SHOULD NOT be easy to spoof.
+          <li>Such notifications SHOULD NOT be easy to spoof.
                If an attacker can send spoofed notifications to the User Equipment,
                they can cause the User Equipment to unnecessarily access the API. Rather than
                relying solely on rate limits to prevent problems, a good protocol will strive
                to limit the feasibility of such attacks.
             </li>
-          <li>It SHOULD be possible to send the notification before the captive portal closes.
+          <li>It SHOULD be possible to send a notification before the captive portal closes.
                This will help ensure seamless connectivity for the user, as the User Equipment
                will not need to wait for a network failure to refresh its login. On receipt of
-               preemptive notification, the User Equipment can prompt the user to refresh.
+               preemptive notification, the User Equipment can prompt the user to refresh the 
+               connection or satisfy the Captive Portal Conditions again.
              </li>
           <li>The signal SHOULD NOT include any information other than an indication that traffic
                 is restricted, which can be used as a prompt to contact the API.</li>
@@ -383,9 +389,9 @@
        network prevents access to some destinations. The intent is to rely on the Captive Portal API
        and the web portal to which it points to communicate local network policies.
         </t>
-        <t>The Captive Portal Enforcement function MAY send Captive Portal Signals when disallowed
-	  User Equipment attempts to send to the network.  These signals MUST be rate-limited to a
-          configurable rate.
+        <t>The Captive Portal Enforcement function MAY send Captive Portal Signals when User Equipment
+        that has not satisfied the Captive Portal Conditions attempts to send traffic to the network.
+        These signals MUST be rate-limited to a configurable rate.
         </t>
         <t>
          The signals MUST NOT be sent to the Internet devices. The indications
