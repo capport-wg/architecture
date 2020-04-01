@@ -667,7 +667,8 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
 	     URLs is correct and meaningful to the User Equipment, even when
 	     accessed from a network other than the one that contains the
 	     captive portal.  One consequence of this is that URLs provided in
-	     the API are expected to be resolved using public DNS.
+	     the API are expected to be resolved using public global DNS (as
+	     defined in section 2 of <xref target="RFC8499"/>).
           </t>
           <t>
 	     Though a URL might still correctly resolve when the UE makes the
@@ -924,6 +925,28 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
       </references>
       <references>
         <name>Informative References</name>
+        <reference anchor="RFC8499" target="https://www.rfc-editor.org/info/rfc8499">
+          <front>
+            <title>DNS Terminology</title>
+            <author initials="P." surname="Hoffman" fullname="P. Hoffman">
+              <organization/>
+            </author>
+            <author initials="A." surname="Sullivan" fullname="A. Sullivan">
+              <organization/>
+            </author>
+            <author initials="K." surname="Fujiwara" fullname="K. Fujiwara">
+              <organization/>
+            </author>
+            <date year="2019" month="January"/>
+            <abstract>
+              <t>The Domain Name System (DNS) is defined in literally dozens of different RFCs.  The terminology used by implementers and developers of DNS protocols, and by operators of DNS systems, has sometimes changed in the decades since the DNS was first defined.  This document gives current definitions for many of the terms used in the DNS in a single document.</t>
+              <t>This document obsoletes RFC 7719 and updates RFC 2308.</t>
+            </abstract>
+          </front>
+          <seriesInfo name="BCP" value="219"/>
+          <seriesInfo name="RFC" value="8499"/>
+          <seriesInfo name="DOI" value="10.17487/RFC8499"/>
+        </reference>
         <reference anchor="I-D.nottingham-capport-problem" xml:base="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.nottingham-capport-problem.xml" target="http://www.ietf.org/internet-drafts/draft-nottingham-capport-problem-01.txt">
           <front>
             <title>Captive Portals Problem Statement</title>
