@@ -668,7 +668,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
 	     accessed from a network other than the one that contains the
 	     captive portal.  One consequence of this is that URLs provided in
 	     the API are expected to be resolved using public global DNS (as
-	     defined in section 2 of <xref target="RFC8499"/>).
+	     defined in Section 2 of <xref target="RFC8499"/>).
           </t>
           <t>
 	     Though a URL might still correctly resolve when the UE makes the
