@@ -352,8 +352,8 @@
         <t>
         User Equipment may send traffic outside the captive network prior to the Enforcement
         device granting it access. The Enforcement Device rightly blocks or resets these
-        requests. However, in the absence of a signal from the Captive Network or interaction with the
-        API server, the User Equipment can only guess at whether it is captive. Consequently,
+        requests. However, in the absence of a signal from the Enforcement Device or interaction with
+        the API server, the User Equipment can only guess at whether it is captive. Consequently,
         allowing the Enforcement Device to signal to the User Equipment that there is a
         problem with its connectivity may improve the user's experience.
         </t>
