@@ -338,7 +338,7 @@
           <li>Allows traffic through for allowed User Equipment that has satisfied
           the Captive Portal Conditions.</li>
           <li>Blocks (discards) traffic according to the site-specific policy
-            for User Equipment has not yet satisfied the Captive Portal Conditions.</li>
+            for User Equipment that has not yet satisfied the Captive Portal Conditions.</li>
           <li>May signal User Equipment using the Captive Portal Signaling protocol
            if certain traffic is blocked.</li>
           <li>Permits User Equipment that has not satisfied the Captive Portal Conditions 
