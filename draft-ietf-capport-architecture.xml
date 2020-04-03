@@ -177,9 +177,13 @@
       </t>
       <section>
         <name>Requirements Language</name>
-        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-       "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-       document are to be interpreted as described in <xref target="RFC2119">RFC 2119</xref>.</t>
+	<t>
+	  The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+	  "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+	  "OPTIONAL" in this document are to be interpreted as described in BCP
+	  14 <xref target="RFC2119"/> <xref target="RFC8174"/> when, and only
+	  when, they appear in all capitals, as shown here.
+	</t>
       </section>
       <section>
         <name>Terminology</name>
@@ -247,7 +251,7 @@
         </ul>
         <t>
         None of the above requirements are mandatory because (a) we do not wish
-        to say users or devices must seek access beyond the captive network,
+        to say users or devices must seek full access to the captive network,
         (b) the requirements may be fulfilled by manually visiting the captive
         portal web application, and (c) legacy devices must continue to be
         supported.
@@ -344,18 +348,18 @@
           <li>Permits User Equipment that has not satisfied the Captive Portal Conditions 
           to access necessary APIs and web pages to fulfill requirements for escaping captivity.</li>
           <li>Updates allow/block rules per User Equipment in response to operations
-           from the Captive Portal back-end.</li>
+           from the Captive Portal Server.</li>
         </ul>
       </section>
       <section anchor="section_signal">
         <name>Captive Portal Signal</name>
         <t>
-        User Equipment may send traffic outside the captive network prior to the Enforcement
+        User Equipment may send traffic to hosts blocked by the captive network prior to the Enforcement
         device granting it access. The Enforcement Device rightly blocks or resets these
         requests. However, in the absence of a signal from the Enforcement Device or interaction with
         the API server, the User Equipment can only guess at whether it is captive. Consequently,
-        allowing the Enforcement Device to signal to the User Equipment that there is a
-        problem with its connectivity may improve the user's experience.
+        allowing the Enforcement Device to explicitly signal to the User Equipment that the
+        traffic is being blocked may improve the user's experience.
         </t>
         <t>
         An Enforcement Device may also want to notify the User Equipment of a pending expiry
@@ -381,7 +385,7 @@
                connection or satisfy the Captive Portal Conditions again.
              </li>
           <li>The signal SHOULD NOT include any information other than an indication that traffic
-                is restricted, which can be used as a prompt to contact the API.</li>
+                is restricted, which can prompt the User Equipment to contact the API.</li>
         </ol>
         <t>
 
@@ -394,8 +398,9 @@
         These signals MUST be rate-limited to a configurable rate.
         </t>
         <t>
-         The signals MUST NOT be sent to the Internet devices. The indications
-         are only sent to the User Equipment.
+         The signals MUST NOT be sent to the destinations/peers that the User Equipment is
+         restricted from accessing.
+         The indications are only to be sent to the User Equipment.
         </t>
       </section>
       <section>
@@ -444,15 +449,16 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                  the URI for the Captive Portal API.</li>
           <li>The User Equipment queries the API to learn of its state of
                  captivity. If captive, the User Equipment presents the portal
-                 user interface to the user.</li>
+                 user interface from the Web Portal Server to the user.</li>
+          <li>Based on user interaction, the Web Portal Server directs the Captive Portal
+                 Enforcement device to either allow or deny external network
+                 access for the User Equipment.</li>
           <li>The User Equipment attempts to communicate to the external
                  network through the Captive Portal enforcement device.</li>
           <li>The Captive Portal Enforcement device either allows the User
-                 Equipment's packets to the external network, or if a signal has
-                 been implemented, responds with a Captive Portal Signal.</li>
-          <li>The Web Portal Server directs the Captive Portal
-                 Enforcement device to either allow or deny external network
-                 access for the User Equipment.</li>
+                 Equipment's packets to the external network, or blocks the
+                 packets. If blocking traffic and a signal has
+                 been implemented, it may respond with a Captive Portal Signal.</li>
         </ul>
         <t>
         Although the Provisioning Service, API Server, and Web Portal Server functions
@@ -667,7 +673,8 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
 	     URLs is correct and meaningful to the User Equipment, even when
 	     accessed from a network other than the one that contains the
 	     captive portal.  One consequence of this is that URLs provided in
-	     the API are expected to be resolved using public DNS.
+	     the API are expected to be resolved using public global DNS (as
+	     defined in Section 2 of <xref target="RFC8499"/>).
           </t>
           <t>
 	     Though a URL might still correctly resolve when the UE makes the
@@ -775,7 +782,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
          When joining a network, some trust is placed in the network operator.
          This is usually considered to be a decision by a user on the basis of
          the reputation of an organization. However, once a user makes such a
-         decision, protocols can support authenticating a network is operated
+         decision, protocols can support authenticating that a network is operated
          by who claims to be operating it.  The Provisioning Domain
          Architecture <xref target="RFC7556"/> provides some discussion on
          authenticating an operator.
@@ -834,7 +841,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
          about this.
          Devices MAY permit users to disable automatic reaction to
          captive-portal indications for privacy reasons.
-         However, there is the trade-off that the user doesn't get notified
+         However, there would be the trade-off that the user doesn't get notified
          when network access is restricted.
          Hence, end-user devices MAY allow users to manually control captive
          portal interactions, possibly on the granularity of Provisioning
@@ -875,6 +882,17 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
             </abstract>
           </front>
         </reference>
+	<reference  anchor='RFC8174' target='https://www.rfc-editor.org/info/rfc8174'>
+<front>
+<title>Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</title>
+<author initials='B.' surname='Leiba' fullname='B. Leiba'><organization /></author>
+<date year='2017' month='May' />
+<abstract><t>RFC 2119 specifies common key words that may be used in protocol  specifications.  This document aims to reduce the ambiguity by clarifying that only UPPERCASE usage of the key words have the  defined special meanings.</t></abstract>
+</front>
+<seriesInfo name='BCP' value='14'/>
+<seriesInfo name='RFC' value='8174'/>
+<seriesInfo name='DOI' value='10.17487/RFC8174'/>
+</reference>
 	<reference anchor='RFC7710bis'>
 <front>
 <title>Captive-Portal Identification in DHCP / RA</title>
@@ -913,6 +931,28 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
       </references>
       <references>
         <name>Informative References</name>
+        <reference anchor="RFC8499" target="https://www.rfc-editor.org/info/rfc8499">
+          <front>
+            <title>DNS Terminology</title>
+            <author initials="P." surname="Hoffman" fullname="P. Hoffman">
+              <organization/>
+            </author>
+            <author initials="A." surname="Sullivan" fullname="A. Sullivan">
+              <organization/>
+            </author>
+            <author initials="K." surname="Fujiwara" fullname="K. Fujiwara">
+              <organization/>
+            </author>
+            <date year="2019" month="January"/>
+            <abstract>
+              <t>The Domain Name System (DNS) is defined in literally dozens of different RFCs.  The terminology used by implementers and developers of DNS protocols, and by operators of DNS systems, has sometimes changed in the decades since the DNS was first defined.  This document gives current definitions for many of the terms used in the DNS in a single document.</t>
+              <t>This document obsoletes RFC 7719 and updates RFC 2308.</t>
+            </abstract>
+          </front>
+          <seriesInfo name="BCP" value="219"/>
+          <seriesInfo name="RFC" value="8499"/>
+          <seriesInfo name="DOI" value="10.17487/RFC8499"/>
+        </reference>
         <reference anchor="I-D.nottingham-capport-problem" xml:base="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.nottingham-capport-problem.xml" target="http://www.ietf.org/internet-drafts/draft-nottingham-capport-problem-01.txt">
           <front>
             <title>Captive Portals Problem Statement</title>
@@ -945,7 +985,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
       </references>
     </references>
     <section anchor="app-additional">
-      <name>Existing captive portal detection implementations</name>
+      <name>Existing Captive Portal Detection Implementations</name>
       <t>
        Operating systems and user applications may perform various tests when
        network connectivity is established to determine if the device is
@@ -954,14 +994,20 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
        a fixed response. Any other response is interpreted as a signal that a
        captive portal is present. This check is typically not secured with TLS,
        as a network with a captive portal may intercept the connection, leading
-       to a host name mismatch.
+       to a host name mismatch. This has been referred to as a "canary" request
+       because, like the canary in the coal mine, it can be the first sign
+       that something is wrong.
+      </t>
 
+      <t>
        Another test that can be performed is a DNS lookup to a known address
        with an expected answer. Such tests may be less reliable as the captive
        portal may only be intercepting TCP traffic and deliberately excluding
        the interception of DNS queries. DNS queries not using UDP may
        potentially fail this test if operating over TCP or DNS over HTTP.
+      </t>
 
+      <t>
        Malicious or misconfigured networks with a captive portal present may
        not intercept these requests and choose to pass them through or decide to
        impersonate, leading to the device having a false negative.
