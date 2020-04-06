@@ -104,12 +104,6 @@
        of alerting the user involve modifying HTTP or DNS traffic.
       </t>
       <t>
-       Problems with captive portal implementations have been described in
-       <xref target="I-D.nottingham-capport-problem"/>. [If that document
-       cannot be published, consider putting its best parts into an appendix of
-       this document.]
-      </t>
-      <t>
        This document standardizes an architecture for implementing captive portals
        that provides tools for addressing most of those problems. We are guided
        by these principles:
@@ -952,19 +946,6 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
           <seriesInfo name="BCP" value="219"/>
           <seriesInfo name="RFC" value="8499"/>
           <seriesInfo name="DOI" value="10.17487/RFC8499"/>
-        </reference>
-        <reference anchor="I-D.nottingham-capport-problem" xml:base="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.nottingham-capport-problem.xml" target="http://www.ietf.org/internet-drafts/draft-nottingham-capport-problem-01.txt">
-          <front>
-            <title>Captive Portals Problem Statement</title>
-            <seriesInfo name="Internet-Draft" value="draft-nottingham-capport-problem-01"/>
-            <author initials="M" surname="Nottingham" fullname="Mark Nottingham">
-              <organization/>
-            </author>
-            <date month="April" day="4" year="2016"/>
-            <abstract>
-              <t>This draft attempts to establish a problem statement for "Captive Portals", in order to inform discussions of improving their operation.  Note to Readers  The issues list for this draft can be found at https://github.com/mnot/I-D/labels/capport-problem .  The most recent (often, unpublished) draft is at https://mnot.github.io/I-D/capport-problem/ .  Recent changes are listed at https://github.com/mnot/I-D/commits/gh- pages/capport-problem .</t>
-            </abstract>
-          </front>
         </reference>
         <reference anchor="I-D.pfister-capport-pvd" xml:base="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.pfister-capport-pvd.xml" target="http://www.ietf.org/internet-drafts/draft-pfister-capport-pvd-00.txt">
           <front>
