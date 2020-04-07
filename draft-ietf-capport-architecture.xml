@@ -355,7 +355,7 @@
         </t>
 
         <t>
-        An Enforcement Device MUST rate limit any signal generated in response to these conditions.  See <xref target="section_signal_risks"/> for a discussion of
+        An Enforcement Device MUST rate-limit any signal generated in response to these conditions.  See <xref target="section_signal_risks"/> for a discussion of
         risks related to a Captive Portal Signal.
         </t>
       </section>
