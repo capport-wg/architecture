@@ -153,9 +153,8 @@
             in response to traffic.  This notification should work with any Internet
             protocol, not just clear-text HTTP. This notification does not carry the
             portal URI; rather it provides a notification to the User Equipment that
-            it is in a captive state. This document will specify requirements for
-            a signaling protocol which could generate Captive Portal Signals.
-         </li>
+            it is in a captive state.
+        </li>
         <li>
             Receipt of a Captive Portal Signal informs an end-user device that
             it could be captive.
@@ -348,53 +347,16 @@
       <section anchor="section_signal">
         <name>Captive Portal Signal</name>
         <t>
-        User Equipment may send traffic to hosts blocked by the captive network prior to the Enforcement
-        device granting it access. The Enforcement Device rightly blocks or resets these
-        requests. However, in the absence of a signal from the Enforcement Device or interaction with
-        the API server, the User Equipment can only guess at whether it is captive. Consequently,
-        allowing the Enforcement Device to explicitly signal to the User Equipment that the
-        traffic is being blocked may improve the user's experience.
+        When User Equipment first connects to a network, or when there are changes in status,
+        the Enforcement Device could generate a signal toward the User Equipment.  This signal
+        indicates that the User Equipment might need to contact the API Server to receive
+        updated information.  For instance, this signal might be generated when the end of a
+        session is imminent, or when network access was denied.
         </t>
-        <t>
-        An Enforcement Device may also want to notify the User Equipment of a pending expiry
-        of its access to the external network, so providing the Enforcement Device the ability
-        to preemptively signal may be desirable.
-        </t>
-        <t>
-        A specific Captive Portal Signaling Protocol is out of scope for this document.
-        However, in order to ensure that future protocols fit into the architecture,
-        requirements for a Captive Portal Signaling Protocol follow:
-        </t>
-        <ol spacing="normal" type="1">
-          <li>Such notifications SHOULD NOT be easy to spoof.
-               If an attacker can send spoofed notifications to the User Equipment,
-               they can cause the User Equipment to unnecessarily access the API. Rather than
-               relying solely on rate limits to prevent problems, a good protocol will strive
-               to limit the feasibility of such attacks.
-            </li>
-          <li>It SHOULD be possible to send a notification before the captive portal closes.
-               This will help ensure seamless connectivity for the user, as the User Equipment
-               will not need to wait for a network failure to refresh its login. On receipt of
-               preemptive notification, the User Equipment can prompt the user to refresh the 
-               connection or satisfy the Captive Portal Conditions again.
-             </li>
-          <li>The signal SHOULD NOT include any information other than an indication that traffic
-                is restricted, which can prompt the User Equipment to contact the API.</li>
-        </ol>
-        <t>
 
-       The Captive Portal Signaling Protocol does not provide any means of indicating that the
-       network prevents access to some destinations. The intent is to rely on the Captive Portal API
-       and the web portal to which it points to communicate local network policies.
-        </t>
-        <t>The Captive Portal Enforcement function MAY send Captive Portal Signals when User Equipment
-        that has not satisfied the Captive Portal Conditions attempts to send traffic to the network.
-        These signals MUST be rate-limited to a configurable rate.
-        </t>
         <t>
-         The signals MUST NOT be sent to the destinations/peers that the User Equipment is
-         restricted from accessing.
-         The indications are only to be sent to the User Equipment.
+        An Enforcement Device MUST rate-limit any signal generated in response to these conditions.  See <xref target="section_signal_risks"/> for a discussion of
+        risks related to a Captive Portal Signal.
         </t>
       </section>
       <section>
@@ -810,7 +772,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
            ensure the integrity of this information, as well as its confidentiality.
         </t>
       </section>
-      <section>
+      <section anchor="section_signal_risks">
         <name>Risks Associated with the Signaling Protocol</name>
         <t>
          If a Signaling Protocol is implemented, it may be possible for any user on
@@ -830,11 +792,11 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
       <section>
         <name>User Options</name>
         <t>
-         The Signal could inform the User Equipment that it is being held
+         The Captive Portal Signal could inform the User Equipment that it is being held
          captive.  There is no requirement that the User Equipment do something
          about this.
          Devices MAY permit users to disable automatic reaction to
-         captive-portal indications for privacy reasons.
+         Captive Portal Signals indications for privacy reasons.
          However, there would be the trade-off that the user doesn't get notified
          when network access is restricted.
          Hence, end-user devices MAY allow users to manually control captive
