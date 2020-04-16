@@ -562,10 +562,9 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
           <t>
                  Another consideration related to uniqueness of the User Equipment is that
                  if the attached User Equipment changes, both the API Server and the
-                 Enforcement Device must invalidate their state related to the User Equipment.
+                 Enforcement Device MUST invalidate their state related to the User Equipment.
           </t>
           <t>
-
                  The Enforcement Device needs to be aware of the physical interface,
                  which constrains the environment: it must either be part of the device providing
                  physical access (e.g., implemented in firmware), or packets traversing the network
@@ -590,9 +589,9 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                   However, it may be possible to spoof the IP address, particularly for
                   malicious reasons where proper functioning of the network is not necessary
                   for the malicious actor. Consequently, any solution using the IP address
-                  should proactively try to prevent spoofing of the IP address. Similarly,
+                  SHOULD proactively try to prevent spoofing of the IP address. Similarly,
                   if the mapping of IP address to User Equipment is changed, the components
-                  of the architecture must remove or update their mapping to prevent spoofing.
+                  of the architecture MUST remove or update their mapping to prevent spoofing.
                   Demonstrations of return routeability, such as that required for TCP
                   connection establishment, might be sufficient defense against spoofing,
                   though this might not be sufficient in networks that use broadcast media
@@ -768,7 +767,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         <t>
            The solution described here requires that the API be secured using TLS.
            This is required to allow the user equipment and API Server to exchange
-           secrets which can be used to validate future interactions. The API must
+           secrets which can be used to validate future interactions. The API MUST
            ensure the integrity of this information, as well as its confidentiality.
         </t>
       </section>
