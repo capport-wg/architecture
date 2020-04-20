@@ -1,0 +1,63 @@
+Publication request writeup for draft-ietf-capport-architecture-06
+
+Intended status: Informational
+Working group: capport
+Document shepherd: Martin Thomson
+
+Technical Summary:
+
+This document defines terminology related to the operation of a captive portal.
+Using those terms, it then defines how a network that deploys a captive portal
+should work.
+
+Working Group Summary:
+
+This document was difficult to reach consensus on.  The complexity of the
+architecture here is reflective of a far greater complexity in practice of
+deployment.
+
+More contentious in discussion was the question of what signals from the network
+would be provided and what clients might do in response to those signals.  The
+hard reality of the situation is that clients will be forced to use the existing
+heuristics they use, likely indefinitely, even when the mechanisms we define are
+in relatively wide deployment.
+
+A particularly difficult discussion was the option for a network to signal that
+conditions have changed.  There was considerable discussion about the security
+properties of unsolicited signals from the network, how that related to the
+identification of endpoints (or User Equipment to use the terminology here), and
+how these signals might be turned to malicious ends.
+
+In the end, we decided to document requirements for how User Equipment is
+identified and how to avoid identifier spoofing.  A high-level design and
+security requirements for a signal from the network about changed conditions was
+also documented, but no mechanism that met these requirements was proposed and
+the working group decided to proceed to publication without a specific
+mechanism.
+
+Document Quality:
+
+This document has not had a whole lot of attention from editors over time, and
+editors have changed.  This shows in some editorial aspects of the document, but
+aside from a few areas in which things like terminology are inconsistently
+capitalized, the document is in good shape.
+
+Personnel:
+
+Martin Thomson is document shepherd.  Barry Leiba is the responsible Area Director.
+
+Important information:
+
+This document represents the consensus of the capport WG.  The above summarizes
+some of the challenges overcome.  There were a few occasions where this
+consensus was a little rocky though.
+
+This document has no special requirement for review and so has received limited
+external review.
+
+IPR disclosures from authors have been checked.  No IPR disclosures have been
+made with reference to this work.
+
+No request is made of IANA.
+
+Validation is limited to nits check (which only reported false positives).
