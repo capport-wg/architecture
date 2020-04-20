@@ -229,7 +229,6 @@
         The User Equipment:
         </t>
         <ul spacing="normal">
-          <li></li>
           <li>SHOULD support provisioning of the URI for the Captive Portal API (e.g., by DHCP)</li>
           <li>SHOULD distinguish Captive Portal API access per network interface, in the manner
            of Provisioning Domain Architecture <xref target="RFC7556"/>.</li>
@@ -249,6 +248,15 @@
         (b) the requirements may be fulfilled by manually visiting the captive
         portal web application, and (c) legacy devices must continue to be
         supported.
+        </t>
+        <t>
+        If User Equipment supports the Captive Portal API, it MUST validate API server TLS certificate
+        (see <xref target="RFC2818"/>). An Enforcement device SHOULD allow access to
+        any services that User Equipment could need to contact to perform certificate validation,
+        such as OCSP responders, CRLs, and NTP servers; see Section 4.1 of 
+        <xref target="I-D.ietf-capport-api"/> for more information.
+        If certificate validation fails, User Equipment MUST NOT proceed with any of the behavior
+        described above.
         </t>
       </section>
       <section anchor="section_provisioning">
@@ -884,6 +892,20 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
             </abstract>
           </front>
         </reference>
+        <reference anchor="RFC2818" target="https://www.rfc-editor.org/info/rfc2818">
+          <front>
+            <title>HTTP Over TLS</title>
+            <author initials="E." surname="Rescorla" fullname="E. Rescorla">
+              <organization/>
+            </author>
+            <date year="2000" month="May"/>
+            <abstract>
+              <t>This memo describes how to use Transport Layer Security (TLS) to secure Hypertext Transfer Protocol (HTTP) connections over the Internet.  This memo provides information for the Internet community.</t>
+            </abstract>
+          </front>
+          <seriesInfo name="RFC" value="2818"/>
+          <seriesInfo name="DOI" value="10.17487/RFC2818"/>
+        </reference>
       </references>
       <references>
         <name>Informative References</name>
@@ -924,6 +946,23 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
               <t>Devices that connect to Captive Portals need a way to identify that the network is restricted and discover a method for opening up access.  This document defines how to use Provisioning Domain Additional Information to discover a Captive Portal API URI.</t>
             </abstract>
           </front>
+        </reference>
+        <reference anchor="I-D.ietf-capport-api">
+          <front>
+            <title>Captive Portal API</title>
+            <author initials="T" surname="Pauly" fullname="Tommy Pauly">
+              <organization/>
+            </author>
+            <author initials="D" surname="Thakore" fullname="Darshak Thakore">
+              <organization/>
+            </author>
+            <date month="March" day="31" year="2020"/>
+            <abstract>
+              <t>This document describes an HTTP API that allows clients to interact with a Captive Portal system.  With this API, clients can discover how to get out of captivity and fetch state about their Captive Portal sessions.</t>
+            </abstract>
+          </front>
+          <seriesInfo name="Internet-Draft" value="draft-ietf-capport-api-06"/>
+          <format type="TXT" target="http://www.ietf.org/internet-drafts/draft-ietf-capport-api-06.txt"/>
         </reference>
       </references>
     </references>
