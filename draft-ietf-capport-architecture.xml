@@ -671,7 +671,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
       <section>
         <name>Initial Connection</name>
         <t>
-      This section describes a possible work-flow when User Equipment initially
+      This section describes a possible workflow when User Equipment initially
       joins a Captive Network.
         </t>
         <ol spacing="normal" type="1">
@@ -695,7 +695,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
       <section>
         <name>Conditions About to Expire</name>
         <t>
-      This section describes a possible work-flow when access is about to expire.
+      This section describes a possible workflow when access is about to expire.
         </t>
         <ol spacing="normal" type="1">
           <li>Precondition: the API has provided the User Equipment with a duration
