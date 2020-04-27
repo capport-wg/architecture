@@ -991,10 +991,16 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
 
       <t>
        Another test that can be performed is a DNS lookup to a known address
-       with an expected answer. Such tests may be less reliable as the captive
-       portal may only be intercepting TCP traffic and deliberately excluding
-       the interception of DNS queries. DNS queries not using UDP may
-       potentially fail this test if operating over TCP or DNS over HTTP.
+       with an expected answer. If the answer differs from the expected answer,
+       the equipment detects that a captive portal is present.
+       DNS queries over TCP or HTTPS are less likely to be modified than DNS
+       queries over UDP due to the complexity of implementation.
+      </t>
+
+      <t>
+       The different tests may produce different conclusions, varying by
+       whether or not the implementation treats both TCP and UDP traffic,
+       and by which types of DNS are intercepted.
       </t>
 
       <t>
