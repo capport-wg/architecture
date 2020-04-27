@@ -442,7 +442,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
              Multiple components in the architecture interact with both the User
              Equipment and each other. Since the User Equipment is the focus of
              these interactions, the components must be able to both identify the
-             User Equipment from their interactions with it, and be able to agree
+             User Equipment from their interactions with it, and to agree
              on the identity of the User Equipment when interacting with each
              other.
       </t>
