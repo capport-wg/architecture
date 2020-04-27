@@ -490,12 +490,11 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         <section anchor="id_recommended_unique">
           <name>Uniquely Identify User Equipment</name>
           <t>
-                  In order to uniquely identify the User Equipment, at most one User Equipment
-                  interacting with the other components of the Captive Portal MUST have a given
-                  value of the identifier.
+                  Each instance of User Equipment interacting with the Captive Network MUST be
+                  given an identifier that is unique among User Equipment interacting at that time.
           </t>
           <t>
-                  Over time, the User Equipment identified by the value MAY change. Allowing the
+                  Over time, the User Equipment assigned to an identifier value MAY change. Allowing the
                   identified device to change over time ensures that the space of possible
                   identifying values need not be overly large.
           </t>
