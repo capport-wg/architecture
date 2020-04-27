@@ -151,11 +151,12 @@
             A device MAY query this API at any time to determine whether the
             network is holding the device in a captive state.
          </li>
-        <li>End-user devices can be notified of captivity with Captive Portal Signals
-            in response to traffic.  This notification should work with any Internet
-            protocol, not just clear-text HTTP. This notification does not carry the
-            portal URL; rather it provides a notification to the User Equipment that
-            it is in a captive state.
+        <li>End-user devices can be notified of captivity with Captive Portal
+            Signals in response to traffic. This notification works in response
+            to any Internet protocol, and is not done by modifying protocols
+            in-band.  This notification does not carry the portal URL; rather
+            it provides a notification to the User Equipment that it is in a
+            captive state.
         </li>
         <li>
             Receipt of a Captive Portal Signal informs an end-user device that
