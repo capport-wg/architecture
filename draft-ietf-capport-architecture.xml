@@ -520,9 +520,10 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
           <name>Visible to the API Server</name>
           <t>
                   Since the API Server will need to perform operations which rely on the identity
-                  of the User Equipment, such as query whether it is captive, the API Server
-                  needs to be able to relate requests to the User Equipment making the
-                  request.
+                  of the User Equipment, such as answering a query about
+                  whether the User Equipment is captive, the API Server needs
+                  to be able to relate a request to the User Equipment making
+                  the request.
           </t>
         </section>
         <section anchor="id_recommended_visible_ed">
