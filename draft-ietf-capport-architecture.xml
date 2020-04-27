@@ -186,7 +186,7 @@
         <t>Captive Network: A network which limits communication of attached
           devices to restricted hosts until the user has satisfied
           Captive Portal Conditions, after which access is permitted to a wider
-          set of hosts (typically the internet).</t>
+          set of hosts (typically the Internet).</t>
         <t>Captive Portal Conditions: site-specific requirements that a user
           or device must satisfy in order to gain access to the wider network.</t>
         <t>Captive Portal Enforcement: The network equipment which enforces the
@@ -252,7 +252,7 @@
         supported.
         </t>
         <t>
-        If User Equipment supports the Captive Portal API, it MUST validate API server TLS certificate
+        If User Equipment supports the Captive Portal API, it MUST validate the API server's TLS certificate
         (see <xref target="RFC2818"/>). An Enforcement device SHOULD allow access to
         any services that User Equipment could need to contact to perform certificate validation,
         such as OCSP responders, CRLs, and NTP servers; see Section 4.1 of 
@@ -334,7 +334,7 @@
       <section anchor="section_capport_enforcement">
         <name>Captive Portal Enforcement</name>
         <t>
-        The Captive Portal Enforcement component restrict the network access of
+        The Captive Portal Enforcement component restricts the network access of
         User Equipment according to site-specific policy. Typically User Equipment
         is permitted access to a small number of services and is denied general
         network access until it satisfies the Captive Portal Conditions.
@@ -526,8 +526,8 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         <section anchor="id_recommended_visible_ed">
           <name>Visible to the Enforcement Device</name>
           <t>
-                  The Enforcement Device will decide on a per packet basis whether it
-                  should be permitted to communicate with the external network. Since
+                  The Enforcement Device will decide on a per-packet basis whether
+                  the packet should be forwarded to the external network. Since
                   this decision depends on which User Equipment sent the packet, the
                   Enforcement Device requires that it be able to map the packet to its
                   concept of the User Equipment.
@@ -977,7 +977,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
        Operating systems and user applications may perform various tests when
        network connectivity is established to determine if the device is
        attached to a network with a captive portal present. A common method is
-       to attempt to make a HTTP request to a known, vendor hosted endpoint with
+       to attempt to make a HTTP request to a known, vendor-hosted endpoint with
        a fixed response. Any other response is interpreted as a signal that a
        captive portal is present. This check is typically not secured with TLS,
        as a network with a captive portal may intercept the connection, leading
