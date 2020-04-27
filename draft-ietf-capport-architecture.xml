@@ -343,8 +343,8 @@
        The Captive Portal Enforcement component:
         </t>
         <ul spacing="normal">
-          <li>Allows traffic through for allowed User Equipment that has satisfied
-          the Captive Portal Conditions.</li>
+          <li>Allows traffic to pass for User Equipment that is permitted to
+              use the network and has satisfied the Captive Portal Conditions.</li>
           <li>Blocks (discards) traffic according to the site-specific policy
             for User Equipment that has not yet satisfied the Captive Portal Conditions.</li>
           <li>May signal User Equipment using the Captive Portal Signaling protocol
