@@ -386,14 +386,17 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
 . |   User     |                             +--------------+   .
 . | Equipment  |   Query captivity status    +-------------+    .
 . |            |+--------------------------->|  API        |    .
-. |            |                             |  Server     |    .
+. |            |  Captivity status response  |  Server     |    .
+. |            |<---------------------------+|             |    .
 . |            |                             +------+------+    .
 . |            |                                    | Status    .
-. |            |   Portal user interface     +------+------+    .
+. |            | Portal UI page requests     +------+------+    .
 . |            |+--------------------------->|  Web Portal |    .
-. +------------+                             |  Server     |    .
+. |            | Portal UI pages             |  Server     |    .
+. |            |<---------------------------+|             |    .
+. +------------+                             |             |    .
 .     ^   ^ |                                +-------------+    .
-.     |   | |   Data                                  |         .
+.     |   | | Data to/from ext. network               |         .
 .     |   | +-----------------> +---------------+  Allow/Deny   .
 .     |   +--------------------+|               |    Rules      .
 .     |                         | Captive Portal|     |         .
