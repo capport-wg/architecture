@@ -311,7 +311,7 @@
          the present architecture.
         </t>
         <t>
-         When user equipment receives Captive Portal Signals, the user equipment
+         When User Equipment receives Captive Portal Signals, the User Equipment
          MAY query the API to check the state.
          The User Equipment SHOULD rate-limit these API queries in the event of
          the signal being flooded. (See <xref target="Security"/>.)
@@ -437,8 +437,8 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
              Multiple components in the architecture interact with both the User
              Equipment and each other. Since the User Equipment is the focus of
              these interactions, the components must be able to both identify the
-             user equipment from their interactions with it, and be able to agree
-             on the identity of the user equipment when interacting with each
+             User Equipment from their interactions with it, and be able to agree
+             on the identity of the User Equipment when interacting with each
              other.
       </t>
       <t>
@@ -485,12 +485,12 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         <section anchor="id_recommended_unique">
           <name>Uniquely Identify User Equipment</name>
           <t>
-                  In order to uniquely identify the User Equipment, at most one user equipment
+                  In order to uniquely identify the User Equipment, at most one User Equipment
                   interacting with the other components of the Captive Portal MUST have a given
                   value of the identifier.
           </t>
           <t>
-                  Over time, the user equipment identified by the value MAY change. Allowing the
+                  Over time, the User Equipment identified by the value MAY change. Allowing the
                   identified device to change over time ensures that the space of possible
                   identifying values need not be overly large.
           </t>
@@ -507,8 +507,8 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                   A good identifier does not lend itself to being easily spoofed. At no time
                   should it be simple or straightforward for one User Equipment to
                   pretend to be another User Equipment, regardless of whether both are active
-                  at the same time. This property is particularly important when the user
-                  equipment is extended externally to devices such as billing systems, or where
+                  at the same time. This property is particularly important when the User
+                  Equipment is extended externally to devices such as billing systems, or where
                   the identity of the User Equipment could imply liability.
           </t>
         </section>
@@ -516,7 +516,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
           <name>Visible to the API Server</name>
           <t>
                   Since the API Server will need to perform operations which rely on the identity
-                  of the user equipment, such as query whether it is captive, the API Server
+                  of the User Equipment, such as query whether it is captive, the API Server
                   needs to be able to relate requests to the User Equipment making the
                   request.
           </t>
@@ -617,7 +617,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
           <t>
                 In some situations, the User Equipment may have multiple IP addresses, while
                 still satisfying all of the recommended properties. This raises some challenges
-                to the components of the network. For example, if the user equipment tries
+                to the components of the network. For example, if the User Equipment tries
                 to access the network with multiple IP addresses, should the enforcement device
                 and API Server treat each IP address as a unique User Equipment, or should it
                 tie the multiple addresses together into one view of the subscriber?
@@ -712,9 +712,9 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
           <li>If DHCP is used, a lease renewal/rebind may return a different Captive
           Portal API URI.</li>
           <li>If RA is used, a new Captive Portal API URI may be specified in a new RA
-          message received by end user equipment.</li>
+          message received by end User Equipment.</li>
         </ul>
-        <t>Whenever a new Portal URI is received by end user equipment, it SHOULD discard
+        <t>Whenever a new Portal URI is received by end User Equipment, it SHOULD discard
       the old URI and use the new one for future requests to the API.</t>
       </section>
     </section>
@@ -775,7 +775,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         <name>Secure APIs</name>
         <t>
            The solution described here requires that the API be secured using TLS.
-           This is required to allow the user equipment and API Server to exchange
+           This is required to allow the User Equipment and API Server to exchange
            secrets which can be used to validate future interactions. The API MUST
            ensure the integrity of this information, as well as its confidentiality.
         </t>
