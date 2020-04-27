@@ -116,7 +116,7 @@
             SHOULD NOT require man-in-the-middle proxy of TLS traffic.</li>
         <li>Solutions MUST operate at the layer of Internet Protocol (IP) or
             above, not being specific to any particular access technology such
-            as Cable, WiFi or 3GPP.</li>
+            as Cable, WiFi or mobile telecom.</li>
         <li>Solutions MAY allow a device to be alerted that it is in a
             captive network when attempting to use any application on the
             network.</li>
