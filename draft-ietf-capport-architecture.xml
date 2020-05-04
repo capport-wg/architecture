@@ -141,7 +141,8 @@
       </t>
       <ul spacing="normal">
         <li>Network provisioning protocols provide end-user devices with a
-            URL for the API that end-user devices query for information about
+            Uniform Resource Identifier <xref target="RFC3986"/> (URI) for
+            the API that end-user devices query for information about
             what is required to escape captivity. DHCP, DHCPv6, and
             Router-Advertisement options for this purpose are available in
             <xref target="RFC7710bis"/>. Other protocols (such as RADIUS),
@@ -154,7 +155,7 @@
         <li>End-user devices can be notified of captivity with Captive Portal
             Signals in response to traffic. This notification works in response
             to any Internet protocol, and is not done by modifying protocols
-            in-band.  This notification does not carry the portal URL; rather
+            in-band.  This notification does not carry the portal URI; rather
             it provides a notification to the User Equipment that it is in a
             captive state.
         </li>
@@ -231,7 +232,7 @@
         The User Equipment:
         </t>
         <ul spacing="normal">
-          <li>SHOULD support provisioning of the URL for the Captive Portal API (e.g., by DHCP)</li>
+          <li>SHOULD support provisioning of the URI for the Captive Portal API (e.g., by DHCP)</li>
           <li>SHOULD distinguish Captive Portal API access per network interface, in the manner
            of Provisioning Domain Architecture <xref target="RFC7556"/>.</li>
           <li>SHOULD have a mechanism for notifying the user of the Captive Portal</li>
@@ -265,15 +266,15 @@
         <name>Provisioning Service</name>
         <t>
          Here we discuss candidate mechanisms for provisioning the User
-         Equipment with the URL of the API to query captive portal state and
+         Equipment with the URI of the API to query captive portal state and
          navigate the portal.
         </t>
         <section anchor="section_dhcp">
           <name>DHCP or Router Advertisements</name>
           <t>
-           A standard for providing a portal URL using DHCP or Router
+           A standard for providing a portal URI using DHCP or Router
            Advertisements is described in <xref target="RFC7710bis"/>.  The
-           CAPPORT architecture expects this URL to indicate the API described
+           CAPPORT architecture expects this URI to indicate the API described
            in <xref target="section_api"/>.
           </t>
         </section>
@@ -283,7 +284,7 @@
            Although still a work in progress,
            <xref target="I-D.pfister-capport-pvd"/>
            proposes a mechanism for User Equipment to be provided with PvD
-           Bootstrap Information containing the URL for the JSON-based API
+           Bootstrap Information containing the URI for the JSON-based API
            described in <xref target="section_api"/>.
           </t>
         </section>
@@ -297,7 +298,7 @@
          check for response tampering.
         </t>
         <t>
-         The URL of this API will have been provisioned to the User Equipment.
+         The URI of this API will have been provisioned to the User Equipment.
          (Refer to <xref target="section_provisioning"/>).
         </t>
         <t>
@@ -307,7 +308,7 @@
          User Equipment and return the state of captivity for the equipment.
         </t>
         <t>
-         At minimum, the API MUST provide: (1) the state of captivity and (2) a URL
+         At minimum, the API MUST provide: (1) the state of captivity and (2) a URI
          for the Captive Portal Server.
          The API SHOULD provide evidence to the caller that it supports
          the present architecture.
@@ -381,7 +382,7 @@
 o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
 . CAPTIVE NETWORK                                               .
 .                                            +--------------+   .
-. +------------+   Provision API URL         | Provisioning |   .
+. +------------+   Provision API URI         | Provisioning |   .
 . |            |<---------------------------+|  Service     |   .
 . |   User     |                             +--------------+   .
 . | Equipment  |   Query captivity status    +-------------+    .
@@ -416,7 +417,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         </t>
         <ul spacing="normal">
           <li>During provisioning (e.g., DHCP), the User Equipment acquires
-                 the URL for the Captive Portal API.</li>
+                 the URI for the Captive Portal API.</li>
           <li>The User Equipment queries the API to learn of its state of
                  captivity. If captive, the User Equipment presents the portal
                  user interface from the Web Portal Server to the user.</li>
@@ -632,21 +633,21 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                 to which the IP belongs.
           </t>
         </section>
-        <section anchor="context_free_url">
-          <name>Context-free URL</name>
+        <section anchor="context_free_uri">
+          <name>Context-free URI</name>
           <t>
-	     The URLs provided in the API SHOULD contain all the information
+	     The URIs provided in the API SHOULD contain all the information
 	     necessary to render the resources requested: the resources should
 	     not depend on ambient information, such as remote address on the
 	     connection. This is to ensure that the content served from these
-	     URLs is correct and meaningful to the User Equipment, even when
+	     URIs is correct and meaningful to the User Equipment, even when
 	     accessed from a network other than the one that contains the
-	     captive portal.  One consequence of this is that URLs provided in
+	     captive portal.  One consequence of this is that URIs provided in
 	     the API are expected to be resolved using public global DNS (as
 	     defined in Section 2 of <xref target="RFC8499"/>).
           </t>
           <t>
-	     Though a URL might still correctly resolve when the UE makes the
+	     Though a URI might still correctly resolve when the UE makes the
 	     request from a different network, it is possible that some
 	     functions could be limited to when the UE makes requests using the
 	     captive network. For example, payment options could be absent or a
@@ -654,9 +655,9 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
 	     current connection.
           </t>
           <t>
-	     URLs could include some means of identifying the User Equipment in
-	     the URLs.  However, including unauthenticated User Equipment
-	     identifiers in the URL may expose the service to spoofing or replay
+	     URIs could include some means of identifying the User Equipment in
+	     the URIs.  However, including unauthenticated User Equipment
+	     identifiers in the URI may expose the service to spoofing or replay
 	     attacks.
           </t>
         </section>
@@ -677,11 +678,11 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         <ol spacing="normal" type="1">
           <li>The User Equipment joins the Captive Network by acquiring a DHCP
          lease, RA, or similar, acquiring provisioning information.</li>
-          <li>The User Equipment learns the URL for the Captive Portal API from the
+          <li>The User Equipment learns the URI for the Captive Portal API from the
          provisioning information (e.g., <xref target="RFC7710bis"/>).</li>
           <li>The User Equipment accesses the Captive Portal API to receive parameters
-         of the Captive Network, including web-portal URL. (This step replaces
-         the clear-text query to a canary URL.)</li>
+         of the Captive Network, including web-portal URI. (This step replaces
+         the clear-text query to a canary URI.)</li>
           <li>If necessary, the User navigates the web portal to gain access to the
          external network.</li>
           <li>The Captive Portal API server indicates to the Captive Portal Enforcement
@@ -705,22 +706,22 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
          has fallen below a threshold</li>
           <li>The User Equipment visits the API again to validate the expiry time</li>
           <li>If expiry is still imminent, the User Equipment prompts the user to access the
-         web-portal URL again</li>
+         web-portal URI again</li>
           <li>The User extends their access through the web-portal</li>
           <li>The User Equipment's access to the outside network continues uninterrupted</li>
         </ol>
       </section>
       <section>
-        <name>Handling of Changes in Portal URL</name>
-        <t>A different Captive Portal API URL could be returned in the following cases:</t>
+        <name>Handling of Changes in Portal URI</name>
+        <t>A different Captive Portal API URI could be returned in the following cases:</t>
         <ul spacing="normal">
           <li>If DHCP is used, a lease renewal/rebind may return a different Captive
-          Portal API URL.</li>
-          <li>If RA is used, a new Captive Portal API URL may be specified in a new RA
+          Portal API URI.</li>
+          <li>If RA is used, a new Captive Portal API URI may be specified in a new RA
           message received by end User Equipment.</li>
         </ul>
-        <t>Whenever a new Portal URL is received by end User Equipment, it SHOULD discard
-      the old URL and use the new one for future requests to the API.</t>
+        <t>Whenever a new Portal URI is received by end User Equipment, it SHOULD discard
+      the old URI and use the new one for future requests to the API.</t>
       </section>
     </section>
     <section anchor="Acknowledgments">
@@ -757,7 +758,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
          authenticating an operator.
         </t>
         <t>
-         Given that a user chooses to visit a Captive Portal URL, the URL location
+         Given that a user chooses to visit a Captive Portal URI, the URI location
          SHOULD be securely provided to the user's device. E.g., the DHCPv6 AUTH
          option can sign this information.
         </t>
@@ -914,6 +915,29 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
       </references>
       <references>
         <name>Informative References</name>
+        <reference anchor="RFC3986" target="https://www.rfc-editor.org/info/rfc3986">
+          <front>
+            <title>Uniform Resource Identifier (URI): Generic Syntax</title>
+            <author initials="T." surname="Berners-Lee" fullname="T. Berners-Lee">
+              <organization/>
+            </author>
+            <author initials="R." surname="Fielding" fullname="R. Fielding">
+              <organization/>
+            </author>
+            <author initials="L." surname="Masinter" fullname="L. Masinter">
+              <organization/>
+            </author>
+            <date year="2005" month="January"/>
+            <abstract>
+              <t>
+              A Uniform Resource Identifier (URI) is a compact sequence of characters that identifies an abstract or physical resource. This specification defines the generic URI syntax and a process for resolving URI references that might be in relative form, along with guidelines and security considerations for the use of URIs on the Internet. The URI syntax defines a grammar that is a superset of all valid URIs, allowing an implementation to parse the common components of a URI reference without knowing the scheme-specific requirements of every possible identifier. This specification does not define a generative grammar for URIs; that task is performed by the individual specifications of each URI scheme. [STANDARDS-TRACK]
+              </t>
+            </abstract>
+          </front>
+        <seriesInfo name="STD" value="66"/>
+        <seriesInfo name="RFC" value="3986"/>
+        <seriesInfo name="DOI" value="10.17487/RFC3986"/>
+        </reference>
         <reference anchor="RFC8499" target="https://www.rfc-editor.org/info/rfc8499">
           <front>
             <title>DNS Terminology</title>
@@ -951,7 +975,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
               <t>Devices that connect to Captive Portals need a way to identify
               that the network is restricted and discover a method for opening
               up access.  This document defines how to use Provisioning Domain
-              Additional Information to discover a Captive Portal API URL.</t>
+              Additional Information to discover a Captive Portal API URI.</t>
             </abstract>
           </front>
         </reference>
