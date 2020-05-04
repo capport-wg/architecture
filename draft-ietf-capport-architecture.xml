@@ -554,10 +554,10 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         <name>Example Identifier Types</name>
         <t>
                  This section provides some example identifier types, along with some
-                 evaluation of whether they are good types. The list of identifier types
+                 evaluation of whether they are suitable types. The list of identifier types
                  is not exhaustive. Other types may be used. An important point to note
-                 is that whether the identifier types are good depends heavily on the capabilities
-                 of the components and where in the network the components exist.
+                 is that whether a given identifier type is suitable depends heavily on the
+                 capabilities of the components and where in the network the components exist.
         </t>
         <section anchor="id_example_interface">
           <name>Physical Interface</name>
