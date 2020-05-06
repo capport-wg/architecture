@@ -633,35 +633,45 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                 to which the IP belongs.
           </t>
         </section>
+      </section>
         <section anchor="context_free_uri">
           <name>Context-free URI</name>
           <t>
-	     The URIs provided in the API SHOULD contain all the information
-	     necessary to render the resources requested: the resources should
-	     not depend on ambient information, such as remote address on the
-	     connection. This is to ensure that the content served from these
-	     URIs is correct and meaningful to the User Equipment, even when
-	     accessed from a network other than the one that contains the
-	     captive portal.  One consequence of this is that URIs provided in
-	     the API are expected to be resolved using public global DNS (as
-	     defined in Section 2 of <xref target="RFC8499"/>).
+            A Captive Portal API needs to present information to clients
+            that is unique to that client. To do this, some systems use
+            information from the context of a request, such as the source
+            address, to identify the UE.
           </t>
           <t>
-	     Though a URI might still correctly resolve when the UE makes the
-	     request from a different network, it is possible that some
-	     functions could be limited to when the UE makes requests using the
-	     captive network. For example, payment options could be absent or a
-	     warning could be displayed to indicate the payment is not for the
-	     current connection.
+            Using information from context rather than information from the
+            URI allows the same URI to be used for different clients. However,
+            it also means that the resource is unable to provide relevant
+            information if the UE makes a request using a different network
+            path. This might happen when UE has multiple network interfaces.
+            It might also happen if the address of the API provided by DNS
+            depends on where the query originates (as in split DNS
+            <xref target="RFC8499"/>).
           </t>
           <t>
-	     URIs could include some means of identifying the User Equipment in
-	     the URIs.  However, including unauthenticated User Equipment
-	     identifiers in the URI may expose the service to spoofing or replay
-	     attacks.
+            Accessing the API MAY depend on contextual information. However,
+            the URIs provided in the API SHOULD be unique to the UE and not
+            dependent on contextual information to function correctly.
+          </t>
+          <t>
+            Though a URI might still correctly resolve when the UE makes the
+            request from a different network, it is possible that some
+            functions could be limited to when the UE makes requests using the
+            captive network. For example, payment options could be absent or a
+            warning could be displayed to indicate the payment is not for the
+            current connection.
+          </t>
+          <t>
+            URIs could include some means of identifying the User Equipment in
+            the URIs.  However, including unauthenticated User Equipment
+            identifiers in the URI may expose the service to spoofing or replay
+            attacks.
           </t>
         </section>
-      </section>
     </section>
     <section anchor="section_workflow">
       <name>Solution Workflow</name>
