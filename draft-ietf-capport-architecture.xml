@@ -539,31 +539,31 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         </section>
       </section>
       <section anchor="id_evaluating">
-        <name>Evaluating an Identifier</name>
+        <name>Evaluating Types of Identifiers</name>
         <t>
-                 To evaluate whether an identifier is appropriate, one should consider
+                 To evaluate whether a type of identifier is appropriate, one should consider
                  every recommended property from the perspective of interactions among
-                 the components in the architecture. When comparing identifiers, choose
+                 the components in the architecture. When comparing identifier types, choose
                  the one which best satisfies all of the recommended properties. The
                  architecture does not provide an exact measure of how well an identifier
-                 satisfies a given property; care should be taken in performing the
+                 type satisfies a given property; care should be taken in performing the
                  evaluation.
         </t>
       </section>
       <section anchor="id_examples">
-        <name>Examples of an Identifier</name>
+        <name>Example Identifier Types</name>
         <t>
-                 This section provides some examples of identifiers, along with some
-                 evaluation of whether they are good identifiers. The list of identifiers
-                 is not exhaustive. Other identifiers may be used. An important point to note
-                 is that whether the identifiers are good depends heavily on the capabilities
-                 of the components and where in the network the components exist.
+                 This section provides some example identifier types, along with some
+                 evaluation of whether they are suitable types. The list of identifier types
+                 is not exhaustive. Other types may be used. An important point to note
+                 is that whether a given identifier type is suitable depends heavily on the
+                 capabilities of the components and where in the network the components exist.
         </t>
         <section anchor="id_example_interface">
           <name>Physical Interface</name>
           <t>
                  The physical interface by which the User Equipment is attached to the
-                 network can be used to identify the User Equipment. This identifier has
+                 network can be used to identify the User Equipment. This identifier type has
                  the property of being extremely difficult to spoof: the User Equipment is
                  unaware of the property; one User Equipment cannot manipulate its
                  interactions to appear as though it is another.
@@ -571,7 +571,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
           <t>
                  Further, if only a single User Equipment is attached to a given physical
                  interface, then the identifier will be unique. If multiple User Equipment
-                 is attached to the network on the same physical interface, then this property
+                 is attached to the network on the same physical interface, then this type
                  is not appropriate.
           </t>
           <t>
@@ -595,7 +595,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         <section anchor="id_example_IP_address">
           <name>IP Address</name>
           <t>
-                  A natural identifier to consider is the IP address of the User Equipment.
+                  A natural identifier type to consider is the IP address of the User Equipment.
                   At any given time, no device on the network can have the same IP address
                   without causing the network to malfunction, so it is appropriate from the
                   perspective of uniqueness.
