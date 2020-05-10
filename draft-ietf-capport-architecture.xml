@@ -310,8 +310,13 @@
         <t>
          At minimum, the API MUST provide: (1) the state of captivity and (2) a URI
          for the Captive Portal Server.
-         The API SHOULD provide evidence to the caller that it supports
-         the present architecture.
+         </t>
+         <t>
+         A caller to the API needs to be presented with evidence that the content
+         it is receiving is for a version of the API that it supports. For an
+         HTTP-based interaction, such as in <xref target="I-D.ietf-capport-api"/>
+         this might be achieved by using a content type that is unique to the
+         protocol.
         </t>
         <t>
          When User Equipment receives Captive Portal Signals, the User Equipment
