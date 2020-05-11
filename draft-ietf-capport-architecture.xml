@@ -190,8 +190,8 @@
           set of hosts (typically the Internet).</t>
         <t>Captive Portal Conditions: site-specific requirements that a user
           or device must satisfy in order to gain access to the wider network.</t>
-        <t>Captive Portal Enforcement: The network equipment which enforces the
-          traffic restriction.</t>
+        <t>Captive Portal Enforcement Device: The network equipment which enforces the
+          traffic restriction. Also known as Enforcement Device.</t>
         <t>Captive Portal User Equipment: Also known as User Equipment. A device
           which has voluntarily joined a network for purposes of communicating
           beyond the constraints of the captive network.</t>
@@ -220,7 +220,7 @@
        The User Equipment is the device that a user desires to be attached to
        a network with full access to all hosts on the network (e.g., to have
        Internet access). The User Equipment communication is typically
-       restricted by the Captive Portal Enforcement, described in <xref target="section_capport_enforcement"/>,
+       restricted by the Enforcement Device, described in <xref target="section_capport_enforcement"/>,
        until site-specific requirements have been met.
         </t>
         <t>
@@ -254,7 +254,7 @@
         </t>
         <t>
         If User Equipment supports the Captive Portal API, it MUST validate the API server's TLS certificate
-        (see <xref target="RFC2818"/>). An Enforcement device SHOULD allow access to
+        (see <xref target="RFC2818"/>). An Enforcement Device SHOULD allow access to
         any services that User Equipment could need to contact to perform certificate validation,
         such as OCSP responders, CRLs, and NTP servers; see Section 4.1 of 
         <xref target="I-D.ietf-capport-api"/> for more information.
@@ -333,15 +333,15 @@
         </t>
       </section>
       <section anchor="section_capport_enforcement">
-        <name>Captive Portal Enforcement</name>
+        <name>Captive Portal Enforcement Device</name>
         <t>
-        The Captive Portal Enforcement component restricts the network access of
+        The Enforcement Device component restricts the network access of
         User Equipment according to site-specific policy. Typically User Equipment
         is permitted access to a small number of services and is denied general
         network access until it satisfies the Captive Portal Conditions.
         </t>
         <t>
-       The Captive Portal Enforcement component:
+       The Enforcement Device component:
         </t>
         <ul spacing="normal">
           <li>Allows traffic to pass for User Equipment that is permitted to
@@ -400,8 +400,8 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
 .     |   | | Data to/from ext. network               |         .
 .     |   | +-----------------> +---------------+  Allow/Deny   .
 .     |   +--------------------+|               |    Rules      .
-.     |                         | Captive Portal|     |         .
-.     |   Captive Portal Signal | Enforcement   | <---+         .
+.     |                         | Enforcement   |     |         .
+.     |   Captive Portal Signal | Device        | <---+         .
 .     +-------------------------+---------------+               .
 .                                      ^ |                      .
 .                                      | |                      .
@@ -421,12 +421,12 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
           <li>The User Equipment queries the API to learn of its state of
                  captivity. If captive, the User Equipment presents the portal
                  user interface from the Web Portal Server to the user.</li>
-          <li>Based on user interaction, the Web Portal Server directs the Captive Portal
-                 Enforcement device to either allow or deny external network
+          <li>Based on user interaction, the Web Portal Server directs the
+                 Enforcement Device to either allow or deny external network
                  access for the User Equipment.</li>
           <li>The User Equipment attempts to communicate to the external
-                 network through the Captive Portal enforcement device.</li>
-          <li>The Captive Portal Enforcement device either allows the User
+                 network through the Enforcement Device.</li>
+          <li>The Enforcement Device either allows the User
                  Equipment's packets to the external network, or blocks the
                  packets. If blocking traffic and a signal has
                  been implemented, it may respond with a Captive Portal Signal.</li>
@@ -588,7 +588,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
           </t>
           <t>
                  The API Server faces a similar problem, implying that it should co-exist with the
-                 Enforcement Device, or that the enforcement device should extend requests to it
+                 Enforcement Device, or that the Enforcement Device should extend requests to it
                  with the identifying information.
           </t>
         </section>
@@ -624,7 +624,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                 In some situations, the User Equipment may have multiple IP addresses, while
                 still satisfying all of the recommended properties. This raises some challenges
                 to the components of the network. For example, if the User Equipment tries
-                to access the network with multiple IP addresses, should the enforcement device
+                to access the network with multiple IP addresses, should the Enforcement Device
                 and API Server treat each IP address as a unique User Equipment, or should it
                 tie the multiple addresses together into one view of the subscriber?
                 An implementation MAY do either. Attention should be paid to IPv6 and the fact
@@ -695,8 +695,8 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
          the clear-text query to a canary URI.)</li>
           <li>If necessary, the User navigates the web portal to gain access to the
          external network.</li>
-          <li>The Captive Portal API server indicates to the Captive Portal Enforcement
-         device that the User Equipment is allowed to access the external network.</li>
+          <li>The Captive Portal API server indicates to the Enforcement
+         Device that the User Equipment is allowed to access the external network.</li>
           <li>The User Equipment attempts a connection outside the captive network</li>
           <li>If the requirements have been satisfied, the access is permitted;
          otherwise the "Expired" behavior occurs.</li>
