@@ -195,7 +195,7 @@
         <t>Captive Portal User Equipment: Also known as User Equipment. A device
           which has voluntarily joined a network for purposes of communicating
           beyond the constraints of the captive network.</t>
-        <t>Captive Portal Server: The web server providing a user interface for
+        <t>User Portal: The web server providing a user interface for
           assisting the user in satisfying the conditions to escape
           captivity.</t>
         <t>Captive Portal API: Also known as API. An HTTP API allowing User Equipment
@@ -236,13 +236,12 @@
           <li>SHOULD distinguish Captive Portal API access per network interface, in the manner
            of Provisioning Domain Architecture <xref target="RFC7556"/>.</li>
           <li>SHOULD have a mechanism for notifying the user of the Captive Portal</li>
-          <li>SHOULD have a web browser so that the user may navigate the Captive Portal
-           user interface.</li>
+          <li>SHOULD have a web browser so that the user may navigate the User Portal.</li>
           <li>MAY prevent applications from using networks that do not grant full
            network access. E.g., a device connected to a mobile network may
            be connecting to a captive WiFi network; the operating system MAY
            avoid updating the default route until network access restrictions
-           have been lifted (excepting access to the Captive Portal server) in
+           have been lifted (excepting access to the User Portal) in
            the new network. This has been termed "make before break".</li>
         </ul>
         <t>
@@ -309,7 +308,7 @@
         </t>
         <t>
          At minimum, the API MUST provide: (1) the state of captivity and (2) a URI
-         for the Captive Portal Server.
+         for the User Portal.
          </t>
          <t>
          A caller to the API needs to be presented with evidence that the content
@@ -358,7 +357,7 @@
           <li>Permits User Equipment that has not satisfied the Captive Portal Conditions 
           to access necessary APIs and web pages to fulfill requirements for escaping captivity.</li>
           <li>Updates allow/block rules per User Equipment in response to operations
-           from the Captive Portal Server.</li>
+           from the User Portal.</li>
         </ul>
       </section>
       <section anchor="section_signal">
@@ -397,8 +396,8 @@ o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
 . |            |                             +------+------+    .
 . |            |                                    | Status    .
 . |            | Portal UI page requests     +------+------+    .
-. |            |+--------------------------->|  Web Portal |    .
-. |            | Portal UI pages             |  Server     |    .
+. |            |+--------------------------->|             |    .
+. |            | Portal UI pages             | User Portal |    .
 . |            |<---------------------------+|             |    .
 . +------------+                             |             |    .
 .     ^   ^ |                                +-------------+    .
@@ -425,8 +424,8 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                  the URI for the Captive Portal API.</li>
           <li>The User Equipment queries the API to learn of its state of
                  captivity. If captive, the User Equipment presents the portal
-                 user interface from the Web Portal Server to the user.</li>
-          <li>Based on user interaction, the Web Portal Server directs the
+                 user interface from the User Portal to the user.</li>
+          <li>Based on user interaction, the User Portal directs the
                  Enforcement Device to either allow or deny external network
                  access for the User Equipment.</li>
           <li>The User Equipment attempts to communicate to the external
@@ -437,7 +436,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                  been implemented, it may respond with a Captive Portal Signal.</li>
         </ul>
         <t>
-        The Provisioning Service, API Server, and Web Portal Server are
+        The Provisioning Service, API Server, and User Portal are
         described as discrete functions. An implementation might provide the
         multiple functions within a single entity.
         </t>
@@ -697,9 +696,9 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
           <li>The User Equipment learns the URI for the Captive Portal API from the
          provisioning information (e.g., <xref target="RFC7710bis"/>).</li>
           <li>The User Equipment accesses the Captive Portal API to receive parameters
-         of the Captive Network, including web-portal URI. (This step replaces
+         of the Captive Network, including User Portal URI. (This step replaces
          the clear-text query to a canary URI.)</li>
-          <li>If necessary, the User navigates the web portal to gain access to the
+          <li>If necessary, the User navigates the User Portal to gain access to the
          external network.</li>
           <li>The Captive Portal API server indicates to the Enforcement
          Device that the User Equipment is allowed to access the external network.</li>
@@ -722,8 +721,8 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
          has fallen below a threshold</li>
           <li>The User Equipment visits the API again to validate the expiry time</li>
           <li>If expiry is still imminent, the User Equipment prompts the user to access the
-         web-portal URI again</li>
-          <li>The User extends their access through the web-portal</li>
+         User Portal URI again</li>
+          <li>The User extends their access through the User Portal</li>
           <li>The User Equipment's access to the outside network continues uninterrupted</li>
         </ol>
       </section>
