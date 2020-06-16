@@ -133,8 +133,10 @@
       <t>
        A side-benefit of the architecture described in this document is that
        devices without user interfaces are able to identify parameters of
-       captivity.  However, this document does not yet describe a mechanism
-       for such devices to escape captivity.
+       captivity. However, this document does not describe a mechanism for such
+       devices to escape captivity. A future document could provide a solution
+       to devices without user interfaces. This document focuses on devices
+       with user interfaces.
       </t>
       <t>
        The architecture uses the following mechanisms:
@@ -224,9 +226,9 @@
        until site-specific requirements have been met.
         </t>
         <t>
-        At this time we consider only devices with web browsers, with web
+        This document only considers devices with web browsers, with web
         applications being the means of satisfying Captive Portal Conditions.
-        An example interactive User Equipment is a smart phone.
+        An example of such User Equipment is a smart phone.
         </t>
         <t>
         The User Equipment:
