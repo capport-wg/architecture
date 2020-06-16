@@ -307,9 +307,9 @@
          User Equipment and return the state of captivity for the equipment.
         </t>
         <t>
-         At minimum, the API MUST provide: (1) the state of captivity and (2) a URI
-         for the User Portal.
-         </t>
+         At minimum, the API MUST provide the state of captivity. Further the
+         API MUST be able to provide a URI for the User Portal.
+        </t>
          <t>
          A caller to the API needs to be presented with evidence that the content
          it is receiving is for a version of the API that it supports. For an
