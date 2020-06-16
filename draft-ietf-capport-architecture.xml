@@ -437,8 +437,9 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                  been implemented, it may respond with a Captive Portal Signal.</li>
         </ul>
         <t>
-        Although the Provisioning Service, API Server, and Web Portal Server functions
-        are shown as discrete blocks, they could of course be combined into a single element.
+        The Provisioning Service, API Server, and Web Portal Server are
+        described as discrete functions. An implementation might provide the
+        multiple functions within a single entity.
         </t>
       </section>
     </section>
