@@ -105,7 +105,7 @@
        of alerting the user involve modifying HTTP or DNS traffic.
       </t>
       <t>
-       This document standardizes an architecture for implementing captive
+       This document describes an architecture for implementing captive
        portals while addressing most of the problems arising for current
        captive portal mechanisms. The architecture is guided by these
        principles:
