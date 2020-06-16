@@ -38,7 +38,7 @@
   <front>
     <!-- The abbreviated title is used in the page header - it is only necessary if the
         full title is longer than 39 characters -->
-    <title abbrev="CAPPORT Architecture">CAPPORT Architecture</title>
+    <title abbrev="Captive Portal Architecture">Captive Portal Architecture</title>
     <seriesInfo name="Internet-Draft" value="draft-ietf-capport-architecture-08"/>
     <!-- add 'role="editor"' below for the editors if appropriate -->
     <!-- Another author who claims to be an editor -->
@@ -81,7 +81,7 @@
         output. If you submit your draft to the RFC Editor, the
         keywords will be used for the search engine. -->
     <abstract>
-      <t>This document describes a CAPPORT architecture.
+      <t>This document describes a captive portal architecture.
         DHCP or Router Advertisements, an optional signaling protocol, and an HTTP API are used to
         provide the solution. The role of Provisioning Domains (PvDs) is
         described.
@@ -273,7 +273,7 @@
           <t>
            A standard for providing a portal URI using DHCP or Router
            Advertisements is described in <xref target="RFC7710bis"/>.  The
-           CAPPORT architecture expects this URI to indicate the API described
+           captive portal architecture expects this URI to indicate the API described
            in <xref target="section_api"/>.
           </t>
         </section>
