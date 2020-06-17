@@ -485,10 +485,10 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
              An identifier SHOULD:
         </t>
         <ul spacing="normal">
-          <li>Uniquely Identify the User Equipment</li>
-          <li>Be Hard to Spoof</li>
-          <li>Be Visible to the API Server</li>
-          <li>Be Visible to the Enforcement Device</li>
+          <li>uniquely identify the User Equipment</li>
+          <li>be hard to spoof</li>
+          <li>be visible to the API Server</li>
+          <li>be visible to the Enforcement Device</li>
         </ul>
         <t>
 
