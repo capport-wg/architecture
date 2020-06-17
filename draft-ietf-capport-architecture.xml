@@ -343,7 +343,8 @@
         <t>
         The Enforcement Device component restricts the network access of
         User Equipment according to site-specific policy. Typically User Equipment
-        is permitted access to a small number of services and is denied general
+        is permitted access to a small number of services (according to the policies
+        of the network provider) and is denied general
         network access until it satisfies the Captive Portal Conditions.
         </t>
         <t>
