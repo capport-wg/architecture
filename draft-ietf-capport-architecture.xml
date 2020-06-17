@@ -82,9 +82,9 @@
         keywords will be used for the search engine. -->
     <abstract>
       <t>This document describes a captive portal architecture.
-        DHCP or Router Advertisements, an optional signaling protocol, and an HTTP API are used to
-        provide the solution. The role of Provisioning Domains (PvDs) is
-        described.
+        DHCP or Router Advertisements (RAs), an optional signaling protocol,
+        and an HTTP API are used to provide the solution. The role of
+        Provisioning Domains (PvDs) is described.
       </t>
     </abstract>
   </front>
