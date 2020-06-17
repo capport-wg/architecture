@@ -134,7 +134,7 @@
        A side-benefit of the architecture described in this document is that
        devices without user interfaces are able to identify parameters of
        captivity. However, this document does not describe a mechanism for such
-       devices to escape captivity. A future document could provide a solution
+       devices to negotiate for unrestricted network access. A future document could provide a solution
        to devices without user interfaces. This document focuses on devices
        with user interfaces.
       </t>
