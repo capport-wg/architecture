@@ -441,7 +441,8 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         <t>
         The Provisioning Service, API Server, and User Portal are
         described as discrete functions. An implementation might provide the
-        multiple functions within a single entity.
+        multiple functions within a single entity. Furthermore, these functions, combined or not,
+        as well as the Enforcement Device, could be replicated for redundancy or scale.
         </t>
       </section>
     </section>
