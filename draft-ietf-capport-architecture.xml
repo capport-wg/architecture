@@ -640,6 +640,13 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                 link. In such cases, identification could be performed by subnet, such as the /64
                 to which the IP belongs.
           </t>
+
+          <t>
+            Further attention should be paid to a device using dual-stack <xref target="RFC4213"/>:
+            it could have both an IPv4 and an IPv6 address at the same time. There could be no
+            properties in common between the two addresses, meaning that some form of mapping solution
+            could be required to form a single identity from the two address.
+          </t>
         </section>
       </section>
         <section anchor="context_free_uri">
@@ -955,6 +962,24 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         <seriesInfo name="STD" value="66"/>
         <seriesInfo name="RFC" value="3986"/>
         <seriesInfo name="DOI" value="10.17487/RFC3986"/>
+        </reference>
+        <reference anchor="RFC4213" target="https://www.rfc-editor.org/info/rfc4213">
+            <front>
+                <title>Basic Transition Mechanisms for IPv6 Hosts and Routers</title>
+                <author initials="E." surname="Nordmark" fullname="E. Nordmark">
+                    <organization/>
+                </author>
+                <author initials="R." surname="Gilligan" fullname="R. Gilligan">
+                    <organization/>
+                </author>
+                <date year="2005" month="October"/>
+                <abstract>
+                    <t>This document specifies IPv4 compatibility mechanisms that can be implemented by IPv6 hosts and routers. Two mechanisms are specified, dual stack and configured tunneling. Dual stack implies providing complete implementations of both versions of the Internet Protocol (IPv4 and IPv6), and configured tunneling provides a means to carry IPv6 packets over unmodified IPv4 routing infrastructures.</t>
+                    <t>This document obsoletes RFC 2893. [STANDARDS-TRACK]</t>
+                </abstract>
+            </front>
+            <seriesInfo name="RFC" value="4213"/>
+            <seriesInfo name="DOI" value="10.17487/RFC4213"/>
         </reference>
         <reference anchor="RFC8499" target="https://www.rfc-editor.org/info/rfc8499">
           <front>
