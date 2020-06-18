@@ -648,27 +648,27 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
             A Captive Portal API needs to present information to clients
             that is unique to that client. To do this, some systems use
             information from the context of a request, such as the source
-            address, to identify the UE.
+            address, to identify the User Equipment.
           </t>
           <t>
             Using information from context rather than information from the
             URI allows the same URI to be used for different clients. However,
             it also means that the resource is unable to provide relevant
-            information if the UE makes a request using a different network
-            path. This might happen when UE has multiple network interfaces.
+            information if the User Equipment makes a request using a different network
+            path. This might happen when User Equipment has multiple network interfaces.
             It might also happen if the address of the API provided by DNS
             depends on where the query originates (as in split DNS
             <xref target="RFC8499"/>).
           </t>
           <t>
             Accessing the API MAY depend on contextual information. However,
-            the URIs provided in the API SHOULD be unique to the UE and not
+            the URIs provided in the API SHOULD be unique to the User Equipment and not
             dependent on contextual information to function correctly.
           </t>
           <t>
-            Though a URI might still correctly resolve when the UE makes the
+            Though a URI might still correctly resolve when the User Equipment makes the
             request from a different network, it is possible that some
-            functions could be limited to when the UE makes requests using the
+            functions could be limited to when the User Equipment makes requests using the
             captive network. For example, payment options could be absent or a
             warning could be displayed to indicate the payment is not for the
             current connection.
