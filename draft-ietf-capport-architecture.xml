@@ -704,8 +704,11 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
          the clear-text query to a canary URI.)</li>
           <li>If necessary, the User navigates the User Portal to gain access to the
          external network.</li>
-          <li>The Captive Portal API server indicates to the Enforcement
-         Device that the User Equipment is allowed to access the external network.</li>
+          <li>
+            If the User interacted with the User Portal to gain access to the external
+            network in the previous step, the User Portal indicates to the Enforcement
+            Device that the User Equipment is allowed to access the external network.
+         </li>
           <li>The User Equipment attempts a connection outside the captive network</li>
           <li>If the requirements have been satisfied, the access is permitted;
          otherwise the "Expired" behavior occurs.</li>
