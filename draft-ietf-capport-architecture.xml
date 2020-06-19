@@ -629,7 +629,8 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                   to still uniquely identify the device if they are aware of the port mapping.
           </t>
           <t>
-                In some situations, the User Equipment may have multiple IP addresses, while
+                In some situations, the User Equipment may have multiple IP addresses (either
+                IPv4, IPv6 or a dual-stack <xref target="RFC4213"/> combination), while
                 still satisfying all of the recommended properties. This raises some challenges
                 to the components of the network. For example, if the User Equipment tries
                 to access the network with multiple IP addresses, should the Enforcement Device
@@ -639,13 +640,6 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                 that it is expected for a device to have multiple IPv6 addresses on a single
                 link. In such cases, identification could be performed by subnet, such as the /64
                 to which the IP belongs.
-          </t>
-
-          <t>
-            Further attention should be paid to a device using dual-stack <xref target="RFC4213"/>:
-            it could have both an IPv4 and an IPv6 address at the same time. There could be no
-            properties in common between the two addresses, meaning that some form of mapping solution
-            could be required to form a single identity from the two address.
           </t>
         </section>
       </section>
