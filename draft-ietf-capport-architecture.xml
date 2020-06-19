@@ -630,7 +630,8 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                   to still uniquely identify the device if they are aware of the port mapping.
           </t>
           <t>
-                In some situations, the User Equipment may have multiple IP addresses, while
+                In some situations, the User Equipment may have multiple IP addresses (either
+                IPv4, IPv6 or a dual-stack <xref target="RFC4213"/> combination), while
                 still satisfying all of the recommended properties. This raises some challenges
                 to the components of the network. For example, if the User Equipment tries
                 to access the network with multiple IP addresses, should the Enforcement Device
@@ -959,6 +960,24 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         <seriesInfo name="STD" value="66"/>
         <seriesInfo name="RFC" value="3986"/>
         <seriesInfo name="DOI" value="10.17487/RFC3986"/>
+        </reference>
+        <reference anchor="RFC4213" target="https://www.rfc-editor.org/info/rfc4213">
+            <front>
+                <title>Basic Transition Mechanisms for IPv6 Hosts and Routers</title>
+                <author initials="E." surname="Nordmark" fullname="E. Nordmark">
+                    <organization/>
+                </author>
+                <author initials="R." surname="Gilligan" fullname="R. Gilligan">
+                    <organization/>
+                </author>
+                <date year="2005" month="October"/>
+                <abstract>
+                    <t>This document specifies IPv4 compatibility mechanisms that can be implemented by IPv6 hosts and routers. Two mechanisms are specified, dual stack and configured tunneling. Dual stack implies providing complete implementations of both versions of the Internet Protocol (IPv4 and IPv6), and configured tunneling provides a means to carry IPv6 packets over unmodified IPv4 routing infrastructures.</t>
+                    <t>This document obsoletes RFC 2893. [STANDARDS-TRACK]</t>
+                </abstract>
+            </front>
+            <seriesInfo name="RFC" value="4213"/>
+            <seriesInfo name="DOI" value="10.17487/RFC4213"/>
         </reference>
         <reference anchor="RFC8499" target="https://www.rfc-editor.org/info/rfc8499">
           <front>
