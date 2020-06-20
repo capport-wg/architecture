@@ -646,7 +646,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
           <name>Media Access Control (MAC) Address</name>
           <t>
             The MAC address of a device is often used as an identifier in existing implementations.
-            A discussion of it has been omitted for brevity, but the MAC address could be used
+            This document does not discuss the use of MAC addresses within a captive portal system, but they can be used
             as an identifier type, subject to the criteria in <xref target="id_recommended_props"/>.
           </t>
         </section>
