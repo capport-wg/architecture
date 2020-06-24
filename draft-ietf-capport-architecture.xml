@@ -254,8 +254,13 @@
         supported.
         </t>
         <t>
-        If User Equipment supports the Captive Portal API, it MUST validate the API server's TLS certificate
-        (see <xref target="RFC2818"/>). An Enforcement Device SHOULD allow access to
+        If User Equipment supports the Captive Portal API, it MUST validate the API server's
+        TLS certificate (see <xref target="RFC2818"/>) according to the procedures in
+        <xref target="RFC6125"/>.  The API server's URI is obtained via a network
+        provisioning protocol, which will typically provide a hostname to be used
+        in TLS server certificate validation, against a DNS-ID in the server certificate.
+        If the API server is identified by IP address, the iPAddress subjectAltName
+        is used to validate the server certificate.  An Enforcement Device SHOULD allow access to
         any services that User Equipment could need to contact to perform certificate validation,
         such as OCSP responders, CRLs, and NTP servers; see Section 4.1 of 
         <xref target="I-D.ietf-capport-api"/> for more information.
@@ -759,6 +764,8 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
       <name>Acknowledgments</name>
       <t>The authors thank Lorenzo Colitti for providing the majority of the content
          for the Captive Portal Signal requirements.</t>
+      <t>The authors thank Benjamin Kaduk for providing the content related to TLS
+         certificate validation of the API server.</t>
       <t>The authors thank various individuals for their feedback on
         the mailing list and during the IETF98 hackathon:
         David Bird,
@@ -928,6 +935,23 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
               <t>This document is a product of the work of the Multiple Interfaces Architecture Design team.  It outlines a solution framework for some of the issues experienced by nodes that can be attached to multiple networks simultaneously.  The framework defines the concept of a Provisioning Domain (PvD), which is a consistent set of network configuration information.  PvD-aware nodes learn PvD-specific information from the networks they are attached to and/or other sources.  PvDs are used to enable separation and configuration consistency in the presence of multiple concurrent connections.</t>
             </abstract>
           </front>
+        </reference>
+        <reference anchor="RFC6125" target="https://www.rfc-editor.org/info/rfc6125">
+            <front>
+                <title>Representation and Verification of Domain-Based Application Service Identity within Internet Public Key Infrastructure Using X.509 (PKIX) Certificates in the Context of Transport Layer Security (TLS)</title>
+                <author initials="P." surname="Saint-Andre" fullname="P. Saint-Andre">
+                <organization/>
+                </author>
+                <author initials="J." surname="Hodges" fullname="J. Hodges">
+                <organization/>
+                </author>
+                <date year="2011" month="March"/>
+                <abstract>
+                    <t>Many application technologies enable secure communication between two entities by means of Internet Public Key Infrastructure Using X.509 (PKIX) certificates in the context of Transport Layer Security (TLS). This document specifies procedures for representing and verifying the identity of application services in such interactions. [STANDARDS-TRACK]</t>
+            </abstract>
+            </front>
+            <seriesInfo name="RFC" value="6125"/>
+            <seriesInfo name="DOI" value="10.17487/RFC6125"/>
         </reference>
         <reference anchor="RFC2818" target="https://www.rfc-editor.org/info/rfc2818">
           <front>
