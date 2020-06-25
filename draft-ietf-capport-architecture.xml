@@ -316,7 +316,7 @@
         <t>
          At minimum, the API MUST provide the state of captivity. Further the
          API MUST be able to provide a URI for the User Portal. The scheme for
-         the URI SHOULD be https so that the User Equipment communicates with
+         the URI MUST be https so that the User Equipment communicates with
          the User Portal over TLS.
         </t>
          <t>
