@@ -528,7 +528,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                   should it be simple or straightforward for one User Equipment to
                   pretend to be another User Equipment, regardless of whether both are active
                   at the same time. This property is particularly important when the User
-                  Equipment's identifier is extended externally to devices such as billing systems,
+                  Equipment identifier is referenced externally by devices such as billing systems,
                   or where the identity of the User Equipment could imply liability.
           </t>
         </section>
