@@ -128,7 +128,7 @@
             indirectly machine-detectable by the client when it compares
             responses to well-known queries with expected responses).</li>
         <li>The architecture MUST provide a path of incremental migration,
-            acknowledging a huge variety of preexisting portals and end-user
+            acknowledging the existence of a huge variety of pre-existing portals and end-user
             device implementations and software versions.</li>
       </ul>
       <t>
