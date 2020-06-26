@@ -389,7 +389,10 @@
       <section>
         <name>Component Diagram</name>
         <t>
-            The following diagram shows the communication between each component.
+            The following diagram shows the communication between each component in the
+            case where the Captive Network has a User Portal, and the User Equipment
+            chooses to visit the User Portal in response to discovering and interacting
+            with the API Server.
         </t>
         <figure anchor="components">
           <name>Captive Portal Architecture Component Diagram</name>
