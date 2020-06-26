@@ -100,9 +100,10 @@
        acceptable-use policy, or providing some form of credentials.
       </t>
       <t>
-       Implementations generally require a web server, some method to
-       allow/block traffic, and some method to alert the user.  Common methods
-       of alerting the user involve modifying HTTP or DNS traffic.
+       Implementations of captive portals generally require a web server, some
+       method to allow/block traffic, and some method to alert the user.
+       Common methods of alerting the user in implementations prior to this
+       work involve modifying HTTP or DNS traffic.
       </t>
       <t>
        This document describes an architecture for implementing captive
@@ -127,8 +128,8 @@
             indirectly machine-detectable by the client when it compares
             responses to well-known queries with expected responses).</li>
         <li>The architecture MUST provide a path of incremental migration,
-            acknowledging a huge variety of portals and end-user device
-            implementations and software versions.</li>
+            acknowledging the existence of a huge variety of pre-existing portals and end-user
+            device implementations and software versions.</li>
       </ul>
       <t>
        A side-benefit of the architecture described in this document is that
@@ -150,14 +151,14 @@
             <xref target="RFC7710bis"/>. Other protocols (such as RADIUS),
             Provisioning Domains
             <xref target="I-D.pfister-capport-pvd"/>, or
-            static configuration may also be used.
+            static configuration may also be used to convey this Captive Portal API URI.
             A device MAY query this API at any time to determine whether the
             network is holding the device in a captive state.
          </li>
         <li>End-user devices can be notified of captivity with Captive Portal
             Signals in response to traffic. This notification works in response
             to any Internet protocol, and is not done by modifying protocols
-            in-band.  This notification does not carry the portal URI; rather
+            in-band.  This notification does not carry the Captive Portal API URI; rather
             it provides a notification to the User Equipment that it is in a
             captive state.
         </li>
@@ -237,13 +238,13 @@
           <li>SHOULD support provisioning of the URI for the Captive Portal API (e.g., by DHCP)</li>
           <li>SHOULD distinguish Captive Portal API access per network interface, in the manner
            of Provisioning Domain Architecture <xref target="RFC7556"/>.</li>
-          <li>SHOULD have a mechanism for notifying the user of the Captive Portal</li>
+          <li>SHOULD have a non-spoofable mechanism for notifying the user of the Captive Portal</li>
           <li>SHOULD have a web browser so that the user may navigate the User Portal.</li>
           <li>MAY prevent applications from using networks that do not grant full
            network access. E.g., a device connected to a mobile network may
-           be connecting to a captive WiFi network; the operating system MAY
-           avoid updating the default route until network access restrictions
-           have been lifted (excepting access to the User Portal) in
+           be connecting to a captive WiFi network; the operating system could
+           avoid updating the default route to a device on captive WiFi network until
+           network access restrictions have been lifted (excepting access to the User Portal) in
            the new network. This has been termed "make before break".</li>
         </ul>
         <t>
@@ -264,21 +265,21 @@
         any services that User Equipment could need to contact to perform certificate validation,
         such as OCSP responders, CRLs, and NTP servers; see Section 4.1 of 
         <xref target="I-D.ietf-capport-api"/> for more information.
-        If certificate validation fails, User Equipment MUST NOT proceed with any of the behavior
-        described above.
+        If certificate validation fails, User Equipment MUST NOT make any calls to the API
+        server.
         </t>
       </section>
       <section anchor="section_provisioning">
         <name>Provisioning Service</name>
         <t>
          Here we discuss candidate mechanisms for provisioning the User
-         Equipment with the URI of the API to query captive portal state and
+         Equipment with the Captive Portal API URI to query captive portal state and
          navigate the portal.
         </t>
         <section anchor="section_dhcp">
           <name>DHCP or Router Advertisements</name>
           <t>
-           A standard for providing a portal URI using DHCP or Router
+           A standard for providing a Captive Portal API URI using DHCP or Router
            Advertisements is described in <xref target="RFC7710bis"/>.  The
            captive portal architecture expects this URI to indicate the API described
            in <xref target="section_api"/>.
@@ -290,8 +291,8 @@
            Although still a work in progress,
            <xref target="I-D.pfister-capport-pvd"/>
            proposes a mechanism for User Equipment to be provided with PvD
-           Bootstrap Information containing the URI for the JSON-based API
-           described in <xref target="section_api"/>.
+           Bootstrap Information containing the URI for the API described in
+           <xref target="section_api"/>.
           </t>
         </section>
       </section>
@@ -300,8 +301,8 @@
         <t>
          The purpose of a Captive Portal API is to permit a query of Captive
          Portal state without interrupting the user.  This API thereby removes
-         the need for User Equipment to perform clear-text "canary" HTTP queries to
-         check for response tampering.
+         the need for User Equipment to perform clear-text "canary" (see
+         <xref target="app-additional"/>) queries to check for response tampering.
         </t>
         <t>
          The URI of this API will have been provisioned to the User Equipment.
@@ -328,7 +329,7 @@
         </t>
         <t>
          When User Equipment receives Captive Portal Signals, the User Equipment
-         MAY query the API to check the state.
+         MAY query the API to check its state of captivity.
          The User Equipment SHOULD rate-limit these API queries in the event of
          the signal being flooded. (See <xref target="Security"/>.)
         </t>
@@ -362,7 +363,7 @@
               use the network and has satisfied the Captive Portal Conditions.</li>
           <li>Blocks (discards) traffic according to the site-specific policy
             for User Equipment that has not yet satisfied the Captive Portal Conditions.</li>
-          <li>May signal User Equipment using the Captive Portal Signaling protocol
+          <li>Optionally signals User Equipment using the Captive Portal Signaling protocol
            if certain traffic is blocked.</li>
           <li>Permits User Equipment that has not satisfied the Captive Portal Conditions 
           to access necessary APIs and web pages to fulfill requirements for escaping captivity.</li>
@@ -431,7 +432,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         </t>
         <ul spacing="normal">
           <li>During provisioning (e.g., DHCP), the User Equipment acquires
-                 the URI for the Captive Portal API.</li>
+                 the Captive Portal API URI.</li>
           <li>The User Equipment queries the API to learn of its state of
                  captivity. If captive, the User Equipment presents the portal
                  user interface from the User Portal to the user.</li>
@@ -529,8 +530,8 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                   should it be simple or straightforward for one User Equipment to
                   pretend to be another User Equipment, regardless of whether both are active
                   at the same time. This property is particularly important when the User
-                  Equipment is extended externally to devices such as billing systems, or where
-                  the identity of the User Equipment could imply liability.
+                  Equipment identifier is referenced externally by devices such as billing systems,
+                  or where the identity of the User Equipment could imply liability.
           </t>
         </section>
         <section anchor="id_recommended_visible_api">
@@ -718,7 +719,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
           <li>The User Equipment accesses the Captive Portal API to receive parameters
          of the Captive Network, including User Portal URI. (This step replaces
          the clear-text query to a canary URI.)</li>
-          <li>If necessary, the User navigates the User Portal to gain access to the
+          <li>If necessary, the User navigates to the User Portal to gain access to the
          external network.</li>
           <li>
             If the User interacted with the User Portal to gain access to the external
@@ -758,7 +759,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
           <li>If RA is used, a new Captive Portal API URI may be specified in a new RA
           message received by end User Equipment.</li>
         </ul>
-        <t>Whenever a new Portal URI is received by end User Equipment, it SHOULD discard
+        <t>Whenever a new Captive Portal API URI is received by end User Equipment, it SHOULD discard
       the old URI and use the new one for future requests to the API.</t>
       </section>
     </section>
@@ -1104,7 +1105,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
 
       <t>
        Malicious or misconfigured networks with a captive portal present may
-       not intercept these requests and choose to pass them through or decide to
+       not intercept these canary requests and choose to pass them through or decide to
        impersonate, leading to the device having a false negative.
       </t>
     </section>
