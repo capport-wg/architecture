@@ -102,7 +102,7 @@
       <t>
        Implementations of captive portals generally require a web server, some
        method to allow/block traffic, and some method to alert the user.
-       Common methods of alterting the user in implementations prior to this
+       Common methods of alerting the user in implementations prior to this
        work involve modifying HTTP or DNS traffic.
       </t>
       <t>
