@@ -213,6 +213,14 @@
         <t>Captive Portal Signaling Protocol: Also known as Signaling Protocol. The protocol for
           communicating Captive Portal Signals.
         </t>
+        <t>
+          Captive Portal Session: Also known as "session". A Captive Portal Session is the assocation
+          of a User Equipment to its state of captivity in the Captive Network. We say that a session
+          starts when the User Equipment associates with the Captive Network. We say that a session ends
+          when the association ends, or when the User Equipment no longer satisfies the Captive Portal
+          Conditions after previously satisfying them. Typically the Captive Network components determine the
+          User Equipment's session using the User Equipment's identifier (see <xref target="ue_identity"/>). 
+        </t>
       </section>
     </section>
     <section>
