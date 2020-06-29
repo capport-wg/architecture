@@ -246,6 +246,8 @@
            avoid updating the default route to a device on captive WiFi network until
            network access restrictions have been lifted (excepting access to the User Portal) in
            the new network. This has been termed "make before break".</li>
+          <li>SHOULD support updates to the Captive Portal API URI from the network provisioning
+              service.</li>
         </ul>
         <t>
         None of the above requirements are mandatory because (a) we do not wish
@@ -706,7 +708,8 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
       <name>Solution Workflow</name>
       <t>
       This section aims to improve understanding by describing a possible
-      workflow of solutions adhering to the architecture.
+      workflow of solutions adhering to the architecture. Note that the section is
+      not normative: it describes only as subset of possible implementations.
       </t>
       <section>
         <name>Initial Connection</name>
@@ -762,8 +765,11 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
           <li>If RA is used, a new Captive Portal API URI may be specified in a new RA
           message received by end User Equipment.</li>
         </ul>
-        <t>Whenever a new Captive Portal API URI is received by end User Equipment, it SHOULD discard
-      the old URI and use the new one for future requests to the API.</t>
+        <t>When the Network Provisioning Service updates the Captive Portal API URI, the User
+           Equipment could retrieve updated state from the URI immediately, or it could wait
+           as it normally would until the expiry conditions it retrieved from the old URI are
+           about to expire.
+        </t>
       </section>
     </section>
     <section anchor="Acknowledgments">
@@ -819,6 +825,11 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
          The solution described here assumes that when the User Equipment needs to
          trust the API server, server authentication will be performed using TLS
          mechanisms.
+        </t>
+        <t>
+         The Captive Portal API URI might change during the Captive Portal Session.
+         The User Equipment can apply the same trust mechanisms to the new URI as it
+         did to the URI it reveived initially from the network provisioning service.
         </t>
       </section>
       <section>
