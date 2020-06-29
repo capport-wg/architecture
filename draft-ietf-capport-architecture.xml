@@ -379,6 +379,8 @@
         indicates that the User Equipment might need to contact the API Server to receive
         updated information.  For instance, this signal might be generated when the end of a
         session is imminent, or when network access was denied.
+        For simplicity, and to reduce the attack surface, all signals SHOULD be considered
+        equivalent by the User Equipment, as a hint to contact the API.
         </t>
 
         <t>
@@ -843,8 +845,10 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
               carry any information which may mislead or misdirect the User Equipment.</li>
           <li>Even when responding to the signal, the User Equipment securely authenticates
                with API Servers.</li>
-          <li>Accesses to the API Server are rate limited, limiting the impact of a repeated
-              attack.</li>
+          <li>Accesses to the Captive Portal API are rate limited, limiting the impact of a
+              repeated attack. Because there is only one type of signal and one type of API
+              request in response to the signal, a signal-flooding attack will not obscure
+              information from the API to the User Equipment.</li>
         </ul>
       </section>
       <section>
