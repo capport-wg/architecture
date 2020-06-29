@@ -268,6 +268,18 @@
         If certificate validation fails, User Equipment MUST NOT make any calls to the API
         server.
         </t>
+        <section>
+          <name>Handling of Changes in Portal API URI</name>
+          <t>A different Captive Portal API URI could be returned in the following cases:</t>
+          <ul spacing="normal">
+            <li>If DHCP is used, a lease renewal/rebind may return a different Captive
+            Portal API URI.</li>
+            <li>If RA is used, a new Captive Portal API URI may be specified in a new RA
+            message received by end User Equipment.</li>
+          </ul>
+          <t>Whenever a new Captive Portal API URI is received by end User Equipment, it SHOULD discard
+        the old URI and use the new one for future requests to the API.</t>
+        </section>
       </section>
       <section anchor="section_provisioning">
         <name>Provisioning Service</name>
@@ -706,7 +718,8 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
       <name>Solution Workflow</name>
       <t>
       This section aims to improve understanding by describing a possible
-      workflow of solutions adhering to the architecture.
+      workflow of solutions adhering to the architecture. Note that the section is
+      not normative: it describes only as subset of possible implementations.
       </t>
       <section>
         <name>Initial Connection</name>
@@ -752,18 +765,6 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
           <li>The User extends their access through the User Portal</li>
           <li>The User Equipment's access to the outside network continues uninterrupted</li>
         </ol>
-      </section>
-      <section>
-        <name>Handling of Changes in Portal URI</name>
-        <t>A different Captive Portal API URI could be returned in the following cases:</t>
-        <ul spacing="normal">
-          <li>If DHCP is used, a lease renewal/rebind may return a different Captive
-          Portal API URI.</li>
-          <li>If RA is used, a new Captive Portal API URI may be specified in a new RA
-          message received by end User Equipment.</li>
-        </ul>
-        <t>Whenever a new Captive Portal API URI is received by end User Equipment, it SHOULD discard
-      the old URI and use the new one for future requests to the API.</t>
       </section>
     </section>
     <section anchor="Acknowledgments">
