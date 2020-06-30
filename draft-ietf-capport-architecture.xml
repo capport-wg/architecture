@@ -766,7 +766,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
           message received by end User Equipment.</li>
         </ul>
         <t>When the Network Provisioning Service updates the Captive Portal API URI, the User
-           Equipment could retrieve updated state from the URI immediately, or it could wait
+           Equipment can retrieve updated state from the URI immediately, or it can wait
            as it normally would until the expiry conditions it retrieved from the old URI are
            about to expire.
         </t>
