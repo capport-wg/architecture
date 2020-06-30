@@ -203,7 +203,7 @@
           captivity.</t>
         <t>Captive Portal API: Also known as API. An HTTP API allowing User Equipment
           to query information about its state of captivity within the Captive Portal. This
-          information might include how to escape captivity (e.g. by visting a URI).
+          information might include how to obtain full network access (e.g. by visting a URI).
         </t>
         <t>Captive Portal API Server: Also known as API Server. A server hosting the
           Captive Portal API.
