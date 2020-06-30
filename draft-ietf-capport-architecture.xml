@@ -802,9 +802,11 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
          authenticating an operator.
         </t>
         <t>
-         Given that a user chooses to visit a Captive Portal URI, the URI location
-         SHOULD be securely provided to the user's device. E.g., the DHCPv6 AUTH
-         option can sign this information.
+         The user makes an informed choice in deciding to visit and trust the Captive
+         Portal URI. Since the network provides Captive Portal URI to the user
+         equipment, the network SHOULD do so securely so that the user's trust in the
+         network can extend to their trust of the Captive Portal URI. E.g., the DHCPv6
+         AUTH option can sign this information.
         </t>
         <t>
          If a user decides to incorrectly trust an attacking network, they might
