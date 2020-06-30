@@ -381,6 +381,8 @@
         session is imminent, or when network access was denied.
         For simplicity, and to reduce the attack surface, all signals SHOULD be considered
         equivalent by the User Equipment, as a hint to contact the API.
+        If future solutions have multiple signal types, each type SHOULD be rate-limited
+        independently.
         </t>
 
         <t>
@@ -845,7 +847,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
               carry any information which may mislead or misdirect the User Equipment.</li>
           <li>Even when responding to the signal, the User Equipment securely authenticates
                with API Servers.</li>
-          <li>Accesses to the Captive Portal API are rate limited, reducing the impact of an
+          <li>Accesses to the Captive Portal API are rate-limited, reducing the impact of an
               attack attempting to generate excessive load on either User Equipment or API.
               Note that because there is only one type of signal and one type of API request in
               response to the signal, this rate-limiting will not cause loss of signalling
