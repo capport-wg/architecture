@@ -521,8 +521,9 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         <section anchor="id_recommended_unique">
           <name>Uniquely Identify User Equipment</name>
           <t>
-                  Each instance of User Equipment interacting with the Captive Network MUST be
-                  given an identifier that is unique among User Equipment interacting at that time.
+                  The Captive Network MUST associate the User Equipment with an
+                  identifier that is unique among the User Equipment that are
+                  interacting with the Captive Network at that time.
           </t>
           <t>
                   Over time, the User Equipment assigned to an identifier value MAY change. Allowing the
