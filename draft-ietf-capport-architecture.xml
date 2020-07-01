@@ -240,14 +240,14 @@
            of Provisioning Domain Architecture <xref target="RFC7556"/>.</li>
           <li>SHOULD have a non-spoofable mechanism for notifying the user of the Captive Portal</li>
           <li>SHOULD have a web browser so that the user may navigate the User Portal.</li>
+          <li>SHOULD support updates to the Captive Portal API URI from the network provisioning
+              service.</li>
           <li>MAY prevent applications from using networks that do not grant full
            network access. E.g., a device connected to a mobile network may
            be connecting to a captive WiFi network; the operating system could
            avoid updating the default route to a device on captive WiFi network until
            network access restrictions have been lifted (excepting access to the User Portal) in
            the new network. This has been termed "make before break".</li>
-          <li>SHOULD support updates to the Captive Portal API URI from the network provisioning
-              service.</li>
         </ul>
         <t>
         None of the above requirements are mandatory because (a) we do not wish
