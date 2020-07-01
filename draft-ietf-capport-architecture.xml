@@ -380,7 +380,7 @@
         updated information.  For instance, this signal might be generated when the end of a
         session is imminent, or when network access was denied.
         For simplicity, and to reduce the attack surface, all signals SHOULD be considered
-        equivalent by the User Equipment, as a hint to contact the API.
+        equivalent by the User Equipment: as a hint to contact the API.
         If future solutions have multiple signal types, each type SHOULD be rate-limited
         independently.
         </t>
