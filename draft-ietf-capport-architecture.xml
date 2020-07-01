@@ -112,24 +112,40 @@
        principles:
       </t>
       <ul spacing="normal">
-        <li>Solutions SHOULD NOT require the forging of responses from DNS or
-            HTTP servers, or any other protocol.  In particular, solutions
-            SHOULD NOT require man-in-the-middle proxy of TLS traffic.</li>
-        <li>Solutions MUST operate at the layer of Internet Protocol (IP) or
-            above, not being specific to any particular access technology such
-            as Cable, WiFi or mobile telecom.</li>
-        <li>Solutions MAY allow a device to be alerted that it is in a
-            captive network when attempting to use any application on the
-            network.</li>
+        <li>Current captive portal solutions typically implement some variations
+            of forging DNS or HTTP responses.
+            Some reportedly perform man-in-the-middle (MITM) proxy of HTTPS in
+            order to forge reponses.
+            Captive Portal Solutions should not have to break any protocols or
+            otherwise act in the manner of an attacker.
+            Therefore, solutions MUST NOT require the forging of responses from
+            DNS or HTTP servers, or any other protocol; solutions MUST NOT
+            require man-in-the-middle proxy of TLS traffic.</li>
+        <li>To maximize universality and adoption, solutions MUST operate at the
+            layer of Internet Protocol (IP) or above, not being specific to any
+            particular access technology such as Cable, WiFi or mobile
+            telecom.</li>
+        <li>Current captive portal solutions that work by affecting DNS or HTTP
+            can only alert applications using those protocols that the network
+            is a captive network. It would be beneficial to alert any
+            application. Hence, solutions MAY allow a device to be alerted that
+            it is in a captive network when attempting to use any application on
+            the network.</li>
         <li>Solutions SHOULD allow a device to learn that it is in a captive
-            network before any application attempts to use the network.</li>
-        <li>The state of captivity SHOULD be explicitly available to devices
-            (in contrast to modification of DNS or HTTP, which is only
-            indirectly machine-detectable by the client when it compares
-            responses to well-known queries with expected responses).</li>
+            network before any application attempts to use the network. This is
+            to improve the user experience by allowing a device to open the
+            network before an application requires it. Devices are currently
+            achieving this by checking the responses of queries to well-known
+            "canary" URIs in attempt to infer there is a captive network from
+            DNS or HTTP modifications.</li>
+        <li>The state of captivity SHOULD be explicitly available to devices via
+            a standard protocol, vs. having to infer the state indirectly.</li>
         <li>The architecture MUST provide a path of incremental migration,
-            acknowledging the existence of a huge variety of pre-existing portals and end-user
-            device implementations and software versions.</li>
+            acknowledging the existence of a huge variety of pre-existing
+            portals and end-user device implementations and software versions.
+            This requirement is not to recommend or standardize existing
+            approaches, rather to provide device and portal implementors a path
+            to new standard.</li>
       </ul>
       <t>
        A side-benefit of the architecture described in this document is that
