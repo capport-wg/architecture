@@ -829,7 +829,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         <t>
          The Captive Portal API URI might change during the Captive Portal Session.
          The User Equipment can apply the same trust mechanisms to the new URI as it
-         did to the URI it reveived initially from the network provisioning service.
+         did to the URI it received initially from the network provisioning service.
         </t>
       </section>
       <section>
