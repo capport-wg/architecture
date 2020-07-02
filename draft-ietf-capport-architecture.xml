@@ -128,19 +128,12 @@
             layer of Internet Protocol (IP) or above, not being specific to any
             particular access technology such as Cable, WiFi or mobile
             telecom.</li>
-        <li>Current captive portal solutions that work by affecting DNS or HTTP
-            can only alert applications using those protocols that the network
-            is a captive network. It would be beneficial to alert any
-            application. Hence, solutions MAY allow a device to be alerted that
-            it is in a captive network when attempting to use any application on
-            the network.</li>
-        <li>Solutions SHOULD allow a device to learn that it is in a captive
-            network before any application attempts to use the network. This is
-            to improve the user experience by allowing a device to open the
-            network before an application requires it. Devices are currently
-            achieving this by checking the responses of queries to well-known
-            "canary" URIs in attempt to infer there is a captive network from
-            DNS or HTTP modifications.</li>
+        <li>Solutions SHOULD allow a device to query the network to determine whether the device is
+            captive, without the solution being coupled to forging intercepted protocols or
+            requiring the device to make sacrificial requests to "canary" URIs.  Current captive
+            portal solutions that work by affecting DNS or HTTP generally only function as intended
+            with browsers, breaking other applications using those protocols; applications using
+            other protocols are not alerted that the network is a captive network.</li>
         <li>The state of captivity SHOULD be explicitly available to devices via
             a standard protocol, vs. having to infer the state indirectly.</li>
         <li>The architecture MUST provide a path of incremental migration,
