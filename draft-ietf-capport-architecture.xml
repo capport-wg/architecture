@@ -130,7 +130,8 @@
             telecom.</li>
         <li>Solutions SHOULD allow a device to query the network to determine whether the device is
             captive, without the solution being coupled to forging intercepted protocols or
-            requiring the device to make sacrificial requests to "canary" URIs.  Current captive
+            requiring the device to make sacrificial queries to "canary" URIs to check for response
+            tampering (see <xref target="app-additional"/>). Current captive
             portal solutions that work by affecting DNS or HTTP generally only function as intended
             with browsers, breaking other applications using those protocols; applications using
             other protocols are not alerted that the network is a captive network.</li>
