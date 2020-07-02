@@ -251,6 +251,8 @@
            of Provisioning Domain Architecture <xref target="RFC7556"/>.</li>
           <li>SHOULD have a non-spoofable mechanism for notifying the user of the Captive Portal</li>
           <li>SHOULD have a web browser so that the user may navigate the User Portal.</li>
+          <li>SHOULD support updates to the Captive Portal API URI from the network provisioning
+              service.</li>
           <li>MAY prevent applications from using networks that do not grant full
            network access. E.g., a device connected to a mobile network may
            be connecting to a captive WiFi network; the operating system could
@@ -718,7 +720,8 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
       <name>Solution Workflow</name>
       <t>
       This section aims to improve understanding by describing a possible
-      workflow of solutions adhering to the architecture.
+      workflow of solutions adhering to the architecture. Note that the section is
+      not normative: it describes only as subset of possible implementations.
       </t>
       <section>
         <name>Initial Connection</name>
@@ -774,8 +777,11 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
           <li>If RA is used, a new Captive Portal API URI may be specified in a new RA
           message received by end User Equipment.</li>
         </ul>
-        <t>Whenever a new Captive Portal API URI is received by end User Equipment, it SHOULD discard
-      the old URI and use the new one for future requests to the API.</t>
+        <t>When the Network Provisioning Service updates the Captive Portal API URI, the User
+           Equipment can retrieve updated state from the URI immediately, or it can wait
+           as it normally would until the expiry conditions it retrieved from the old URI are
+           about to expire.
+        </t>
       </section>
     </section>
     <section anchor="Acknowledgments">
@@ -831,6 +837,11 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
          The solution described here assumes that when the User Equipment needs to
          trust the API server, server authentication will be performed using TLS
          mechanisms.
+        </t>
+        <t>
+         The Captive Portal API URI might change during the Captive Portal Session.
+         The User Equipment can apply the same trust mechanisms to the new URI as it
+         did to the URI it received initially from the network provisioning service.
         </t>
       </section>
       <section>
