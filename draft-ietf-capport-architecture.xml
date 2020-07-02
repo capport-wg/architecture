@@ -114,7 +114,7 @@
       <ul spacing="normal">
         <li>Current captive portal solutions typically implement some variations
             of forging DNS or HTTP responses.
-            Some reportedly perform man-in-the-middle (MITM) proxy of HTTPS in
+            Some attempt man-in-the-middle (MITM) proxy of HTTPS in
             order to forge reponses.
             Captive Portal Solutions should not have to break any protocols or
             otherwise act in the manner of an attacker.
