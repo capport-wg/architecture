@@ -119,8 +119,11 @@
             Captive Portal Solutions should not have to break any protocols or
             otherwise act in the manner of an attacker.
             Therefore, solutions MUST NOT require the forging of responses from
-            DNS or HTTP servers, or any other protocol; solutions MUST NOT
-            require man-in-the-middle proxy of TLS traffic.</li>
+            DNS or HTTP servers, or any other protocol.</li>
+        <li>Solutions MUST permit clients to perform DNSSEC validation, which rules out solutions
+            that forge DNS responses.
+            Solutions SHOULD permit clients to detect and avoid TLS man-in-the-middle attacks
+            without requiring a human to perform any kind of "exception" processing.</li>
         <li>To maximize universality and adoption, solutions MUST operate at the
             layer of Internet Protocol (IP) or above, not being specific to any
             particular access technology such as Cable, WiFi or mobile
@@ -800,6 +803,8 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
          for the Captive Portal Signal requirements.</t>
       <t>The authors thank Benjamin Kaduk for providing the content related to TLS
          certificate validation of the API server.</t>
+      <t>The authors thank Michael Richardson for providing wording requiring DNSSEC and TLS to
+         operate without the user adding exceptions.</t>
       <t>The authors thank various individuals for their feedback on
         the mailing list and during the IETF98 hackathon:
         David Bird,
