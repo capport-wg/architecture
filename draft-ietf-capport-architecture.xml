@@ -840,9 +840,10 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
       <section>
         <name>Authenticated APIs</name>
         <t>
-         The solution described here assumes that when the User Equipment needs to
-         trust the API server, server authentication will be performed using TLS
-         mechanisms.
+         The solution described here requires that when the User Equipment needs to
+         access the API server, server authentication will be performed using TLS
+         mechanisms. See <xref target="section_client"/> for a description of how
+         the User Equipment performs the authentiation procedure.
         </t>
         <t>
          The Captive Portal API URI might change during the Captive Portal Session.
