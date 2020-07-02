@@ -109,7 +109,7 @@
        This document describes an architecture for implementing captive
        portals while addressing most of the problems arising for current
        captive portal mechanisms. The architecture is guided by these
-       principles:
+       requirements:
       </t>
       <ul spacing="normal">
         <li>Current captive portal solutions typically implement some variations
