@@ -109,27 +109,40 @@
        This document describes an architecture for implementing captive
        portals while addressing most of the problems arising for current
        captive portal mechanisms. The architecture is guided by these
-       principles:
+       requirements:
       </t>
       <ul spacing="normal">
-        <li>Solutions SHOULD NOT require the forging of responses from DNS or
-            HTTP servers, or any other protocol.  In particular, solutions
-            SHOULD NOT require man-in-the-middle proxy of TLS traffic.</li>
-        <li>Solutions MUST operate at the layer of Internet Protocol (IP) or
-            above, not being specific to any particular access technology such
-            as Cable, WiFi or mobile telecom.</li>
-        <li>Solutions MAY allow a device to be alerted that it is in a
-            captive network when attempting to use any application on the
-            network.</li>
-        <li>Solutions SHOULD allow a device to learn that it is in a captive
-            network before any application attempts to use the network.</li>
-        <li>The state of captivity SHOULD be explicitly available to devices
-            (in contrast to modification of DNS or HTTP, which is only
-            indirectly machine-detectable by the client when it compares
-            responses to well-known queries with expected responses).</li>
+        <li>Current captive portal solutions typically implement some variations
+            of forging DNS or HTTP responses.
+            Some attempt man-in-the-middle (MITM) proxy of HTTPS in
+            order to forge reponses.
+            Captive Portal Solutions should not have to break any protocols or
+            otherwise act in the manner of an attacker.
+            Therefore, solutions MUST NOT require the forging of responses from
+            DNS or HTTP servers, or any other protocol.</li>
+        <li>Solutions MUST permit clients to perform DNSSEC validation, which rules out solutions
+            that forge DNS responses.
+            Solutions SHOULD permit clients to detect and avoid TLS man-in-the-middle attacks
+            without requiring a human to perform any kind of "exception" processing.</li>
+        <li>To maximize universality and adoption, solutions MUST operate at the
+            layer of Internet Protocol (IP) or above, not being specific to any
+            particular access technology such as Cable, WiFi or mobile
+            telecom.</li>
+        <li>Solutions SHOULD allow a device to query the network to determine whether the device is
+            captive, without the solution being coupled to forging intercepted protocols or
+            requiring the device to make sacrificial queries to "canary" URIs to check for response
+            tampering (see <xref target="app-additional"/>). Current captive
+            portal solutions that work by affecting DNS or HTTP generally only function as intended
+            with browsers, breaking other applications using those protocols; applications using
+            other protocols are not alerted that the network is a captive network.</li>
+        <li>The state of captivity SHOULD be explicitly available to devices via
+            a standard protocol, rather than having to infer the state indirectly.</li>
         <li>The architecture MUST provide a path of incremental migration,
-            acknowledging the existence of a huge variety of pre-existing portals and end-user
-            device implementations and software versions.</li>
+            acknowledging the existence of a huge variety of pre-existing
+            portals and end-user device implementations and software versions.
+            This requirement is not to recommend or standardize existing
+            approaches, rather to provide device and portal implementors a path
+            to new standard.</li>
       </ul>
       <t>
        A side-benefit of the architecture described in this document is that
@@ -798,6 +811,8 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
          for the Captive Portal Signal requirements.</t>
       <t>The authors thank Benjamin Kaduk for providing the content related to TLS
          certificate validation of the API server.</t>
+      <t>The authors thank Michael Richardson for providing wording requiring DNSSEC and TLS to
+         operate without the user adding exceptions.</t>
       <t>The authors thank various individuals for their feedback on
         the mailing list and during the IETF98 hackathon:
         David Bird,
