@@ -761,15 +761,19 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         </t>
         <ol spacing="normal" type="1">
           <li>Precondition: the API has provided the User Equipment with a duration
-         over which its access is valid</li>
-          <li>The User Equipment is communicating with the outside network</li>
-          <li>The User Equipment's UI indicates that the length of time left for its access
-         has fallen below a threshold</li>
-          <li>The User Equipment visits the API again to validate the expiry time</li>
+         over which its access is valid.</li>
+          <li>The User Equipment is communicating with the outside network.</li>
+          <li>
+            The User Equipment detects that the length of time left
+            for its access has fallen below a threshold by comparing its stored
+            expiry time with the current time.
+          </li>
+          <li>The User Equipment visits the API again to validate the expiry time.</li>
           <li>If expiry is still imminent, the User Equipment prompts the user to access the
-         User Portal URI again</li>
-          <li>The User extends their access through the User Portal</li>
-          <li>The User Equipment's access to the outside network continues uninterrupted</li>
+         User Portal URI again.</li>
+          <li>The User accepts the prompt displayed by the User Equipment.</li>
+          <li>The User extends their access through the User Portal via the User Equipment's user interface.</li>
+          <li>The User Equipment's access to the outside network continues uninterrupted.</li>
         </ol>
       </section>
       <section>
