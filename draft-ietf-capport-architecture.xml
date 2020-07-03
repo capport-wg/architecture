@@ -845,7 +845,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         <name>Authenticated APIs</name>
         <t>
          The solution described here requires that when the User Equipment needs to
-         access the API server, the User Equipment authenticates the 
+         access the API server, the User Equipment authenticates the
          server; see <xref target="section_client"/>.
         </t>
         <t>
@@ -861,6 +861,17 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
            This is required to allow the User Equipment and API Server to exchange
            secrets which can be used to validate future interactions. The API MUST
            ensure the integrity of this information, as well as its confidentiality.
+        </t>
+        <t>
+           An attacker with access to this information might be able to
+           masquerade as a specific User Equipment when interacting with the API, which
+           could then allow them to masquerade as that User Equipment when interacting
+           with the User Portal. This could give them the ability to determine whether
+           the User Equipment has accessed the portal, or deny the User Equipment service
+           by ending their session using mechanisms provided by the User Portal, or consume that
+           User Equipment's quota. An attacker with the ability to modify the information
+           could deny service to the User Equipment, or cause them to appear as a different
+           User Equipment.
         </t>
       </section>
       <section anchor="section_signal_risks">
