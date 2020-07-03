@@ -136,7 +136,7 @@
             with browsers, breaking other applications using those protocols; applications using
             other protocols are not alerted that the network is a captive network.</li>
         <li>The state of captivity SHOULD be explicitly available to devices via
-            a standard protocol, vs. having to infer the state indirectly.</li>
+            a standard protocol, rather than having to infer the state indirectly.</li>
         <li>The architecture MUST provide a path of incremental migration,
             acknowledging the existence of a huge variety of pre-existing
             portals and end-user device implementations and software versions.
