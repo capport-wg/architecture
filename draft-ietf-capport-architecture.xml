@@ -294,6 +294,16 @@
         If certificate validation fails, User Equipment MUST NOT make any calls to the API
         server.
         </t>
+        <t>
+        The User Equipment can store the last response it received from the Captive Portal API
+        as a cached view of its state within the Captive Network. This state can be used to
+        determine whether its Captive Portal Session is near expiry. For example, the User
+        Equipment might compare a timestamp indicating when the session expires to the current
+        time. Storing state in this way can reduce the need for communication with the
+        Captive Portal API. However, it could lead to the state becoming
+        stale if the User Equipment's view of the relevant conditions (byte quota, for example)
+        is not consistent with the Captive Portal API's.
+        </t>
       </section>
       <section anchor="section_provisioning">
         <name>Provisioning Service</name>
