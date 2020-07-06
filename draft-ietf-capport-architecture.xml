@@ -302,7 +302,7 @@
           Portal API URI to the User Equipment when it connects to the network, and
           later if the URI changes.  The provisioning service could also be the same
           service which is responsible for provisioning the User Equipment for
-          access to the Captive Network (e.g. by providing it with an IP address).
+          access to the Captive Network (e.g., by providing it with an IP address).
           This section discusses two mechanisms which may be used to provide the
           Captive Portal API URI to the User Equipment.
         </t>
