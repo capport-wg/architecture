@@ -298,9 +298,13 @@
       <section anchor="section_provisioning">
         <name>Provisioning Service</name>
         <t>
-         Here we discuss candidate mechanisms for provisioning the User
-         Equipment with the Captive Portal API URI to query captive portal state and
-         navigate the portal.
+          The Provisioning Service is primarily responsible for providing a Captive
+          Portal API URI to the User Equipment when it connects to the network, and
+          later if the URI changes.  The provisioning service could also be the same
+          service which is responsible for provisioning the User Equipment for
+          access to the Captive Network (e.g., by providing it with an IP address).
+          This section discusses two mechanisms which may be used to provide the
+          Captive Portal API URI to the User Equipment.
         </t>
         <section anchor="section_dhcp">
           <name>DHCP or Router Advertisements</name>
