@@ -180,7 +180,7 @@
             it could be captive.
             In response, the device MAY query the provisioned API to obtain
             information about the network state.
-            The device MAY take immediate action to satisfy the portal
+            The device can take immediate action to satisfy the portal
             (according to its configuration/policy).
          </li>
       </ul>
