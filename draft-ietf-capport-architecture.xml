@@ -522,9 +522,9 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
                  An Identifier is a characteristic of the User Equipment used by
                  the components of a Captive Portal to uniquely determine which
                  specific User Equipment is interacting with them.
-                 An Identifier MAY be a field contained in packets
+                 An Identifier can be a field contained in packets
                  sent by the User Equipment to the External Network. Or, an
-                 Identifier MAY be an ephemeral property not contained in packets
+                 Identifier can be an ephemeral property not contained in packets
                  destined for the External Network, but instead correlated with
                  such information through knowledge available to the different
                  components.
