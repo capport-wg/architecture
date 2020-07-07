@@ -872,7 +872,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         <t>
          Further, the possibility of an on-path attacker in an attacking network
          introduces some risks. The attacker could redirect traffic to arbitrary
-         destinations with malicious payloads. The attacker could analyze the user's
+         destinations. The attacker could analyze the user's
          traffic leading to loss of confidentiality. Or, the attacker could modify
          the traffic inline.
         </t>
