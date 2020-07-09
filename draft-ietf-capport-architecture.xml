@@ -360,6 +360,12 @@
          the URI MUST be https so that the User Equipment communicates with
          the User Portal over TLS.
         </t>
+        <t>
+         If the API receives a request for state that does not correspond to the
+         requesting User Equipment, the API SHOULD deny access.  Given that the
+         API might use the User Equipment's identifier for authentication, this
+         requirement motivates <xref target="id_recommended_hard"/>.
+        </t>
          <t>
          A caller to the API needs to be presented with evidence that the content
          it is receiving is for a version of the API that it supports. For an
