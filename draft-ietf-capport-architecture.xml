@@ -168,16 +168,14 @@
             A device MAY query this API at any time to determine whether the
             network is holding the device in a captive state.
          </li>
-        <li>End-user devices can be signalled that they could be captive with Captive Portal
-            Signals in response to traffic. This signal works in response
-            to any Internet protocol, and is not done by modifying protocols
-            in-band.  This signal does not carry the Captive Portal API URI; rather
-            it provides a signal to the User Equipment that it is in a
-            captive state.
+        <li>A Captive Network can signal User Equipment in response to transmissions by
+            the User Equipment. This signal works in response to any Internet protocol,
+            and is not done by modifying protocols in-band.  This signal does not carry the
+            Captive Portal API URI; rather it provides a signal to the User Equipment that it
+            is in a captive state.
         </li>
         <li>
-            Receipt of a Captive Portal Signal provides a hint that an end-user device could be captive.
-            it could be captive.
+            Receipt of a Captive Portal Signal provides a hint that User Equipment could be captive.
             In response, the device MAY query the provisioned API to obtain
             information about the network state.
             The device can take immediate action to satisfy the portal
