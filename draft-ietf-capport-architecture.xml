@@ -176,7 +176,7 @@
             captive state.
         </li>
         <li>
-            Receipt of a Captive Portal Signal signals to an end-user device that
+            Receipt of a Captive Portal Signal provides a hint that an end-user device could be captive.
             it could be captive.
             In response, the device MAY query the provisioned API to obtain
             information about the network state.
