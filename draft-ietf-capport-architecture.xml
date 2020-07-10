@@ -940,6 +940,27 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
          Domains.
         </t>
       </section>
+      <section>
+        <name>Privacy</name>
+        <t>
+          <xref target="ue_identity"/> describes a mechanism by which all components within
+          the Captive Network agree on a unique identifier for the User Equipment.
+          This identifier could be abused to track the user. Implementers and designers
+          of Captive Networks should take care to ensure that identifiers, if stored, are
+          stored securely. Likewise, if any component communicates the identifier over the
+          network, it should ensure the confidentiality of the identifier on the wire by
+          using encryption such as TLS.
+        </t>
+        <t>
+          The fact that an identity can change provides some anonymity benefits. For
+          example, User Equipment could cycle through multiple identifiers to help prevent
+          long-term tracking. However, if the components of the network use an internal
+          mapping to map the identity to a stable, long-term value in order to deal with
+          changing identifiers, they need to treat that value as sensitive information: an
+          attacker could use it to tie traffic back to the originating User Equipment,
+          despite the User Equipment having changed identifiers.
+        </t>
+      </section>
     </section>
   </middle>
   <!--  *****BACK MATTER ***** -->
