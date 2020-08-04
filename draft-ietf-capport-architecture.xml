@@ -944,15 +944,15 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
         <name>Privacy</name>
         <t>
           <xref target="ue_identity"/> describes a mechanism by which all components within
-          the Captive Network agree on a unique identifier for the User Equipment.
-          This identifier could be abused to track the user. Implementers and designers
-          of Captive Networks should take care to ensure that identifiers, if stored, are
-          stored securely. Likewise, if any component communicates the identifier over the
-          network, it should ensure the confidentiality of the identifier on the wire by
-          using encryption such as TLS.
+          the Captive Portal are designed to use the same identifier to uniquely identify
+          the User Equipment.  This identifier could be abused to track the user.
+          Implementers and designers of Captive Portals should take care to ensure that
+          identifiers, if stored, are stored securely. Likewise, if any component
+          communicates the identifier over the network, it should ensure the confidentiality
+          of the identifier on the wire by using encryption such as TLS.
         </t>
         <t>
-          The fact that an identity can change provides some anonymity benefits. For
+          There are benfits to choosing mutable anonymous identifiers. For
           example, User Equipment could cycle through multiple identifiers to help prevent
           long-term tracking. However, if the components of the network use an internal
           mapping to map the identity to a stable, long-term value in order to deal with
