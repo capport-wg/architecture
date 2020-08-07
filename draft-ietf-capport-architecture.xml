@@ -84,7 +84,6 @@
       <t>This document describes a captive portal architecture.
         Network provisioning protocols such as DHCP or Router Advertisements (RAs),
         an optional signaling protocol, and an HTTP API are used to provide the solution.
-        The role of Provisioning Domains (PvDs) is described.
       </t>
     </abstract>
   </front>
