@@ -962,7 +962,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
           of the identifier on the wire by using encryption such as TLS.
         </t>
         <t>
-          There are benfits to choosing mutable anonymous identifiers. For
+          There are benefits to choosing mutable anonymous identifiers. For
           example, User Equipment could cycle through multiple identifiers to help prevent
           long-term tracking. However, if the components of the network use an internal
           mapping to map the identity to a stable, long-term value in order to deal with
