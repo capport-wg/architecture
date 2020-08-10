@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>capport-wg/architecture branches</title>
+    <style>
+      body { font-family: sans-serif; }
+      h2 { font-size: 130%; }
+      h3 { font-size: 120%; color: #222; }
+    </style>
+  </head>
+  <body>
+    <h2>Editor's drafts for capport-wg/architecture</h2>
+    <p><a href="issues.html">Saved issues</a>.</p>
+    <ul id="branch-master">
+      <li>
+        draft-ietf-capport-architecture: 
+        <a href="./draft-ietf-capport-architecture.html"
+           class="html draft-ietf-capport-architecture">html</a>, 
+        <a href="./draft-ietf-capport-architecture.txt"
+           class="txt draft-ietf-capport-architecture">plain text</a>, 
+        <a href="https://tools.ietf.org/rfcdiff?url1=https://tools.ietf.org/id/draft-ietf-capport-architecture.txt&amp;url2=https://capport-wg.github.io/architecture/draft-ietf-capport-architecture.txt"
+           class="diff draft-ietf-capport-architecture">
+          diff with last submission</a>
+      </li>
+    </ul>
+    <script>
+// @licstart
+//  Any copyright is dedicated to the Public Domain.
+//  http://creativecommons.org/publicdomain/zero/1.0/
+// @licend */
+window.onload = function() {
+  var referrer_branch = 'master';
+  // e.g., "https://github.com/user/repo/tree/master"
+  var chunks = document.referrer.split("/");
+  if (chunks[2] === 'github.com' && chunks[5] === 'tree') {
+    referrer_branch = chunks[6];
+  }
+  let branch = document.querySelector('#branch-' + referrer_branch);
+  let h = document.location.hash.substring(1);
+  if (h === 'show') {
+    document.location.hash = '#' + branch.id;
+  } else if (branch && h.startsWith('go')) {
+    let e = branch.querySelector(h.substring(2));
+    if (e && e.href) {
+      document.location = e.href;
+    }
+  }
+};
+    </script>
+  </body>
+</html>

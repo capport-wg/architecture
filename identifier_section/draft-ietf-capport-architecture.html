@@ -1,0 +1,840 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head profile="http://www.w3.org/2006/03/hcard http://dublincore.org/documents/2008/08/04/dc-html/">
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+
+  <title>CAPPORT Architecture</title>
+
+  
+<style type="text/css">/*<![CDATA[*/
+@viewport {
+  zoom: 1.0;
+  width: extend-to-zoom;
+}
+@-ms-viewport {
+  width: extend-to-zoom;
+  zoom: 1.0;
+}
+
+@media screen and (min-width: 1024px) {
+  body>ul.toc, body>#rfc\.toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 550px);
+    width: 300px;
+    z-index: 1;
+  }
+  #rfc\.toc {
+    top: 55px;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+  ul.toc, #rfc\.toc {
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+  body>ul.toc {
+    top: 140px;
+  }
+
+  body {
+    padding-right: 350px;
+  }
+}
+
+body {
+  font: 16px "Helvetica Neue",Helvetica,Arial,sans-serif;
+  color: #333;
+  font-size-adjust: 0.5;
+  line-height: 24px;
+  margin: 75px auto;
+  max-width: 724px;
+}
+
+.title, .filename, h1, h2, h3, h4 {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size-adjust: 0.5;
+  font-weight: 500;
+  color: #333;
+  line-height: 100%;
+  margin: 0.8em 0 0.3em;
+}
+.title { font-size: 36px; }
+h1 { font-size: 36px; }
+h2 { font-size: 24px; }
+h3, h4 { font-size: 18px; }
+h1 a[href], h2 a[href], h3 a[href], h4 a[href] {
+  color: #333;
+}
+
+ul.toc li {
+  list-style: none;
+  text-indent: -2.5em;
+  padding-left: 2.5em;
+  padding-bottom: 5px;
+  margin: 0;
+}
+ul.toc ul {
+  margin: 0;
+}
+/* xml2rfc nests ul directly inside ul which messes with the style badly */
+ul.toc, ul.toc>ul, ul.toc ul>ul {
+  margin: 0 0 0 1.5em;
+}
+
+table {
+  margin-left: 0em;
+  border-collapse: collapse;
+}
+th {
+  text-align: left;
+  border-bottom: 2px solid #ddd;
+}
+td {
+  border-top: 1px solid #ddd;
+  vertical-align: top;
+}
+tr:nth-child(2n+1) > td,
+tr:nth-child(2n+1) > th {
+  background-color: #f9f9f9;
+}
+td.reference {
+  max-width: 200px;
+  border-top: none;
+  padding-right: 1em;
+}
+.right {
+  text-align: right;
+}
+
+
+table.header {
+  width: 100%;
+}
+table.header td {
+  border: none;
+  background-color: transparent;
+  color: black;
+}
+.filename {
+  color: rgb(119, 119, 119);
+  font-size: 23px;
+  font-weight: normal;
+  height: auto;
+  line-height: 100%;
+}
+#rfc\.abstract+p, #rfc\.abstract p {
+  font-size: 18px;
+  line-height: 27px%;
+}
+
+samp, tt, code, pre {
+  font: 11pt consolas, monospace;
+  font-size-adjust: none;
+}
+pre {
+  background-color: #eee;
+  border: 1px solid #ddd;
+  overflow-x: auto;
+  padding: 5px;
+  margin: 5px;
+}
+.figure {
+  font-style: italic;
+  margin: 0 1.5em;
+}
+
+address {
+  margin: 10px 0 0;
+}
+.vcard {
+  font-style: normal;
+}
+.vcardline {
+  display: block;
+}
+.vcardline .fn {
+  font-weight: bold;
+}
+.vcardline .hidden {
+  display: none;
+}
+
+dl {
+  margin-left: 1em;
+}
+dl.dl-horizontal: {
+  margin-left: 0;
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.nohang > dt {
+  float: none;
+}
+dl > dd {
+  margin-bottom: .5em;
+}
+dl.compact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+ul.empty {
+  list-style-type: none;
+}
+ul.empty li {
+  margin-top: .5em;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #eee;
+}
+hr.noprint {
+  display: none;
+}
+
+a {
+  text-decoration: none;
+}
+a[href] {
+  color: #2a6496;
+}
+a[href]:hover {
+  background-color: #eee;
+}
+
+ol, ul, li, p {
+  padding: 0;
+  margin: 0.5em 0 0.5em 2em;
+}
+li, p {
+  margin-left: 0;
+}
+address {
+  font-style: normal;
+}
+
+.github-fork-ribbon-wrapper {
+  display: none;
+}
+@media screen and (min-width: 800px) {
+  /* "Fork me on GitHub" CSS ribbon based on
+   * https://github.com/simonwhitaker/github-fork-ribbon-css
+   */
+  .github-fork-ribbon {
+    position: absolute;
+    padding: 2px 0;
+    background-color: #a00;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);
+    font: 700 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+    pointer-events: auto;
+
+    top: 38px;
+    right: -45px;
+
+    transform: rotate(45deg);
+  }
+
+  .github-fork-ribbon a[href],
+  .github-fork-ribbon a[href]:hover {
+    color: #fff;
+    background-color: transparent;
+    text-decoration: none;
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.5);
+    text-align: center;
+
+    width: 190px;
+    line-height: 18px;
+
+    display: inline-block;
+    padding: 2px 0;
+
+    border: 1.5px dotted #fff;
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .github-fork-ribbon-wrapper {
+    display: block;
+    width: 130px;
+    height: 130px;
+    position: absolute;
+    overflow: hidden;
+    top: 0; right: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+}
+@media screen and (min-width: 1000px) {
+  .github-fork-ribbon-wrapper {
+    position: fixed;
+  }
+  /*]]>*/</style>
+
+
+  <link href="#rfc.toc" rel="Contents">
+<link href="#rfc.section.1" rel="Chapter" title="1 Introduction">
+<link href="#rfc.section.1.1" rel="Chapter" title="1.1 Requirements Language">
+<link href="#rfc.section.1.2" rel="Chapter" title="1.2 Terminology">
+<link href="#rfc.section.2" rel="Chapter" title="2 Components">
+<link href="#rfc.section.2.1" rel="Chapter" title="2.1 User Equipment">
+<link href="#rfc.section.2.2" rel="Chapter" title="2.2 Provisioning Service">
+<link href="#rfc.section.2.2.1" rel="Chapter" title="2.2.1 DHCP or Router Advertisements">
+<link href="#rfc.section.2.2.2" rel="Chapter" title="2.2.2 Provisioning Domains">
+<link href="#rfc.section.2.3" rel="Chapter" title="2.3 Captive Portal API Server">
+<link href="#rfc.section.2.4" rel="Chapter" title="2.4 Captive Portal Enforcement">
+<link href="#rfc.section.2.5" rel="Chapter" title="2.5 ICMP/ICMP6">
+<link href="#rfc.section.2.6" rel="Chapter" title="2.6 Component Diagram">
+<link href="#rfc.section.3" rel="Chapter" title="3 User Equipment Identity">
+<link href="#rfc.section.3.1" rel="Chapter" title="3.1 Identifiers">
+<link href="#rfc.section.3.2" rel="Chapter" title="3.2 Recommended Properties">
+<link href="#rfc.section.3.2.1" rel="Chapter" title="3.2.1 Uniquely Identify User Equipment">
+<link href="#rfc.section.3.2.2" rel="Chapter" title="3.2.2 Hard to Spoof">
+<link href="#rfc.section.3.2.3" rel="Chapter" title="3.2.3 Visible to the API">
+<link href="#rfc.section.3.2.4" rel="Chapter" title="3.2.4 Visible to the Enforcement Device">
+<link href="#rfc.section.3.3" rel="Chapter" title="3.3 Evaluating an Identifier">
+<link href="#rfc.section.3.4" rel="Chapter" title="3.4 Examples of an Identifier">
+<link href="#rfc.section.3.4.1" rel="Chapter" title="3.4.1 Physical Interface">
+<link href="#rfc.section.3.4.2" rel="Chapter" title="3.4.2 IP Address">
+<link href="#rfc.section.4" rel="Chapter" title="4 Solution Workflow">
+<link href="#rfc.section.4.1" rel="Chapter" title="4.1 Initial Connection">
+<link href="#rfc.section.4.2" rel="Chapter" title="4.2 Conditions Expire">
+<link href="#rfc.section.5" rel="Chapter" title="5 Acknowledgements">
+<link href="#rfc.section.6" rel="Chapter" title="6 IANA Considerations">
+<link href="#rfc.section.7" rel="Chapter" title="7 Security Considerations">
+<link href="#rfc.section.7.1" rel="Chapter" title="7.1 Trusting the Network">
+<link href="#rfc.section.7.2" rel="Chapter" title="7.2 Authenticated APIs">
+<link href="#rfc.section.7.3" rel="Chapter" title="7.3 Risk of Nuisance Captive Portal">
+<link href="#rfc.section.7.4" rel="Chapter" title="7.4 User Options">
+<link href="#rfc.references" rel="Chapter" title="8 References">
+<link href="#rfc.references.1" rel="Chapter" title="8.1 Normative References">
+<link href="#rfc.references.2" rel="Chapter" title="8.2 Informative References">
+<link href="#rfc.authors" rel="Chapter">
+
+
+  <meta name="generator" content="xml2rfc version 2.9.6 - https://tools.ietf.org/tools/xml2rfc" />
+  <link rel="schema.dct" href="http://purl.org/dc/terms/" />
+
+  <meta name="dct.creator" content="Larose, K. and D. Dolson" />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-capport-architecture-latest" />
+  <meta name="dct.issued" scheme="ISO8601" content="2018-06" />
+  <meta name="dct.abstract" content="This document aims to document consensus on the CAPPORT architecture.  DHCP or Router Advertisements, ICMP, and an HTTP API are used to provide the solution. The role of Provisioning Domains (PvDs) is described.  " />
+  <meta name="description" content="This document aims to document consensus on the CAPPORT architecture.  DHCP or Router Advertisements, ICMP, and an HTTP API are used to provide the solution. The role of Provisioning Domains (PvDs) is described.  " />
+
+</head>
+
+<body>
+
+  <table class="header">
+    <tbody>
+    
+    	<tr>
+<td class="left">Internet Engineering Task Force</td>
+<td class="right">K. Larose</td>
+</tr>
+<tr>
+<td class="left">Internet-Draft</td>
+<td class="right">Sandvine</td>
+</tr>
+<tr>
+<td class="left">Intended status: Informational</td>
+<td class="right">D. Dolson</td>
+</tr>
+<tr>
+<td class="left">Expires: September 7, 2018</td>
+<td class="right">March 6, 2018</td>
+</tr>
+
+    	
+    </tbody>
+  </table>
+
+  <p class="title">CAPPORT Architecture<br />
+  <span class="filename">draft-ietf-capport-architecture-latest</span></p>
+  
+  <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
+<p>This document aims to document consensus on the CAPPORT architecture.  DHCP or Router Advertisements, ICMP, and an HTTP API are used to provide the solution. The role of Provisioning Domains (PvDs) is described.  </p>
+<h1 id="rfc.status"><a href="#rfc.status">Status of This Memo</a></h1>
+<p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
+<p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
+<p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
+<p>This Internet-Draft will expire on September 7, 2018.</p>
+<h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
+<p>Copyright (c) 2018 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
+<p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
+
+  
+  <hr class="noprint" />
+  <h1 class="np" id="rfc.toc"><a href="#rfc.toc">Table of Contents</a></h1>
+  <ul class="toc">
+
+  	<li>1.   <a href="#rfc.section.1">Introduction</a>
+</li>
+<ul><li>1.1.   <a href="#rfc.section.1.1">Requirements Language</a>
+</li>
+<li>1.2.   <a href="#rfc.section.1.2">Terminology</a>
+</li>
+</ul><li>2.   <a href="#rfc.section.2">Components</a>
+</li>
+<ul><li>2.1.   <a href="#rfc.section.2.1">User Equipment</a>
+</li>
+<li>2.2.   <a href="#rfc.section.2.2">Provisioning Service</a>
+</li>
+<ul><li>2.2.1.   <a href="#rfc.section.2.2.1">DHCP or Router Advertisements</a>
+</li>
+<li>2.2.2.   <a href="#rfc.section.2.2.2">Provisioning Domains</a>
+</li>
+</ul><li>2.3.   <a href="#rfc.section.2.3">Captive Portal API Server</a>
+</li>
+<li>2.4.   <a href="#rfc.section.2.4">Captive Portal Enforcement</a>
+</li>
+<li>2.5.   <a href="#rfc.section.2.5">ICMP/ICMP6</a>
+</li>
+<li>2.6.   <a href="#rfc.section.2.6">Component Diagram</a>
+</li>
+</ul><li>3.   <a href="#rfc.section.3">User Equipment Identity</a>
+</li>
+<ul><li>3.1.   <a href="#rfc.section.3.1">Identifiers</a>
+</li>
+<li>3.2.   <a href="#rfc.section.3.2">Recommended Properties</a>
+</li>
+<ul><li>3.2.1.   <a href="#rfc.section.3.2.1">Uniquely Identify User Equipment</a>
+</li>
+<li>3.2.2.   <a href="#rfc.section.3.2.2">Hard to Spoof</a>
+</li>
+<li>3.2.3.   <a href="#rfc.section.3.2.3">Visible to the API</a>
+</li>
+<li>3.2.4.   <a href="#rfc.section.3.2.4">Visible to the Enforcement Device</a>
+</li>
+</ul><li>3.3.   <a href="#rfc.section.3.3">Evaluating an Identifier</a>
+</li>
+<li>3.4.   <a href="#rfc.section.3.4">Examples of an Identifier</a>
+</li>
+<ul><li>3.4.1.   <a href="#rfc.section.3.4.1">Physical Interface</a>
+</li>
+<li>3.4.2.   <a href="#rfc.section.3.4.2">IP Address</a>
+</li>
+</ul></ul><li>4.   <a href="#rfc.section.4">Solution Workflow</a>
+</li>
+<ul><li>4.1.   <a href="#rfc.section.4.1">Initial Connection</a>
+</li>
+<li>4.2.   <a href="#rfc.section.4.2">Conditions Expire</a>
+</li>
+</ul><li>5.   <a href="#rfc.section.5">Acknowledgements</a>
+</li>
+<li>6.   <a href="#rfc.section.6">IANA Considerations</a>
+</li>
+<li>7.   <a href="#rfc.section.7">Security Considerations</a>
+</li>
+<ul><li>7.1.   <a href="#rfc.section.7.1">Trusting the Network</a>
+</li>
+<li>7.2.   <a href="#rfc.section.7.2">Authenticated APIs</a>
+</li>
+<li>7.3.   <a href="#rfc.section.7.3">Risk of Nuisance Captive Portal</a>
+</li>
+<li>7.4.   <a href="#rfc.section.7.4">User Options</a>
+</li>
+</ul><li>8.   <a href="#rfc.references">References</a>
+</li>
+<ul><li>8.1.   <a href="#rfc.references.1">Normative References</a>
+</li>
+<li>8.2.   <a href="#rfc.references.2">Informative References</a>
+</li>
+</ul><li><a href="#rfc.authors">Authors' Addresses</a>
+</li>
+
+
+  </ul>
+
+  <h1 id="rfc.section.1">
+<a href="#rfc.section.1">1.</a> Introduction</h1>
+<p id="rfc.section.1.p.1">In this document, "Captive Portal" is used to describe a network to which a device may be voluntarily attached, such that network access is limited until some requirements have been fulfilled.  Typically a user is required to use a web browser to fulfil requirements imposed by the network operator, such as reading advertisements, accepting an acceptable-use policy, or providing some form of credentials.  </p>
+<p id="rfc.section.1.p.2">Implementations generally require a web server, some method to allow/block traffic, and some method to alert the user.  Common methods of alerting the user involve modifying HTTP or DNS traffic.  </p>
+<p id="rfc.section.1.p.3">Problems with captive portal implementations have been described in <a href="#I-D.nottingham-capport-problem" class="xref">[I-D.nottingham-capport-problem]</a>. [If that document cannot be published, consider putting its best parts into an appendix of this document.] </p>
+<p id="rfc.section.1.p.4">This document standardizes an architecture for implementing captive portals that provides tools for addressing most of those problems. We are guided by these principles: </p>
+
+<ul>
+<li>Solutions SHOULD NOT require the forging of responses from DNS or HTTP servers, or any other protocol.  In particular, solutions SHOULD NOT require man-in-the-middle proxy of TLS traffic.</li>
+<li>Solutions MUST operate at the layer of Internet Protocol (IP) or above, not being specific to any particular access technology such as Cable, WiFi or 3GPP.</li>
+<li>Solutions SHOULD allow a device to be alerted that it is in a captive network when attempting to use any application on the network.  (Versus requiring a user to visit a clear-text HTTP site in order to receive a notification.)</li>
+<li>Solutions SHOULD allow a device to learn that it is in a captive network before any application attempts to use the network.</li>
+<li>The state of captivity SHOULD be explicitly available to devices (in contrast to modification of DNS or HTTP, which is only indirectly machine-detectable by the client--by comparing responses to well-known queries with expected responses).</li>
+<li>The architecture MUST provide a path of incremental migration, acknowledging a huge variety of portals and end-user device implementations and software versions.</li>
+<li>The architecture SHOULD improve security by providing mechanisms for trust, allowing alerts from trusted network operators to be distinguished from attacks from untrusted agents.</li>
+</ul>
+
+<p> </p>
+<p id="rfc.section.1.p.5">A side-benefit of the architecture described in this document is that devices without user interfaces are able to identify parameters of captivity.  However, this document does not yet describe a mechanism for such devices to escape captivity.  </p>
+<p id="rfc.section.1.p.6">The architecture uses the following mechanisms: </p>
+
+<ul>
+<li>Network provisioning protocols provide end-user devices with a URI for the API that end-user devices query for information about what is required to escape captivity. DHCP, DHCPv6, and Router-Advertisement options for this purpose are available in <a href="#RFC7710" class="xref">[RFC7710]</a>. Other protocols (such as RADIUS), Provisioning Domains <a href="#I-D.ietf-intarea-provisioning-domains" class="xref">[I-D.ietf-intarea-provisioning-domains]</a>, or static configuration may also be used.  A device MAY query this API at any time to determine whether the network is holding the device in a captive state.  </li>
+<li>End-user devices are notified of captivity with ICMP/ICMP6 messages in response to traffic.  This notification can work with any Internet protocol, not just clear-text HTTP. This notification does not carry the portal URI; rather it provides a notification to the User Equipment that it is in a captive state.  </li>
+<li>Receipt of the ICMP/ICMP6 messages informs an end-user device that it is captive.  In response, the device SHOULD query the provisioned API to obtain information about the network state.  The device MAY take immediate action to satisfy the portal (according to its configuration/policy).  </li>
+</ul>
+
+<p> </p>
+<p id="rfc.section.1.p.7">The architecture attempts to provide privacy, authentication, and safety mechanisms to the extent possible.  </p>
+<h1 id="rfc.section.1.1">
+<a href="#rfc.section.1.1">1.1.</a> Requirements Language</h1>
+<p id="rfc.section.1.1.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119" class="xref">RFC 2119</a>.</p>
+<h1 id="rfc.section.1.2">
+<a href="#rfc.section.1.2">1.2.</a> Terminology</h1>
+<p id="rfc.section.1.2.p.1">Captive Network: A network which limits communication of attached devices to restricted hosts until the user has satisfied Captive Portal Conditions, after which access is permitted to a wider set of hosts (typically the internet).</p>
+<p id="rfc.section.1.2.p.2">Captive Portal Conditions: site-specific requirements that a user or device must satisfy in order to gain access to the wider network.</p>
+<p id="rfc.section.1.2.p.3">Captive Portal Enforcement: The network equipment which enforces the traffic restriction and notifies the User Equipment it is in a captive state.</p>
+<p id="rfc.section.1.2.p.4">Captive Portal User Equipment: Also known as User Equipment. A device which has voluntarily joined a network for purposes of communicating beyond the constraints of the captive network.</p>
+<p id="rfc.section.1.2.p.5">Captive Portal Server: The web server providing a user interface for assisting the user in satisfying the conditions to escape captivity.</p>
+<h1 id="rfc.section.2">
+<a href="#rfc.section.2">2.</a> Components</h1>
+<h1 id="rfc.section.2.1">
+<a href="#rfc.section.2.1">2.1.</a> <a href="#section_client" id="section_client">User Equipment</a>
+</h1>
+<p id="rfc.section.2.1.p.1">The User Equipment is the device that a user desires to be attached to a network with full access to all hosts on the network (e.g., to have Internet access). The User Equipment communication is typically restricted by the Captive Portal Enforcement, described in <a href="#section_capport_enforcement" class="xref">Section 2.4</a>, until site-specific requirements have been met.  </p>
+<p id="rfc.section.2.1.p.2">At this time we consider only devices with web browsers, with web applications being the means of satisfying Captive Portal Conditions.  </p>
+<p></p>
+
+<ul>
+<li>An example interactive User Equipment is a smart phone.</li>
+<li>SHOULD support provisioning of the URI for the Captive Portal API (e.g., by DHCP)</li>
+<li>SHOULD distinguish Captive Portal API access per network interface, in the manner of Provisioning Domain Architecture <a href="#RFC7556" class="xref">[RFC7556]</a>.</li>
+<li>SHOULD have a mechanism for notifying the user of the Captive Portal</li>
+<li>SHOULD have a web browser so that the user may navigate the Captive Portal user interface.</li>
+<li>SHOULD be able to receive and validate the Captive Portal ICMP message types, and to access the Captive Portal API in response.</li>
+<li>MAY restrict application access to networks not granting full network access. E.g., a device connected to a mobile network may be connecting to a WiFi network; the operating system MAY avoid updating the default route until network access restrictions have been lifted (excepting access to the Captive Portal server).  This has been termed "make before break".</li>
+</ul>
+
+<p> </p>
+<p id="rfc.section.2.1.p.4">None of the above requirements are mandatory because (a) we do not wish to say users or devices must seek access beyond the captive network, (b) the requirements may be fulfilled by manually visiting the captive portal web application, and (c) legacy devices must continue to be supported.  </p>
+<h1 id="rfc.section.2.2">
+<a href="#rfc.section.2.2">2.2.</a> <a href="#section_provisioning" id="section_provisioning">Provisioning Service</a>
+</h1>
+<p id="rfc.section.2.2.p.1">Here we discuss candidate mechanisms for provisioning the User Equipment with the URI of the API to query captive portal state and navigate the portal.  </p>
+<h1 id="rfc.section.2.2.1">
+<a href="#rfc.section.2.2.1">2.2.1.</a> <a href="#section_dhcp" id="section_dhcp">DHCP or Router Advertisements</a>
+</h1>
+<p id="rfc.section.2.2.1.p.1">A standard for providing a portal URI using DHCP or Router Advertisements is described in <a href="#RFC7710" class="xref">[RFC7710]</a>.  The CAPPORT architecture expects this URI to indicate the API described in <a href="#section_api" class="xref">Section 2.3</a>.  </p>
+<p id="rfc.section.2.2.1.p.2">Although it is not clear from RFC7710  what protocol should be executed at the specified URI, some readers might have assumed it to be an HTML page, and hence there might be User Equipment assuming a browser should open this URI.  For backwards compatibility, it is RECOMMENDED that the server check the "Accept" field when serving the URI, and serve HTML pages for "text/html" and serve the API for "application/json". [REVISIT: are these details appropriate?] </p>
+<h1 id="rfc.section.2.2.2">
+<a href="#rfc.section.2.2.2">2.2.2.</a> <a href="#section_pvd" id="section_pvd">Provisioning Domains</a>
+</h1>
+<p id="rfc.section.2.2.2.p.1">Although still a work in progress, <a href="#I-D.ietf-intarea-provisioning-domains" class="xref">[I-D.ietf-intarea-provisioning-domains]</a> proposes a mechanism for User Equipment to be provided with PvD Bootstrap Information containing the URI for a JSON file containing key-value pairs to be downloaded over HTTPS.  This JSON file would fill the role of the Captive Portal API described in <a href="#section_api" class="xref">Section 2.3</a>.  </p>
+<p id="rfc.section.2.2.2.p.2">The PvD security model provides secure binding between the information provided by the trusted Router Advertisement and the HTTPS server.  </p>
+<p id="rfc.section.2.2.2.p.3">One key-value pair can be used to indicate the network has restricted access, requiring captive portal navigation by a user.  E.g., key="captivePortal" and value=&lt;URI of portal&gt;.  The key-value pair should provide a different result when access is not restricted. E.g., key="captivePortal" and value="".  </p>
+<p id="rfc.section.2.2.2.p.4">This JSON file is extensible, allowing new key-value pairs to indicate such things as network access expiry time, URI for API access by IOT devices, etc.  </p>
+<p id="rfc.section.2.2.2.p.5">The PvD server MUST support multiple (repeated) queries from each User Equipment, always returning the current captive portal information.  The User Equipment is expected to make this query upon receiving (and validating) an ICMP Captive Portal message (see <a href="#section_icmp" class="xref">Section 2.5</a>).  </p>
+<h1 id="rfc.section.2.3">
+<a href="#rfc.section.2.3">2.3.</a> <a href="#section_api" id="section_api">Captive Portal API Server</a>
+</h1>
+<p id="rfc.section.2.3.p.1">The purpose of a Captive Portal API is to permit a query of Captive Portal state without interrupting the user.  This API thereby removes the need for a device to perform clear-text "canary" HTTP queries to check for response tampering.  </p>
+<p id="rfc.section.2.3.p.2">The URI of this API will have been provisioned to the User Equipment.  (Refer to <a href="#section_provisioning" class="xref">Section 2.2</a>).  </p>
+<p id="rfc.section.2.3.p.3">This architecture expects the User Equipment to query the API when the User Equipment attaches to the network and multiple times thereafter.  Therefore the API MUST support multiple repeated queries from the same User Equipment, returning current state of captivity for the equipment.  </p>
+<p id="rfc.section.2.3.p.4">At minimum the API MUST provide: (1) the state of captivity and (2) a URI for a browser to present the portal application to the user.  The API SHOULD provide evidence to the caller that it supports the present architecture.  </p>
+<p id="rfc.section.2.3.p.5">When user equipment receives (and validates) ICMP Captive Portal alerts, the user equipment SHOULD query the API to check the state.  The User Equipment SHOULD rate-limit these API queries in the event of ICMP flooding by an attacker. (See <a href="#Security" class="xref">Section 7</a>.) </p>
+<p id="rfc.section.2.3.p.6">The API MUST be extensible to support future use-cases by allowing extensible information elements. Suggestions include quota information, expiry time, method of providing credentials, security token for validating ICMP messages.  </p>
+<p id="rfc.section.2.3.p.7">This document does not specify the details of the API.  </p>
+<p id="rfc.section.2.3.p.8">The CAPPORT API MUST support TLS for privacy and server authentication.  </p>
+<h1 id="rfc.section.2.4">
+<a href="#rfc.section.2.4">2.4.</a> <a href="#section_capport_enforcement" id="section_capport_enforcement">Captive Portal Enforcement</a>
+</h1>
+<p id="rfc.section.2.4.p.1">The Captive Portal Enforcement component restricts network access to User Equipment according to site-specific policy. Typically User Equipment is permitted access to a small number of services and is denied general network access until it has performed some action.  </p>
+<p id="rfc.section.2.4.p.2">The Captive Portal Enforcement component: </p>
+
+<ul>
+<li>Allows traffic through for allowed User Equipment.</li>
+<li>Blocks (discards) traffic and sends ICMP notifications for disallowed User Equipment.</li>
+<li>Permits disallowed User Equipment to access necessary APIs and web pages to fulfill requirements of exiting captivity.</li>
+<li>Updates allow/block rules per User Equipment in response to operations from the Captive Portal back-end.</li>
+</ul>
+
+<p> </p>
+<p id="rfc.section.2.4.p.3">As an upgrade path, captive portals MAY continue to support methods that work today, such as modification of port-80 HTTP responses to redirect users to the portal.  Various user-equipment vendors probe canary URLs to identify the state captivity [reference Mariko Kobayashi's survey]. While doing so, ICMP messages SHOULD also be sent, to activate work-flows in supporting devices.  [TODO: give some thought to precise recommendations for backwards compatibility.] </p>
+<h1 id="rfc.section.2.5">
+<a href="#rfc.section.2.5">2.5.</a> <a href="#section_icmp" id="section_icmp">ICMP/ICMP6</a>
+</h1>
+<p id="rfc.section.2.5.p.1">ICMP messages have been selected for indicating to a sender that packets could not be delivered for reason of a network policy (in particular, captive portal). ICMP is already used to indicate reasons that packets could not be delivered (network unreachable, port unreachable, packet too large, etc.).  </p>
+<p id="rfc.section.2.5.p.2">A mechanism to trigger captive portal work-flows in the User Equipment is proposed in <a href="#I-D.wkumari-capport-icmp-unreach" class="xref">[I-D.wkumari-capport-icmp-unreach]</a>.  </p>
+<p id="rfc.section.2.5.p.3">The Captive Portal Enforcement function is REQUIRED to send such ICMP messages when disallowed User Equipment attempts to send to the network.  These ICMP messages MUST be rate-limited to a configurable rate.  </p>
+<p id="rfc.section.2.5.p.4">The ICMP messages MUST NOT be sent to the Internet devices. The indications are only sent to the User Equipment.  </p>
+<p id="rfc.section.2.5.p.5">The User Equipment operating system is NOT REQUIRED to deliver the impact of the ICMP message to the application that triggered it.  The User Equipment might be able to satisfy the Captive Portal requirements quickly enough that existing transport connections are not impacted.  </p>
+<h1 id="rfc.section.2.6">
+<a href="#rfc.section.2.6">2.6.</a> Component Diagram</h1>
+<p></p>
+
+<p>The following diagram shows the communication between each component.  </p>
+<pre>
+o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
+. CAPTIVE NETWORK                                               .
+.                                            +--------------+   .
+. +------------+   Provision API URI         | Provisioning |   .
+. |            |&lt;---------------------------+|  Service     |   .
+. |   User     |                             +--------------+   .
+. | Equipment  |   Query CAPPORT status;     +-------------+    .
+. |            |+---------------------------&gt;| CAPPORT API |    .
+. |            |                             |  Server     |    .
+. |            |                             +------+------+    .
+. |            |                                    |Status     .
+. |            |   Portal user interface     +------+------+    .
+. |            |+--------------------------&gt; | CAPPORT     |    .
+. +------------+                             | web portal  |    .
+.       ^  |  Connection Attempt             +-------------+    .
+.       |  |  to prohibited service.                   |        .
+.       |  +------------------&gt; +---------------+  Allow/Deny   .
+.       |                       |               |    Rules      .
+.       |   ICMP Unreachable    | Captive Portal|     |         .
+.       +---------------------+ | Enforcement   | &lt;---+         .
+.                               +---------------+               .
+.                                       |                       .
+.                            To/from external network           .
+.                                       |                       .
+.                                       |                       .
+o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
+                                  EXTERNAL NETWORK
+
+        Figure 1: Captive Portal Architecture Component Diagram
+           </pre>
+<ul>
+<li>During provisioning (e.g., DHCP), the User Equipment acquires the URI for the CAPPORT API.</li>
+<li>The User Equipment queries the API to learn of its state of captivity. If captive, the User Equipment presents the portal user interface to the user.</li>
+<li>The User Equipment attempts to communicate to the external network through the Captive Portal enforcement device.</li>
+<li>The Captive Portal Enforcement device either allows the User Equipment's packets to the external network, or responds with an ICMP message.</li>
+<li>The CAPPORT web portal server directs the Captive Portal Enforcement device to either allow or deny external network access for the User Equipment.</li>
+</ul>
+
+<p> </p>
+<p id="rfc.section.2.6.p.2">Although the provisioning, API, and web portal functions are shown as discrete blocks, they could of course be combined into a single element.  </p>
+<h1 id="rfc.section.3">
+<a href="#rfc.section.3">3.</a> <a href="#ue_identity" id="ue_identity">User Equipment Identity</a>
+</h1>
+<p id="rfc.section.3.p.1">Multiple components in the architecture interact with both the User Equipment and each other. Since the User Equipment is the focus of these interactions, the components must be able to both identify the user equipment from their interactions with it, and be able to agree on the identify of the user equipment when interacting with each other.  </p>
+<p id="rfc.section.3.p.2">The methods by which the components interact restrict the type of information that may be used as an identifying charactertics. This section discusses the identifying charactersitics.  </p>
+<h1 id="rfc.section.3.1">
+<a href="#rfc.section.3.1">3.1.</a> <a href="#id_identifiers" id="id_identifiers">Identifiers</a>
+</h1>
+<p id="rfc.section.3.1.p.1">An Identifier is a chatacteristic of the User Equipment used by the components of a Captive Portal to uniquely determine which specific User Equipment is interacting with them.  An Identifier MAY be a field contained in packets sent by the User Equipment to the External Network. Or, an Identifier MAY be an ephemeral property not contained in packets destined for the External Network, but instead correlated with such information through knowledge available to the different components.  </p>
+<h1 id="rfc.section.3.2">
+<a href="#rfc.section.3.2">3.2.</a> <a href="#id_recommended_props" id="id_recommended_props">Recommended Properties</a>
+</h1>
+<p id="rfc.section.3.2.p.1">The set of possible identifiers is quite large. However, in order to be considered a good identifer, an identifier SHOULD meet the following criteria. Note that the optimal identifier will likely change depending on the positino of the components in the network as well as the information available to them.  An identifier SHOULD: </p>
+
+<ul>
+<li>Uniquely Identify the User Equipment</li>
+<li>Be Hard to Spoof</li>
+<li>Be Visible to the API</li>
+<li>Be Visible to the Enforcement Device</li>
+</ul>
+
+<p> </p>
+<h1 id="rfc.section.3.2.1">
+<a href="#rfc.section.3.2.1">3.2.1.</a> <a href="#id_recommended_unique" id="id_recommended_unique">Uniquely Identify User Equipment</a>
+</h1>
+<p id="rfc.section.3.2.1.p.1">In order to uniquely identify the User Equipment, at most one user equipment interacting with the other components of the Captive Portal MUST have a given value of the identifier.  </p>
+<p id="rfc.section.3.2.1.p.2">Over time, the user equipment identified by the value MAY change. Allowing the identified device to change over time ensures that the space of possible identifying vallues need not be overly large.  </p>
+<p id="rfc.section.3.2.1.p.3">Independent Captive Portals MAY use the same identifying value to identify different User Equipment. Allowing indendent captive portals to reuse identifying values allows the identifier to be a property of the local network, expanding the space of possible identifiers.  </p>
+<h1 id="rfc.section.3.2.2">
+<a href="#rfc.section.3.2.2">3.2.2.</a> <a href="#id_recommended_hard" id="id_recommended_hard">Hard to Spoof</a>
+</h1>
+<p id="rfc.section.3.2.2.p.1">A good identifier does not lend itself to being easily spoofed. At no time should it be simple or straightforward for one User Equipment to pretend to be another User Equipment, regardless of whether both are active at the same time. This property is particularly important when the user equipment is extended externally to devices such as billing systems, or where the identity of the User Equipment could imply liability.  </p>
+<h1 id="rfc.section.3.2.3">
+<a href="#rfc.section.3.2.3">3.2.3.</a> <a href="#id_recommended_visible_api" id="id_recommended_visible_api">Visible to the API</a>
+</h1>
+<p id="rfc.section.3.2.3.p.1">Since the API will need to perform operations which rely on the identify of the user equipment, such as query whether it is captive, the API needs to be able to relate requests to the User Equipment making the request.  </p>
+<h1 id="rfc.section.3.2.4">
+<a href="#rfc.section.3.2.4">3.2.4.</a> <a href="#id_recommended_visible_ed" id="id_recommended_visible_ed">Visible to the Enforcement Device</a>
+</h1>
+<p id="rfc.section.3.2.4.p.1">The Enforcement Device will decide on a per packet basis whether it should be permitted to communicate with the external network. Since this decision depends on which User Equipment sent the packet, the Enforcement Device requires that it be able to map the packet to its concept of the User Equipment.  </p>
+<h1 id="rfc.section.3.3">
+<a href="#rfc.section.3.3">3.3.</a> <a href="#id_evaluating" id="id_evaluating">Evaluating an Identifier</a>
+</h1>
+<p id="rfc.section.3.3.p.1">To evaluate whether an identifer is appropriate, one should consider every recommended property from the perspective of interactions among the components in the architecture. When comparing identifiers, choose the one which best satifies all of the recommended properties. The architecture does not provide an exact measure of how well an identifier satisfies a given property; care should be taken in performing the evaluation.  </p>
+<h1 id="rfc.section.3.4">
+<a href="#rfc.section.3.4">3.4.</a> <a href="#id_examples" id="id_examples">Examples of an Identifier</a>
+</h1>
+<p id="rfc.section.3.4.p.1">This section provides some examples of identifiers, along with some evaluation of whether they are good identifiers. The list of identifiers is not exhaustive. Other identifiers may be used. An important point to note is that whether the identifiers are good depends heavily on the capabilities of the components and where in the network the components exist.  </p>
+<h1 id="rfc.section.3.4.1">
+<a href="#rfc.section.3.4.1">3.4.1.</a> <a href="#id_example_interface" id="id_example_interface">Physical Interface</a>
+</h1>
+<p id="rfc.section.3.4.1.p.1">The physical interface by which the User Equipment is attached to the network can be used to identify the User Equipment. This identifier has the property of being extremely difficult to spoof: the User Equipment is unaware of the property; one User Equipment cannot manipulate its interactions to appear as though it is another.  </p>
+<p id="rfc.section.3.4.1.p.2">Further, if only a single User Equipment is attatched to a given physical interface, then the identifier will be unique. If multiple User Equipment is attached to the network on the same physical interface, then this property is not appropriate.  </p>
+<p id="rfc.section.3.4.1.p.3">Another consideration related to uniqueness of the User Equipment is that if the attached User Equipment changes, both the API server and the Enforcement Device must invalidate their state related to the User Equipment.  </p>
+<p id="rfc.section.3.4.1.p.4">The Enforcement Device needs to be aware of the physical interface, which constrains the environment: it must either be part of the device providing physical access (e.g., implemented in firmware), or packets traversing the network must be extended to include information about the source physical interface (e.g.  a tunnel).  </p>
+<p id="rfc.section.3.4.1.p.5">The API server faces a similar problem, implying that it should co-exist with the Enforcement Device, or that the enforcement device should extend requests to it with the identifying information.  </p>
+<h1 id="rfc.section.3.4.2">
+<a href="#rfc.section.3.4.2">3.4.2.</a> <a href="#id_example_IP_address" id="id_example_IP_address">IP Address</a>
+</h1>
+<p id="rfc.section.3.4.2.p.1">A natural identifier to consider is the IP address of the User Equipment.  At any given time, no device on the network can have the same IP address without causing the network to malfunction, so it is appropriate from the perspective of uniqueness.  </p>
+<p id="rfc.section.3.4.2.p.2">However, it may be possible to spoof the IP address, particularly for malicious reasons where proper functioning of the network is not necessary for the malicious actor. Consequently, any solution using the IP address should proactively try to prevent spoofing of the IP address. Similarily, if the mapping of IP address to User Equipment is changed, the components of the architecture must remove or update their mapping to prevent spoofing.  Demonstrations of return routeability, such as that required for TCP connection establishment, might be sufficient defense against spoofing, though this might not be sufficient in networks that use broadcast media (such as some wireless networks).  </p>
+<p id="rfc.section.3.4.2.p.3">Since the IP address may traverse multiple segments of the network, more flexibility is afforded to the Enforcement Device and the API server: they simply must exist on a segment of the network where the IP address is still unique. However, consider that a NAT may be deployed between the User Equipment and the Enforcement Device. In such cases, it is possible for the components to still uniquely identify the device if they are aware of the port mapping.  </p>
+<p id="rfc.section.3.4.2.p.4">In some situtations, the User Equipment may have multiple IP addresses, while still satisfying all of the recommended properties. This raises some challenges to the components of the network. For example, if the user equipment tries to access the network with multiple IP addresses, should the enforcement device and API server treat each IP address as a unique User Equipment, or should it tie the multiple addresses together into one view of the subscriber? An implementation MAY do either. Attention should be paid to IPv6 and the fact that it is expected for a device to have multiple IPv6 addresses on a single link. In such cases, idenfication could be performed by subnet, such as the /64 to which the IP belongs.  </p>
+<h1 id="rfc.section.4">
+<a href="#rfc.section.4">4.</a> <a href="#section_workflow" id="section_workflow">Solution Workflow</a>
+</h1>
+<p id="rfc.section.4.p.1">This section aims to improve understanding by describing a possible workflow of solutions adhering to the architecture.  </p>
+<h1 id="rfc.section.4.1">
+<a href="#rfc.section.4.1">4.1.</a> Initial Connection</h1>
+<p id="rfc.section.4.1.p.1">This section describes a possible work-flow when User Equipment initially joins a Captive Network.  </p>
+<p></p>
+
+<ol>
+<li>The User Equipment joins the Captive Network by acquiring a DHCP lease, RA, or similar, acquiring provisioning information.</li>
+<li>The User Equipment learns the URI for the Captive Portal API from the provisioning information (e.g., <a href="#RFC7710" class="xref">[RFC7710]</a>).</li>
+<li>The User Equipment accesses the CAPPORT API to receive parameters of the Captive Network, including web-portal URI. (This step replaces the clear-text query to a canary URL.)</li>
+<li>If necessary, the User navigates the web portal to gain access to the external network.</li>
+<li>The Captive Portal API server indicates to the Captive Portal Enforcement device that the User Equipment is allowed to access the external network.</li>
+<li>The User Equipment attempts a connection outside the captive network</li>
+<li>If the requirements have been satisfied, the access is permitted; otherwise the "Expired" behavior occurs.</li>
+<li>The User Equipment accesses the network until conditions Expire.</li>
+</ol>
+
+<p> </p>
+<h1 id="rfc.section.4.2">
+<a href="#rfc.section.4.2">4.2.</a> Conditions Expire</h1>
+<p id="rfc.section.4.2.p.1">This section describes a possible work-flow when conditions expire and the user visits the portal again (e.g., low quota, or time expiry).  </p>
+<p></p>
+
+<ol>
+<li>Pre-condition: the Captive Portal Enforcement has been configured to detect an expiry condition, which has now occurred.</li>
+<li>The User Equipment sends a packet to the outside network.</li>
+<li>The Captive Portal Enforcement detects that the packet is from an expired User Equipment.</li>
+<li>The Captive Portal Enforcement sends an ICMP message to the User Equipment indicating that it needs to refresh its access.  <a href="#I-D.wkumari-capport-icmp-unreach" class="xref">[I-D.wkumari-capport-icmp-unreach]</a>.</li>
+<li>The User Equipment verifies the ICMP message is plausible.</li>
+<li>The User Equipment queries the Captive Portal API to refresh parameters and status of the Captive Network.</li>
+<li>If necessary, the User once again navigates the web portal to gain access to the external network.</li>
+<li>The Captive Portal API Server gives more quota (time, bytes, etc.) to the User Equipment by indicating to the Captive Portal Enforcement the new, extended quota.</li>
+<li>The User Equipment accesses the external network.</li>
+</ol>
+
+<p> </p>
+<h1 id="rfc.section.5">
+<a href="#rfc.section.5">5.</a> <a href="#Acknowledgements" id="Acknowledgements">Acknowledgements</a>
+</h1>
+<p id="rfc.section.5.p.1">The authors thank various individuals for their feedback on the mailing list and during the IETF98 hackathon: David Bird, Eric Kline, Alexis La Goulette, Alex Roscoe, Darshak Thakore, and Vincent van Dam.  </p>
+<h1 id="rfc.section.6">
+<a href="#rfc.section.6">6.</a> <a href="#IANA" id="IANA">IANA Considerations</a>
+</h1>
+<p id="rfc.section.6.p.1">This memo includes no request to IANA.</p>
+<h1 id="rfc.section.7">
+<a href="#rfc.section.7">7.</a> <a href="#Security" id="Security">Security Considerations</a>
+</h1>
+<h1 id="rfc.section.7.1">
+<a href="#rfc.section.7.1">7.1.</a> Trusting the Network</h1>
+<p id="rfc.section.7.1.p.1">When joining a network, some trust is placed in the network operator.  This is usually considered to be a decision by a user on the basis of the reputation of an organization. However, once a user makes such a decision, protocols can support authenticating a network is operated by who claims to be operating it.  The Provisioning Domain Architecture <a href="#RFC7556" class="xref">[RFC7556]</a> provides some discussion on authenticating an operator.  </p>
+<p id="rfc.section.7.1.p.2">Given that a user chooses to visit a Captive Portal URI, the URI location SHOULD be securely provided to the user's device. E.g., the DHCPv6 AUTH option can sign this information.  </p>
+<p id="rfc.section.7.1.p.3">If a user decides to incorrectly trust an attacking network, they might be convinced to visit an attacking web page and unwittingly provide credentials to an attacker. Browsers can authenticate servers but cannot detect cleverly misspelled domains, for example.  </p>
+<h1 id="rfc.section.7.2">
+<a href="#rfc.section.7.2">7.2.</a> Authenticated APIs</h1>
+<p id="rfc.section.7.2.p.1">The solution described here assumes that when the User Equipment needs to trust the API server, server authentication will be utilized using TLS mechanisms.  </p>
+<h1 id="rfc.section.7.3">
+<a href="#rfc.section.7.3">7.3.</a> Risk of Nuisance Captive Portal</h1>
+<p id="rfc.section.7.3.p.1">It is possible for any user on the Internet to send ICMP packets in an attempt to cause the receiving equipment to go to the captive portal. This has been considered and addressed in the following ways: </p>
+
+<ul class="empty">
+<li>The ICMP packet does not carry the URL, making this method safer than HTTP 3xx-redirect methods currently in use.  The User Equipment does not have to use clear-text HTTP to solicit the URL of the portal.  </li>
+<li>Because the ICMP messages will carry embedded packets sent by the sender, the receiver of the ICMP message can validate that the transport header is plausibly one it sent (i.e., the transport-layer 5-tuple matches an open connection; there is no need to save every packet it sent).  This validation requires an off-path attacker to guess the 5-tuple in order to affect a flow.  It is trivial for an on-path attacker to send a plausible ICMP packet.  (This is not a new ICMP attack.) The impact of getting a valid ICMP packet to the User Equipment is that it will visit the CAPPORT API to check the status.  For this reason we recommend the User Equipment rate-limit these requests to the API.  </li>
+<li>We considered that the ICMP packet could carry a short secret token that would be known to the User Equipment and Captive Portal Enforcement device but would not be available to an attacker, even to an on-path attacker.  Although possible to guess by brute force, the impact would be at worst a nuisance visit to the API.  We suggest that a 32-bit token would be sufficient to deter nuisance attacks.  </li>
+<li>Even when redirected, the User Equipment securely authenticates with API servers.  </li>
+</ul>
+
+<p> </p>
+<h1 id="rfc.section.7.4">
+<a href="#rfc.section.7.4">7.4.</a> User Options</h1>
+<p id="rfc.section.7.4.p.1">The ICMP messaging informs the User Equipment that it is being held captive.  There is no requirement that the User Equipment do something about this.  Devices MAY permit users to disable automatic reaction to captive-portal indications for privacy reasons.  However, there is the trade-off that the user doesn't get notified when network access is restricted.  Hence, end-user devices MAY allow users to manually control captive portal interactions, possibly on the granularity of Provisioning Domains.  </p>
+<h1 id="rfc.references">
+<a href="#rfc.references">8.</a> References</h1>
+<h1 id="rfc.references.1">
+<a href="#rfc.references.1">8.1.</a> Normative References</h1>
+<table><tbody>
+<tr>
+<td class="reference"><b id="RFC2119">[RFC2119]</b></td>
+<td class="top">
+<a>Bradner, S.</a>, "<a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC7556">[RFC7556]</b></td>
+<td class="top">
+<a>Anipko, D.</a>, "<a href="https://tools.ietf.org/html/rfc7556">Multiple Provisioning Domain Architecture</a>", RFC 7556, DOI 10.17487/RFC7556, June 2015.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC7710">[RFC7710]</b></td>
+<td class="top">
+<a>Kumari, W.</a>, <a>Gudmundsson, O.</a>, <a>Ebersman, P.</a> and <a>S. Sheng</a>, "<a href="https://tools.ietf.org/html/rfc7710">Captive-Portal Identification Using DHCP or Router Advertisements (RAs)</a>", RFC 7710, DOI 10.17487/RFC7710, December 2015.</td>
+</tr>
+</tbody></table>
+<h1 id="rfc.references.2">
+<a href="#rfc.references.2">8.2.</a> Informative References</h1>
+<table><tbody>
+<tr>
+<td class="reference"><b id="I-D.ietf-intarea-provisioning-domains">[I-D.ietf-intarea-provisioning-domains]</b></td>
+<td class="top">
+<a>Pfister, P.</a>, <a>Vyncke, E.</a>, <a>Pauly, T.</a> and <a>D. Schinazi</a>, "<a href="https://tools.ietf.org/html/draft-ietf-intarea-provisioning-domains-01">Discovering Provisioning Domain Names and Data</a>", Internet-Draft draft-ietf-intarea-provisioning-domains-01, February 2018.</td>
+</tr>
+<tr>
+<td class="reference"><b id="I-D.nottingham-capport-problem">[I-D.nottingham-capport-problem]</b></td>
+<td class="top">
+<a>Nottingham, M.</a>, "<a href="https://tools.ietf.org/html/draft-nottingham-capport-problem-01">Captive Portals Problem Statement</a>", Internet-Draft draft-nottingham-capport-problem-01, April 2016.</td>
+</tr>
+<tr>
+<td class="reference"><b id="I-D.wkumari-capport-icmp-unreach">[I-D.wkumari-capport-icmp-unreach]</b></td>
+<td class="top">
+<a>Bird, D.</a> and <a>W. Kumari</a>, "<a href="https://tools.ietf.org/html/draft-wkumari-capport-icmp-unreach-02">Captive Portal ICMP Messages</a>", Internet-Draft draft-wkumari-capport-icmp-unreach-02, April 2017.</td>
+</tr>
+</tbody></table>
+<h1 id="rfc.authors"><a href="#rfc.authors">Authors' Addresses</a></h1>
+<div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Kyle Larose</span> 
+	  <span class="n hidden">
+		<span class="family-name">Larose</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Sandvine</span>
+	<span class="adr">
+	  <span class="vcardline">408 Albert Street</span>
+
+	  <span class="vcardline">
+		<span class="locality">Waterloo</span>,  
+		<span class="region">ON</span> 
+		<span class="code">N2L 3V3</span>
+	  </span>
+	  <span class="country-name vcardline">Canada</span>
+	</span>
+	<span class="vcardline">Phone: +1 519 880 2400</span>
+
+<span class="vcardline">EMail: <a href="mailto:klarose@sandvine.com">klarose@sandvine.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">David Dolson</span> 
+	  <span class="n hidden">
+		<span class="family-name">Dolson</span>
+	  </span>
+	</span>
+	<span class="org vcardline"></span>
+	<span class="adr">
+	  
+	  <span class="vcardline">
+		<span class="locality"></span> 
+		<span class="region"></span>
+		<span class="code"></span>
+	  </span>
+	  <span class="country-name vcardline"></span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:ddolson@acm.org">ddolson@acm.org</a></span>
+
+  </address>
+</div>
+
+</body>
+</html>

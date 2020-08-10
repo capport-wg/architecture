@@ -1,0 +1,2160 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>Captive Portal Architecture</title>
+<meta content="Kyle Larose" name="author">
+<meta content="David Dolson" name="author">
+<meta content="Heng Liu" name="author">
+<meta content="
+       This document describes a captive portal architecture.
+        Network provisioning protocols such as DHCP or Router Advertisements (RAs),
+        an optional signaling protocol, and an HTTP API are used to provide the solution.
+       
+    " name="description">
+<meta content="xml2rfc 2.47.0" name="generator">
+<meta content="plus" name="keyword">
+<meta content="draft-ietf-capport-architecture-09" name="ietf.draft">
+<link href="draft-ietf-capport-architecture.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">@import url('https://martinthomson.github.io/i-d-template/fonts.css');
+
+html {
+  --background-color: #fff;
+  --text-color: #222;
+  --title-color: #191919;
+  --link-color: #2a6496;
+  --highlight-color: #f9f9f9;
+  --line-color: #eee;
+  --small-font-size: 14.5px;
+}
+body {
+  max-width: 600px;
+  margin: 75px auto;
+  padding: 0 5px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font: 16px/22px "Lora", serif;
+  scroll-behavior: smooth;
+}
+
+.ears {
+  display: none;
+}
+
+/* headings */
+#title, h1, h2, h3, h4, h5, h6 {
+  font-family: "Cabin Condensed", sans-serif;
+  font-weight: 600;
+  margin: 0.8em 0 0.3em;
+  font-size-adjust: 0.5;
+  color: var(--title-color);
+}
+#title {
+  padding: 1em 0 0.2em;
+  font-size: 32px;
+  line-height: 40px;
+  clear: both;
+}
+h1, h2, h3 {
+  font-size: 22px;
+  line-height: 26px;
+}
+h4, h5, h6 {
+  font-size: 18px;
+  line-height: 22px;
+}
+
+/* general structure */
+.author {
+  padding-bottom: 0.3em;
+}
+#abstract+p, #abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 18px;
+  line-height: 24px;
+}
+p {
+  padding: 0;
+  margin: 0.5em 0;
+  text-align: left;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+.alignCenter.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 1em 2em;
+}
+ol ol, ul ul, ol ul, ul ol {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+ul.compact, .ulCompact,
+ol.compact, .olCompact {
+  line-height: 100%;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl > dd {
+  margin-bottom: .8em;
+  min-height: 1.3em;
+}
+dl.compact > dd, .dlCompact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+dd.break {
+  display: none;
+}
+
+/* links */
+a, a[href].selfRef:hover {
+  text-decoration: none;
+}
+a[href].selfRef {
+  color: var(--text-color);
+}
+a[href] {
+  color: var(--link-color);
+}
+a[href]:hover {
+  text-decoration: underline;
+}
+a[href].selfRef:hover {
+  background-color: var(--highlight-color);
+}
+a.xref {
+  white-space: nowrap;
+}
+
+/* Figures */
+tt, code, pre {
+  background-color: var(--highlight-color);
+  font: 14px/22px 'Oxygen Mono', monospace;
+}
+pre {
+  border: 1px solid var(--line-color);
+  font-size: 13.5px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  margin: 5px;
+  padding: 5px;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0.5em 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption, caption {
+  font-style: italic;
+  margin: 0.5em 1.5em;
+  text-align: left;
+}
+@media screen {
+  pre {
+    display: inline-block;
+    overflow-x: auto;
+    max-width: 100%;
+    width: calc(100% - 22px - 1em);
+  }
+  figure pre {
+    display: block;
+    width: calc(100% - 25px);
+  }
+  pre + .pilcrow {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-bottom: 8px;
+  }
+  table {
+    display: inline-block;
+    overflow-x: auto;
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 0 2em;
+  font-style: italic;
+}
+blockquote {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+}
+table.right {
+  margin-left: auto;
+}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+table.left {
+  margin-right: auto;
+}
+thead, tbody {
+  border: 1px solid var(--line-color);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+th {
+  background-color: var(--line-color);
+}
+tr:nth-child(2n) > td {
+  background-color: var(--background-color);
+}
+tr:nth-child(2n+1) > td {
+  background-color: var(--highlight-color);
+}
+thead+tbody > tr:nth-child(2n) > td {
+  background-color: var(--highlight-color);
+}
+thead+tbody > tr:nth-child(2n+1) > td {
+  background-color: var(--background-color);
+}
+table caption {
+  margin: 0;
+  padding: 3px 1em;
+}
+table p {
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  margin-left: 3px;
+  visibility: hidden;
+  user-select: none;
+}
+a.pilcrow[href] { color: #ddd; }
+a.pilcrow[href]:hover { text-decoration: none; }
+@media screen {
+  :hover > a.pilcrow {
+    visibility: visible;
+  }
+  a.pilcrow:hover {
+    background-color: transparent;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-color);
+}
+.bcp14 {
+  font-variant: small-caps;
+}
+
+.role {
+  font-variant: all-small-caps;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: var(--small-font-size);
+  line-height: 18px;
+  --identifier-width: 8em;
+}
+#identifiers dt {
+  width: var(--identifier-width);
+  margin: 0;
+  clear: left;
+  float: left;
+  text-align: right;
+}
+#identifiers dd {
+  margin: 0 0 0 calc(1em + var(--identifier-width));
+  min-width: 5em;
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+#toc nav ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+#toc nav li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+#toc a.xref {
+  white-space: normal;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 7em;
+}
+.references dd {
+  margin-left: 8em;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+.index ul {
+  margin: 0 0 0 1em;
+  padding: 0;
+  list-style: none;
+}
+.index ul ul {
+  margin: 0;
+}
+.index li {
+  margin: 0;
+  text-indent: -2em;
+  padding-left: 2em;
+  padding-bottom: 5px;
+}
+.indexIndex {
+  margin: 0.5em 0 1em;
+}
+.index a {
+  font-weight: 700;
+}
+/* make the index two-column on all but the smallest screens */
+@media (min-width: 500px) {
+  .index ul {
+    column-count: 2;
+    column-gap: 20px;
+  }
+  .index ul ul {
+    column-count: 1;
+    column-gap: 0;
+  }
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+@media (min-width: 500px) {
+  #authors-addresses > section {
+    column-count: 2;
+    column-gap: 20px;
+  }
+  #authors-addresses > section > h2 {
+    column-span: all;
+  }
+  /* hack for break-inside: avoid-column */
+  #authors-addresses address {
+    display: inline-block;
+    break-inside: avoid-column;
+  }
+}
+
+.rfcEditorRemove p:first-of-type {
+  font-style: italic;
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 929px) {
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0.6;
+  }
+  #toc.active {
+      opacity: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 2px 0 2px 6px;
+    padding-right: 1em;
+    font-size: 18px;
+    line-height: 24px;
+    min-width: 190px;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 8px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    background-color: var(--background-color);
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+  #toc.active nav {
+    display: block;
+  }
+  /* Make the collapsed ToC header render white on gray also when it's a link */
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+  #toc a.toplink {
+    margin-top: 2px;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 930px) {
+  body {
+    padding-right: 360px;
+    padding-right: calc(min(180px + 20%, 500px));
+  }
+  #toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 480px);
+    width: 312px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 2em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  #toc nav > ul  {
+    margin-bottom: 2em;
+  }
+  #toc ul {
+    margin: 0 0 0 4px;
+    font-size: var(--small-font-size);
+  }
+  #toc ul p, #toc ul li {
+    margin: 2px 0;
+    line-height: 22px;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+}
+
+/* Changes introduced to fix issues found during implementation */
+
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin: 8px 0.5em 0;
+}
+
+/* Fix the dl styling to match the RFC 7992 attributes */
+dl > dt,
+dl.dlParallel > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+
+/* Provide styling for table cell text alignment */
+table .text-left, table .text-left {
+  text-align: left;
+}
+table .text-center, table .text-center {
+  text-align: center;
+}
+table .text-right, table .text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact information look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 20em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  dd {
+    page-break-before: avoid;
+  }
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+/* Tweak the bcp14 keyword presentation */
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+</style>
+<link href="rfc-local.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">Captive Portal Architecture</td>
+<td class="right">August 2020</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Larose, et al.</td>
+<td class="center">Expires 11 February 2021</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">Internet Engineering Task Force</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-ietf-capport-architecture-09</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2020-08-10" class="published">10 August 2020</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Informational</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2021-02-11">11 February 2021</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">K. Larose</div>
+<div class="org">Agilicus</div>
+</div>
+<div class="author">
+      <div class="author-name">D. Dolson</div>
+</div>
+<div class="author">
+      <div class="author-name">H. Liu</div>
+<div class="org">Google</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Captive Portal Architecture</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">This document describes a captive portal architecture.
+        Network provisioning protocols such as DHCP or Router Advertisements (RAs),
+        an optional signaling protocol, and an HTTP API are used to provide the solution.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 11 February 2021.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2020 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Simplified BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Simplified BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a><a href="#section-toc.1-1.1.1" class="pilcrow">¶</a></p>
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.1.2.1">
+                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-requirements-language" class="xref">Requirements Language</a><a href="#section-toc.1-1.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="compact toc ulEmpty" id="section-toc.1-1.1.2.2">
+                <p id="section-toc.1-1.1.2.2.1" class="keepWithNext"><a href="#section-1.2" class="xref">1.2</a>.  <a href="#name-terminology" class="xref">Terminology</a><a href="#section-toc.1-1.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1"><a href="#section-2" class="xref">2</a>.  <a href="#name-components" class="xref">Components</a><a href="#section-toc.1-1.2.1" class="pilcrow">¶</a></p>
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.2.2.1">
+                <p id="section-toc.1-1.2.2.1.1"><a href="#section-2.1" class="xref">2.1</a>.  <a href="#name-user-equipment" class="xref">User Equipment</a><a href="#section-toc.1-1.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="compact toc ulEmpty" id="section-toc.1-1.2.2.2">
+                <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="xref">2.2</a>.  <a href="#name-provisioning-service" class="xref">Provisioning Service</a><a href="#section-toc.1-1.2.2.2.1" class="pilcrow">¶</a></p>
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.2.2.2.2.1">
+                    <p id="section-toc.1-1.2.2.2.2.1.1"><a href="#section-2.2.1" class="xref">2.2.1</a>.  <a href="#name-dhcp-or-router-advertisemen" class="xref">DHCP or Router Advertisements</a><a href="#section-toc.1-1.2.2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.2.2.2.2.2">
+                    <p id="section-toc.1-1.2.2.2.2.2.1"><a href="#section-2.2.2" class="xref">2.2.2</a>.  <a href="#name-provisioning-domains" class="xref">Provisioning Domains</a><a href="#section-toc.1-1.2.2.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulEmpty" id="section-toc.1-1.2.2.3">
+                <p id="section-toc.1-1.2.2.3.1"><a href="#section-2.3" class="xref">2.3</a>.  <a href="#name-captive-portal-api-server" class="xref">Captive Portal API Server</a><a href="#section-toc.1-1.2.2.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="compact toc ulEmpty" id="section-toc.1-1.2.2.4">
+                <p id="section-toc.1-1.2.2.4.1"><a href="#section-2.4" class="xref">2.4</a>.  <a href="#name-captive-portal-enforcement-" class="xref">Captive Portal Enforcement Device</a><a href="#section-toc.1-1.2.2.4.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="compact toc ulEmpty" id="section-toc.1-1.2.2.5">
+                <p id="section-toc.1-1.2.2.5.1"><a href="#section-2.5" class="xref">2.5</a>.  <a href="#name-captive-portal-signal" class="xref">Captive Portal Signal</a><a href="#section-toc.1-1.2.2.5.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="compact toc ulEmpty" id="section-toc.1-1.2.2.6">
+                <p id="section-toc.1-1.2.2.6.1"><a href="#section-2.6" class="xref">2.6</a>.  <a href="#name-component-diagram" class="xref">Component Diagram</a><a href="#section-toc.1-1.2.2.6.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-user-equipment-identity" class="xref">User Equipment Identity</a><a href="#section-toc.1-1.3.1" class="pilcrow">¶</a></p>
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="xref">3.1</a>.  <a href="#name-identifiers" class="xref">Identifiers</a><a href="#section-toc.1-1.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="compact toc ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="xref">3.2</a>.  <a href="#name-recommended-properties" class="xref">Recommended Properties</a><a href="#section-toc.1-1.3.2.2.1" class="pilcrow">¶</a></p>
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.3.2.2.2.1">
+                    <p id="section-toc.1-1.3.2.2.2.1.1"><a href="#section-3.2.1" class="xref">3.2.1</a>.  <a href="#name-uniquely-identify-user-equi" class="xref">Uniquely Identify User Equipment</a><a href="#section-toc.1-1.3.2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.3.2.2.2.2">
+                    <p id="section-toc.1-1.3.2.2.2.2.1"><a href="#section-3.2.2" class="xref">3.2.2</a>.  <a href="#name-hard-to-spoof" class="xref">Hard to Spoof</a><a href="#section-toc.1-1.3.2.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.3.2.2.2.3">
+                    <p id="section-toc.1-1.3.2.2.2.3.1"><a href="#section-3.2.3" class="xref">3.2.3</a>.  <a href="#name-visible-to-the-api-server" class="xref">Visible to the API Server</a><a href="#section-toc.1-1.3.2.2.2.3.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.3.2.2.2.4">
+                    <p id="section-toc.1-1.3.2.2.2.4.1"><a href="#section-3.2.4" class="xref">3.2.4</a>.  <a href="#name-visible-to-the-enforcement-" class="xref">Visible to the Enforcement Device</a><a href="#section-toc.1-1.3.2.2.2.4.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulEmpty" id="section-toc.1-1.3.2.3">
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="xref">3.3</a>.  <a href="#name-evaluating-types-of-identif" class="xref">Evaluating Types of Identifiers</a><a href="#section-toc.1-1.3.2.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="compact toc ulEmpty" id="section-toc.1-1.3.2.4">
+                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="xref">3.4</a>.  <a href="#name-example-identifier-types" class="xref">Example Identifier Types</a><a href="#section-toc.1-1.3.2.4.1" class="pilcrow">¶</a></p>
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.3.2.4.2.1">
+                    <p id="section-toc.1-1.3.2.4.2.1.1"><a href="#section-3.4.1" class="xref">3.4.1</a>.  <a href="#name-physical-interface" class="xref">Physical Interface</a><a href="#section-toc.1-1.3.2.4.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.3.2.4.2.2">
+                    <p id="section-toc.1-1.3.2.4.2.2.1"><a href="#section-3.4.2" class="xref">3.4.2</a>.  <a href="#name-ip-address" class="xref">IP Address</a><a href="#section-toc.1-1.3.2.4.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="compact toc ulEmpty" id="section-toc.1-1.3.2.4.2.3">
+                    <p id="section-toc.1-1.3.2.4.2.3.1"><a href="#section-3.4.3" class="xref">3.4.3</a>.  <a href="#name-media-access-control-mac-ad" class="xref">Media Access Control (MAC) Address</a><a href="#section-toc.1-1.3.2.4.2.3.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulEmpty" id="section-toc.1-1.3.2.5">
+                <p id="section-toc.1-1.3.2.5.1"><a href="#section-3.5" class="xref">3.5</a>.  <a href="#name-context-free-uri" class="xref">Context-free URI</a><a href="#section-toc.1-1.3.2.5.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-solution-workflow" class="xref">Solution Workflow</a><a href="#section-toc.1-1.4.1" class="pilcrow">¶</a></p>
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="xref">4.1</a>.  <a href="#name-initial-connection" class="xref">Initial Connection</a><a href="#section-toc.1-1.4.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="compact toc ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="xref">4.2</a>.  <a href="#name-conditions-about-to-expire" class="xref">Conditions About to Expire</a><a href="#section-toc.1-1.4.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="compact toc ulEmpty" id="section-toc.1-1.4.2.3">
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="xref">4.3</a>.  <a href="#name-handling-of-changes-in-port" class="xref">Handling of Changes in Portal URI</a><a href="#section-toc.1-1.4.2.3.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-acknowledgments" class="xref">Acknowledgments</a><a href="#section-toc.1-1.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="compact toc ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a><a href="#section-toc.1-1.6.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="compact toc ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a><a href="#section-toc.1-1.7.1" class="pilcrow">¶</a></p>
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="xref">7.1</a>.  <a href="#name-trusting-the-network" class="xref">Trusting the Network</a><a href="#section-toc.1-1.7.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="compact toc ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="xref">7.2</a>.  <a href="#name-authenticated-apis" class="xref">Authenticated APIs</a><a href="#section-toc.1-1.7.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="compact toc ulEmpty" id="section-toc.1-1.7.2.3">
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="xref">7.3</a>.  <a href="#name-secure-apis" class="xref">Secure APIs</a><a href="#section-toc.1-1.7.2.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="compact toc ulEmpty" id="section-toc.1-1.7.2.4">
+                <p id="section-toc.1-1.7.2.4.1"><a href="#section-7.4" class="xref">7.4</a>.  <a href="#name-risks-associated-with-the-s" class="xref">Risks Associated with the Signaling Protocol</a><a href="#section-toc.1-1.7.2.4.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="compact toc ulEmpty" id="section-toc.1-1.7.2.5">
+                <p id="section-toc.1-1.7.2.5.1"><a href="#section-7.5" class="xref">7.5</a>.  <a href="#name-user-options" class="xref">User Options</a><a href="#section-toc.1-1.7.2.5.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="compact toc ulEmpty" id="section-toc.1-1.7.2.6">
+                <p id="section-toc.1-1.7.2.6.1"><a href="#section-7.6" class="xref">7.6</a>.  <a href="#name-privacy" class="xref">Privacy</a><a href="#section-toc.1-1.7.2.6.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-references" class="xref">References</a><a href="#section-toc.1-1.8.1" class="pilcrow">¶</a></p>
+<ul class="compact toc ulEmpty">
+<li class="compact toc ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="xref">8.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a><a href="#section-toc.1-1.8.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="compact toc ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="xref">8.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a><a href="#section-toc.1-1.8.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-appendix.a" class="xref">Appendix A</a>.  <a href="#name-existing-captive-portal-det" class="xref">Existing Captive Portal Detection Implementations</a><a href="#section-toc.1-1.9.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="compact toc ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-appendix.b" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a><a href="#section-toc.1-1.10.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">
+       In this document, "Captive Portal" is used to describe a network to
+       which a device may be voluntarily attached, such that network access is
+       limited until some requirements have been fulfilled.  Typically a user
+       is required to use a web browser to fulfill requirements imposed by the
+       network operator, such as reading advertisements, accepting an
+       acceptable-use policy, or providing some form of credentials.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">
+       Implementations of captive portals generally require a web server, some
+       method to allow/block traffic, and some method to alert the user.
+       Common methods of alerting the user in implementations prior to this
+       work involve modifying HTTP or DNS traffic.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">
+       This document describes an architecture for implementing captive
+       portals while addressing most of the problems arising for current
+       captive portal mechanisms. The architecture is guided by these
+       requirements:<a href="#section-1-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1-4.1">Current captive portal solutions typically implement some variations
+            of forging DNS or HTTP responses.
+            Some attempt man-in-the-middle (MITM) proxy of HTTPS in
+            order to forge reponses.
+            Captive Portal Solutions should not have to break any protocols or
+            otherwise act in the manner of an attacker.
+            Therefore, solutions MUST NOT require the forging of responses from
+            DNS or HTTP servers, or any other protocol.<a href="#section-1-4.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-1-4.2">Solutions MUST permit clients to perform DNSSEC validation, which rules out solutions
+            that forge DNS responses.
+            Solutions SHOULD permit clients to detect and avoid TLS man-in-the-middle attacks
+            without requiring a human to perform any kind of "exception" processing.<a href="#section-1-4.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-1-4.3">To maximize universality and adoption, solutions MUST operate at the
+            layer of Internet Protocol (IP) or above, not being specific to any
+            particular access technology such as Cable, WiFi or mobile
+            telecom.<a href="#section-1-4.3" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-1-4.4">Solutions SHOULD allow a device to query the network to determine whether the device is
+            captive, without the solution being coupled to forging intercepted protocols or
+            requiring the device to make sacrificial queries to "canary" URIs to check for response
+            tampering (see <a href="#app-additional" class="xref">Appendix A</a>). Current captive
+            portal solutions that work by affecting DNS or HTTP generally only function as intended
+            with browsers, breaking other applications using those protocols; applications using
+            other protocols are not alerted that the network is a captive network.<a href="#section-1-4.4" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-1-4.5">The state of captivity SHOULD be explicitly available to devices via
+            a standard protocol, rather than having to infer the state indirectly.<a href="#section-1-4.5" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-1-4.6">The architecture MUST provide a path of incremental migration,
+            acknowledging the existence of a huge variety of pre-existing
+            portals and end-user device implementations and software versions.
+            This requirement is not to recommend or standardize existing
+            approaches, rather to provide device and portal implementors a path
+            to new standard.<a href="#section-1-4.6" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-1-5">
+       A side-benefit of the architecture described in this document is that
+       devices without user interfaces are able to identify parameters of
+       captivity. However, this document does not describe a mechanism for such
+       devices to negotiate for unrestricted network access. A future document could provide a solution
+       to devices without user interfaces. This document focuses on devices
+       with user interfaces.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-6">
+       The architecture uses the following mechanisms:<a href="#section-1-6" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1-7.1">Network provisioning protocols provide end-user devices with a
+            Uniform Resource Identifier <span>[<a href="#RFC3986" class="xref">RFC3986</a>]</span> (URI) for
+            the API that end-user devices query for information about
+            what is required to escape captivity. DHCP, DHCPv6, and
+            Router-Advertisement options for this purpose are available in
+            <span>[<a href="#RFC7710bis" class="xref">RFC7710bis</a>]</span>. Other protocols (such as RADIUS),
+            Provisioning Domains
+            <span>[<a href="#I-D.pfister-capport-pvd" class="xref">I-D.pfister-capport-pvd</a>]</span>, or
+            static configuration may also be used to convey this Captive Portal API URI.
+            A device MAY query this API at any time to determine whether the
+            network is holding the device in a captive state.<a href="#section-1-7.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-1-7.2">A Captive Portal can signal User Equipment in response to transmissions by
+            the User Equipment. This signal works in response to any Internet protocol,
+            and is not done by modifying protocols in-band.  This signal does not carry the
+            Captive Portal API URI; rather it provides a signal to the User Equipment that it
+            is in a captive state.<a href="#section-1-7.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-1-7.3">
+            Receipt of a Captive Portal Signal provides a hint that User Equipment could be captive.
+            In response, the device MAY query the provisioned API to obtain
+            information about the network state.
+            The device can take immediate action to satisfy the portal
+            (according to its configuration/policy).<a href="#section-1-7.3" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-1-8">
+       The architecture attempts to provide confidentiality, authentication, and safety mechanisms
+       to the extent possible.<a href="#section-1-8" class="pilcrow">¶</a></p>
+<section id="section-1.1">
+        <h3 id="name-requirements-language">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-requirements-language" class="section-name selfRef">Requirements Language</a>
+        </h3>
+<p id="section-1.1-1">
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 <span>[<a href="#RFC2119" class="xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="xref">RFC8174</a>]</span> when, and only
+   when, they appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+</section>
+<section id="section-1.2">
+        <h3 id="name-terminology">
+<a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+        </h3>
+<p id="section-1.2-1">Captive Portal: A network which limits communication of attached
+          devices to restricted hosts until the user has satisfied
+          Captive Portal Conditions, after which access is permitted to a wider
+          set of hosts (typically the Internet).<a href="#section-1.2-1" class="pilcrow">¶</a></p>
+<p id="section-1.2-2">Captive Portal Conditions: site-specific requirements that a user
+          or device must satisfy in order to gain access to the wider network.<a href="#section-1.2-2" class="pilcrow">¶</a></p>
+<p id="section-1.2-3">Captive Portal Enforcement Device: The network equipment which enforces the
+          traffic restriction. Also known as Enforcement Device.<a href="#section-1.2-3" class="pilcrow">¶</a></p>
+<p id="section-1.2-4">Captive Portal User Equipment: Also known as User Equipment. A device
+          which has voluntarily joined a network for purposes of communicating
+          beyond the constraints of the captive network.<a href="#section-1.2-4" class="pilcrow">¶</a></p>
+<p id="section-1.2-5">User Portal: The web server providing a user interface for
+          assisting the user in satisfying the conditions to escape
+          captivity.<a href="#section-1.2-5" class="pilcrow">¶</a></p>
+<p id="section-1.2-6">Captive Portal API: Also known as API. An HTTP API allowing User Equipment
+          to query information about its state of captivity within the Captive Portal. This
+          information might include how to obtain full network access (e.g. by visting a URI).<a href="#section-1.2-6" class="pilcrow">¶</a></p>
+<p id="section-1.2-7">Captive Portal API Server: Also known as API Server. A server hosting the
+          Captive Portal API.<a href="#section-1.2-7" class="pilcrow">¶</a></p>
+<p id="section-1.2-8">Captive Portal Signal: A notification from the network used to signal to the User Equipment
+          that the state of its captivity could have changed.<a href="#section-1.2-8" class="pilcrow">¶</a></p>
+<p id="section-1.2-9">Captive Portal Signaling Protocol: Also known as Signaling Protocol. The protocol for
+          communicating Captive Portal Signals.<a href="#section-1.2-9" class="pilcrow">¶</a></p>
+<p id="section-1.2-10">
+        Captive Portal Session: Also referred to simply as the "session", a Captive Portal
+        Session is the association for a particular User Equipment that starts when it
+        interacts with the Captive Portal and gains open access to the network, and ends
+        when the User Equipment moves back into the original captive state. The Captive
+        Network maintains the state of each active Session, and can limit Sessions based
+        on a length of time or a number of bytes used. The Session is associated with a
+        particular User Equipment using the User Equipment's identifier (see
+        <a href="#ue_identity" class="xref">Section 3</a>).<a href="#section-1.2-10" class="pilcrow">¶</a></p>
+</section>
+</section>
+<section id="section-2">
+      <h2 id="name-components">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-components" class="section-name selfRef">Components</a>
+      </h2>
+<div id="section_client">
+<section id="section-2.1">
+        <h3 id="name-user-equipment">
+<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-user-equipment" class="section-name selfRef">User Equipment</a>
+        </h3>
+<p id="section-2.1-1">
+       The User Equipment is the device that a user desires to be attached to
+       a network with full access to all hosts on the network (e.g., to have
+       Internet access). The User Equipment communication is typically
+       restricted by the Enforcement Device, described in <a href="#section_capport_enforcement" class="xref">Section 2.4</a>,
+       until site-specific requirements have been met.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.1-2">
+        This document only considers devices with web browsers, with web
+        applications being the means of satisfying Captive Portal Conditions.
+        An example of such User Equipment is a smart phone.<a href="#section-2.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.1-3">
+        The User Equipment:<a href="#section-2.1-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.1-4.1">SHOULD support provisioning of the URI for the Captive Portal API (e.g., by DHCP)<a href="#section-2.1-4.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.1-4.2">SHOULD distinguish Captive Portal API access per network interface, in the manner
+           of Provisioning Domain Architecture <span>[<a href="#RFC7556" class="xref">RFC7556</a>]</span>.<a href="#section-2.1-4.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.1-4.3">SHOULD have a non-spoofable mechanism for notifying the user of the Captive Portal<a href="#section-2.1-4.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.1-4.4">SHOULD have a web browser so that the user may navigate the User Portal.<a href="#section-2.1-4.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.1-4.5">SHOULD support updates to the Captive Portal API URI from the network provisioning
+              service.<a href="#section-2.1-4.5" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.1-4.6">MAY prevent applications from using networks that do not grant full
+           network access. E.g., a device connected to a mobile network may
+           be connecting to a captive WiFi network; the operating system could
+           avoid updating the default route to a device on captive WiFi network until
+           network access restrictions have been lifted (excepting access to the User Portal) in
+           the new network. This has been termed "make before break".<a href="#section-2.1-4.6" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-2.1-5">
+        None of the above requirements are mandatory because (a) we do not wish
+        to say users or devices must seek full access to the captive network,
+        (b) the requirements may be fulfilled by manually visiting the captive
+        portal web application, and (c) legacy devices must continue to be
+        supported.<a href="#section-2.1-5" class="pilcrow">¶</a></p>
+<p id="section-2.1-6">
+        If User Equipment supports the Captive Portal API, it MUST validate the API server's
+        TLS certificate (see <span>[<a href="#RFC2818" class="xref">RFC2818</a>]</span>) according to the procedures in
+        <span>[<a href="#RFC6125" class="xref">RFC6125</a>]</span>.  The API server's URI is obtained via a network
+        provisioning protocol, which will typically provide a hostname to be used
+        in TLS server certificate validation, against a DNS-ID in the server certificate.
+        If the API server is identified by IP address, the iPAddress subjectAltName
+        is used to validate the server certificate.  An Enforcement Device SHOULD allow access to
+        any services that User Equipment could need to contact to perform certificate validation,
+        such as OCSP responders, CRLs, and NTP servers; see Section 4.1 of 
+        <span>[<a href="#I-D.ietf-capport-api" class="xref">I-D.ietf-capport-api</a>]</span> for more information.
+        If certificate validation fails, User Equipment MUST NOT make any calls to the API
+        server.<a href="#section-2.1-6" class="pilcrow">¶</a></p>
+<p id="section-2.1-7">
+        The User Equipment can store the last response it received from the Captive Portal API
+        as a cached view of its state within the Captive Portal. This state can be used to
+        determine whether its Captive Portal Session is near expiry. For example, the User
+        Equipment might compare a timestamp indicating when the session expires to the current
+        time. Storing state in this way can reduce the need for communication with the
+        Captive Portal API. However, it could lead to the state becoming
+        stale if the User Equipment's view of the relevant conditions (byte quota, for example)
+        is not consistent with the Captive Portal API's.<a href="#section-2.1-7" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="section_provisioning">
+<section id="section-2.2">
+        <h3 id="name-provisioning-service">
+<a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-provisioning-service" class="section-name selfRef">Provisioning Service</a>
+        </h3>
+<p id="section-2.2-1">
+          The Provisioning Service is primarily responsible for providing a Captive
+          Portal API URI to the User Equipment when it connects to the network, and
+          later if the URI changes.  The provisioning service could also be the same
+          service which is responsible for provisioning the User Equipment for
+          access to the Captive Portal (e.g., by providing it with an IP address).
+          This section discusses two mechanisms which may be used to provide the
+          Captive Portal API URI to the User Equipment.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
+<div id="section_dhcp">
+<section id="section-2.2.1">
+          <h4 id="name-dhcp-or-router-advertisemen">
+<a href="#section-2.2.1" class="section-number selfRef">2.2.1. </a><a href="#name-dhcp-or-router-advertisemen" class="section-name selfRef">DHCP or Router Advertisements</a>
+          </h4>
+<p id="section-2.2.1-1">
+           A standard for providing a Captive Portal API URI using DHCP or Router
+           Advertisements is described in <span>[<a href="#RFC7710bis" class="xref">RFC7710bis</a>]</span>.  The
+           captive portal architecture expects this URI to indicate the API described
+           in <a href="#section_api" class="xref">Section 2.3</a>.<a href="#section-2.2.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="section_pvd">
+<section id="section-2.2.2">
+          <h4 id="name-provisioning-domains">
+<a href="#section-2.2.2" class="section-number selfRef">2.2.2. </a><a href="#name-provisioning-domains" class="section-name selfRef">Provisioning Domains</a>
+          </h4>
+<p id="section-2.2.2-1">
+           Although still a work in progress,
+           <span>[<a href="#I-D.pfister-capport-pvd" class="xref">I-D.pfister-capport-pvd</a>]</span>
+           proposes a mechanism for User Equipment to be provided with PvD
+           Bootstrap Information containing the URI for the API described in
+           <a href="#section_api" class="xref">Section 2.3</a>.<a href="#section-2.2.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="section_api">
+<section id="section-2.3">
+        <h3 id="name-captive-portal-api-server">
+<a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-captive-portal-api-server" class="section-name selfRef">Captive Portal API Server</a>
+        </h3>
+<p id="section-2.3-1">
+         The purpose of a Captive Portal API is to permit a query of Captive
+         Portal state without interrupting the user.  This API thereby removes
+         the need for User Equipment to perform clear-text "canary" (see
+         <a href="#app-additional" class="xref">Appendix A</a>) queries to check for response tampering.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.3-2">
+         The URI of this API will have been provisioned to the User Equipment.
+         (Refer to <a href="#section_provisioning" class="xref">Section 2.2</a>).<a href="#section-2.3-2" class="pilcrow">¶</a></p>
+<p id="section-2.3-3">
+         This architecture expects the User Equipment to query the API when the
+         User Equipment attaches to the network and multiple times thereafter.
+         Therefore the API MUST support multiple repeated queries from the same
+         User Equipment and return the state of captivity for the equipment.<a href="#section-2.3-3" class="pilcrow">¶</a></p>
+<p id="section-2.3-4">
+         At minimum, the API MUST provide the state of captivity. Further the
+         API MUST be able to provide a URI for the User Portal. The scheme for
+         the URI MUST be https so that the User Equipment communicates with
+         the User Portal over TLS.<a href="#section-2.3-4" class="pilcrow">¶</a></p>
+<p id="section-2.3-5">
+         If the API receives a request for state that does not correspond to the
+         requesting User Equipment, the API SHOULD deny access.  Given that the
+         API might use the User Equipment's identifier for authentication, this
+         requirement motivates <a href="#id_recommended_hard" class="xref">Section 3.2.2</a>.<a href="#section-2.3-5" class="pilcrow">¶</a></p>
+<p id="section-2.3-6">
+         A caller to the API needs to be presented with evidence that the content
+         it is receiving is for a version of the API that it supports. For an
+         HTTP-based interaction, such as in <span>[<a href="#I-D.ietf-capport-api" class="xref">I-D.ietf-capport-api</a>]</span>
+         this might be achieved by using a content type that is unique to the
+         protocol.<a href="#section-2.3-6" class="pilcrow">¶</a></p>
+<p id="section-2.3-7">
+         When User Equipment receives Captive Portal Signals, the User Equipment
+         MAY query the API to check its state of captivity.
+         The User Equipment SHOULD rate-limit these API queries in the event of
+         the signal being flooded. (See <a href="#Security" class="xref">Section 7</a>.)<a href="#section-2.3-7" class="pilcrow">¶</a></p>
+<p id="section-2.3-8">
+         The API MUST be extensible to support future use-cases by allowing
+         extensible information elements.<a href="#section-2.3-8" class="pilcrow">¶</a></p>
+<p id="section-2.3-9">
+         The API MUST use TLS to ensure server authentication.
+         The implementation of the API MUST ensure both confidentiality and 
+         integrity of any information provided by or required by it.<a href="#section-2.3-9" class="pilcrow">¶</a></p>
+<p id="section-2.3-10">
+         This document does not specify the details of the API.<a href="#section-2.3-10" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="section_capport_enforcement">
+<section id="section-2.4">
+        <h3 id="name-captive-portal-enforcement-">
+<a href="#section-2.4" class="section-number selfRef">2.4. </a><a href="#name-captive-portal-enforcement-" class="section-name selfRef">Captive Portal Enforcement Device</a>
+        </h3>
+<p id="section-2.4-1">
+        The Enforcement Device component restricts the network access of
+        User Equipment according to site-specific policy. Typically User Equipment
+        is permitted access to a small number of services (according to the policies
+        of the network provider) and is denied general
+        network access until it satisfies the Captive Portal Conditions.<a href="#section-2.4-1" class="pilcrow">¶</a></p>
+<p id="section-2.4-2">
+       The Enforcement Device component:<a href="#section-2.4-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.4-3.1">Allows traffic to pass for User Equipment that is permitted to
+              use the network and has satisfied the Captive Portal Conditions.<a href="#section-2.4-3.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.4-3.2">Blocks (discards) traffic according to the site-specific policy
+            for User Equipment that has not yet satisfied the Captive Portal Conditions.<a href="#section-2.4-3.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.4-3.3">Optionally signals User Equipment using the Captive Portal Signaling protocol
+           if certain traffic is blocked.<a href="#section-2.4-3.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.4-3.4">Permits User Equipment that has not satisfied the Captive Portal Conditions 
+          to access necessary APIs and web pages to fulfill requirements for escaping captivity.<a href="#section-2.4-3.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.4-3.5">Updates allow/block rules per User Equipment in response to operations
+           from the User Portal.<a href="#section-2.4-3.5" class="pilcrow">¶</a>
+</li>
+        </ul>
+</section>
+</div>
+<div id="section_signal">
+<section id="section-2.5">
+        <h3 id="name-captive-portal-signal">
+<a href="#section-2.5" class="section-number selfRef">2.5. </a><a href="#name-captive-portal-signal" class="section-name selfRef">Captive Portal Signal</a>
+        </h3>
+<p id="section-2.5-1">
+        When User Equipment first connects to a network, or when there are changes in status,
+        the Enforcement Device could generate a signal toward the User Equipment.  This signal
+        indicates that the User Equipment might need to contact the API Server to receive
+        updated information.  For instance, this signal might be generated when the end of a
+        session is imminent, or when network access was denied.
+        For simplicity, and to reduce the attack surface, all signals SHOULD be considered
+        equivalent by the User Equipment: as a hint to contact the API.
+        If future solutions have multiple signal types, each type SHOULD be rate-limited
+        independently.<a href="#section-2.5-1" class="pilcrow">¶</a></p>
+<p id="section-2.5-2">
+        An Enforcement Device MUST rate-limit any signal generated in response to these conditions.  See <a href="#section_signal_risks" class="xref">Section 7.4</a> for a discussion of
+        risks related to a Captive Portal Signal.<a href="#section-2.5-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-2.6">
+        <h3 id="name-component-diagram">
+<a href="#section-2.6" class="section-number selfRef">2.6. </a><a href="#name-component-diagram" class="section-name selfRef">Component Diagram</a>
+        </h3>
+<p id="section-2.6-1">
+            The following diagram shows the communication between each component in the
+            case where the Captive Portal has a User Portal, and the User Equipment
+            chooses to visit the User Portal in response to discovering and interacting
+            with the API Server.<a href="#section-2.6-1" class="pilcrow">¶</a></p>
+<span id="name-captive-portal-architecture"></span><div id="components">
+<figure id="figure-1">
+          <div class="artwork art-text alignLeft" id="section-2.6-2.1">
+<pre>
+o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
+. CAPTIVE PORTAL                                                .
+. +------------+  Join Network               +--------------+   .
+. |            |+---------------------------&gt;| Provisioning |   .
+. |            |  Provision API URI          |  Service     |   .
+. |            |&lt;---------------------------+|              |   .
+. |   User     |                             +--------------+   .
+. | Equipment  |  Query captivity status     +-------------+    .
+. |            |+---------------------------&gt;|  API        |    .
+. |            |  Captivity status response  |  Server     |    .
+. |            |&lt;---------------------------+|             |    .
+. |            |                             +------+------+    .
+. |            |                                    | Status    .
+. |            | Portal UI page requests     +------+------+    .
+. |            |+---------------------------&gt;|             |    .
+. |            | Portal UI pages             | User Portal |    .
+. |            |&lt;---------------------------+|             |    .
+. +------------+                             |             |    .
+.     ^   ^ |                                +-------------+    .
+.     |   | | Data to/from ext. network               |         .
+.     |   | +-----------------&gt; +---------------+  Allow/Deny   .
+.     |   +--------------------+|               |    Rules      .
+.     |                         | Enforcement   |     |         .
+.     |   Captive Portal Signal | Device        |&lt;----+         .
+.     +-------------------------+---------------+               .
+.                                      ^ |                      .
+.                                      | |                      .
+.                          Data to/from external network        .
+.                                      | |                      .
+o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
+                                       | v
+                                  EXTERNAL NETWORK
+</pre>
+</div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<a href="#name-captive-portal-architecture" class="selfRef">Captive Portal Architecture Component Diagram</a>
+          </figcaption></figure>
+</div>
+<p id="section-2.6-3">
+        In the diagram:<a href="#section-2.6-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.6-4.1">During provisioning (e.g., DHCP), and possibly later, the User
+              Equipment acquires the Captive Portal API URI.<a href="#section-2.6-4.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.6-4.2">The User Equipment queries the API to learn of its state of
+                 captivity. If captive, the User Equipment presents the portal
+                 user interface from the User Portal to the user.<a href="#section-2.6-4.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.6-4.3">Based on user interaction, the User Portal directs the
+                 Enforcement Device to either allow or deny external network
+                 access for the User Equipment.<a href="#section-2.6-4.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.6-4.4">The User Equipment attempts to communicate to the external
+                 network through the Enforcement Device.<a href="#section-2.6-4.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.6-4.5">The Enforcement Device either allows the User
+                 Equipment's packets to the external network, or blocks the
+                 packets. If blocking traffic and a signal has
+                 been implemented, it may respond with a Captive Portal Signal.<a href="#section-2.6-4.5" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-2.6-5">
+        The Provisioning Service, API Server, and User Portal are
+        described as discrete functions. An implementation might provide the
+        multiple functions within a single entity. Furthermore, these functions, combined or not,
+        as well as the Enforcement Device, could be replicated for redundancy or scale.<a href="#section-2.6-5" class="pilcrow">¶</a></p>
+</section>
+</section>
+<div id="ue_identity">
+<section id="section-3">
+      <h2 id="name-user-equipment-identity">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-user-equipment-identity" class="section-name selfRef">User Equipment Identity</a>
+      </h2>
+<p id="section-3-1">
+             Multiple components in the architecture interact with both the User
+             Equipment and each other. Since the User Equipment is the focus of
+             these interactions, the components must be able to both identify the
+             User Equipment from their interactions with it, and to agree
+             on the identity of the User Equipment when interacting with each
+             other.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">
+             The methods by which the components interact restrict the type of
+             information that may be used as an identifying characteristics. This
+             section discusses the identifying characteristics.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<div id="id_identifiers">
+<section id="section-3.1">
+        <h3 id="name-identifiers">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-identifiers" class="section-name selfRef">Identifiers</a>
+        </h3>
+<p id="section-3.1-1">
+                 An Identifier is a characteristic of the User Equipment used by
+                 the components of a Captive Portal to uniquely determine which
+                 specific User Equipment is interacting with them.
+                 An Identifier can be a field contained in packets
+                 sent by the User Equipment to the External Network. Or, an
+                 Identifier can be an ephemeral property not contained in packets
+                 destined for the External Network, but instead correlated with
+                 such information through knowledge available to the different
+                 components.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="id_recommended_props">
+<section id="section-3.2">
+        <h3 id="name-recommended-properties">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-recommended-properties" class="section-name selfRef">Recommended Properties</a>
+        </h3>
+<p id="section-3.2-1">
+             The set of possible identifiers is quite large. However, in order
+             to be considered a good identifier, an identifier SHOULD meet the
+             following criteria. Note that the optimal identifier will likely
+             change depending on the position of the components in the network
+             as well as the information available to them.
+
+             An identifier SHOULD:<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.2-2.1">uniquely identify the User Equipment<a href="#section-3.2-2.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-3.2-2.2">be hard to spoof<a href="#section-3.2-2.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-3.2-2.3">be visible to the API Server<a href="#section-3.2-2.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-3.2-2.4">be visible to the Enforcement Device<a href="#section-3.2-2.4" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-3.2-3">
+
+             An identifier might only apply to the current point of network attachment. If the
+             device moves to a different network location its identity could change.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+<div id="id_recommended_unique">
+<section id="section-3.2.1">
+          <h4 id="name-uniquely-identify-user-equi">
+<a href="#section-3.2.1" class="section-number selfRef">3.2.1. </a><a href="#name-uniquely-identify-user-equi" class="section-name selfRef">Uniquely Identify User Equipment</a>
+          </h4>
+<p id="section-3.2.1-1">
+                  The Captive Portal MUST associate the User Equipment with an
+                  identifier that is unique among the User Equipment that are
+                  interacting with the Captive Portal at that time.<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-2">
+                  Over time, the User Equipment assigned to an identifier value MAY change. Allowing the
+                  identified device to change over time ensures that the space of possible
+                  identifying values need not be overly large.<a href="#section-3.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-3">
+                  Independent Captive Portals MAY use the same identifying value to identify
+                  different User Equipment. Allowing independent captive portals to reuse
+                  identifying values allows the identifier to be a property of the local
+                  network, expanding the space of possible identifiers.<a href="#section-3.2.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="id_recommended_hard">
+<section id="section-3.2.2">
+          <h4 id="name-hard-to-spoof">
+<a href="#section-3.2.2" class="section-number selfRef">3.2.2. </a><a href="#name-hard-to-spoof" class="section-name selfRef">Hard to Spoof</a>
+          </h4>
+<p id="section-3.2.2-1">
+                  A good identifier does not lend itself to being easily spoofed. At no time
+                  should it be simple or straightforward for one User Equipment to
+                  pretend to be another User Equipment, regardless of whether both are active
+                  at the same time. This property is particularly important when the User
+                  Equipment identifier is referenced externally by devices such as billing systems,
+                  or where the identity of the User Equipment could imply liability.<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="id_recommended_visible_api">
+<section id="section-3.2.3">
+          <h4 id="name-visible-to-the-api-server">
+<a href="#section-3.2.3" class="section-number selfRef">3.2.3. </a><a href="#name-visible-to-the-api-server" class="section-name selfRef">Visible to the API Server</a>
+          </h4>
+<p id="section-3.2.3-1">
+                  Since the API Server will need to perform operations which rely on the identity
+                  of the User Equipment, such as answering a query about
+                  whether the User Equipment is captive, the API Server needs
+                  to be able to relate a request to the User Equipment making
+                  the request.<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="id_recommended_visible_ed">
+<section id="section-3.2.4">
+          <h4 id="name-visible-to-the-enforcement-">
+<a href="#section-3.2.4" class="section-number selfRef">3.2.4. </a><a href="#name-visible-to-the-enforcement-" class="section-name selfRef">Visible to the Enforcement Device</a>
+          </h4>
+<p id="section-3.2.4-1">
+                  The Enforcement Device will decide on a per-packet basis whether
+                  the packet should be forwarded to the external network. Since
+                  this decision depends on which User Equipment sent the packet, the
+                  Enforcement Device requires that it be able to map the packet to its
+                  concept of the User Equipment.<a href="#section-3.2.4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="id_evaluating">
+<section id="section-3.3">
+        <h3 id="name-evaluating-types-of-identif">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-evaluating-types-of-identif" class="section-name selfRef">Evaluating Types of Identifiers</a>
+        </h3>
+<p id="section-3.3-1">
+                 To evaluate whether a type of identifier is appropriate, one should consider
+                 every recommended property from the perspective of interactions among
+                 the components in the architecture. When comparing identifier types, choose
+                 the one which best satisfies all of the recommended properties. The
+                 architecture does not provide an exact measure of how well an identifier
+                 type satisfies a given property; care should be taken in performing the
+                 evaluation.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="id_examples">
+<section id="section-3.4">
+        <h3 id="name-example-identifier-types">
+<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-example-identifier-types" class="section-name selfRef">Example Identifier Types</a>
+        </h3>
+<p id="section-3.4-1">
+                 This section provides some example identifier types, along with some
+                 evaluation of whether they are suitable types. The list of identifier types
+                 is not exhaustive. Other types may be used. An important point to note
+                 is that whether a given identifier type is suitable depends heavily on the
+                 capabilities of the components and where in the network the components exist.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+<div id="id_example_interface">
+<section id="section-3.4.1">
+          <h4 id="name-physical-interface">
+<a href="#section-3.4.1" class="section-number selfRef">3.4.1. </a><a href="#name-physical-interface" class="section-name selfRef">Physical Interface</a>
+          </h4>
+<p id="section-3.4.1-1">
+                 The physical interface by which the User Equipment is attached to the
+                 network can be used to identify the User Equipment. This identifier type has
+                 the property of being extremely difficult to spoof: the User Equipment is
+                 unaware of the property; one User Equipment cannot manipulate its
+                 interactions to appear as though it is another.<a href="#section-3.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.4.1-2">
+                 Further, if only a single User Equipment is attached to a given physical
+                 interface, then the identifier will be unique. If multiple User Equipment
+                 is attached to the network on the same physical interface, then this type
+                 is not appropriate.<a href="#section-3.4.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.4.1-3">
+                 Another consideration related to uniqueness of the User Equipment is that
+                 if the attached User Equipment changes, both the API Server and the
+                 Enforcement Device MUST invalidate their state related to the User Equipment.<a href="#section-3.4.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.4.1-4">
+                 The Enforcement Device needs to be aware of the physical interface,
+                 which constrains the environment: it must either be part of the device providing
+                 physical access (e.g., implemented in firmware), or packets traversing the network
+                 must be extended to include information about the source physical interface (e.g.
+                 a tunnel).<a href="#section-3.4.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.4.1-5">
+                 The API Server faces a similar problem, implying that it should co-exist with the
+                 Enforcement Device, or that the Enforcement Device should extend requests to it
+                 with the identifying information.<a href="#section-3.4.1-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="id_example_IP_address">
+<section id="section-3.4.2">
+          <h4 id="name-ip-address">
+<a href="#section-3.4.2" class="section-number selfRef">3.4.2. </a><a href="#name-ip-address" class="section-name selfRef">IP Address</a>
+          </h4>
+<p id="section-3.4.2-1">
+                  A natural identifier type to consider is the IP address of the User Equipment.
+                  At any given time, no device on the network can have the same IP address
+                  without causing the network to malfunction, so it is appropriate from the
+                  perspective of uniqueness.<a href="#section-3.4.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.4.2-2">
+                  However, it may be possible to spoof the IP address, particularly for
+                  malicious reasons where proper functioning of the network is not necessary
+                  for the malicious actor. Consequently, any solution using the IP address
+                  SHOULD proactively try to prevent spoofing of the IP address. Similarly,
+                  if the mapping of IP address to User Equipment is changed, the components
+                  of the architecture MUST remove or update their mapping to prevent spoofing.
+                  Demonstrations of return routeability, such as that required for TCP
+                  connection establishment, might be sufficient defense against spoofing,
+                  though this might not be sufficient in networks that use broadcast media
+                  (such as some wireless networks).<a href="#section-3.4.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.4.2-3">
+                  Since the IP address may traverse multiple segments of the network, more
+                  flexibility is afforded to the Enforcement Device and the API Server: they
+                  simply must exist on a segment of the network where the IP address is still
+                  unique. However, consider that a NAT may be deployed between the User Equipment
+                  and the Enforcement Device. In such cases, it is possible for the components
+                  to still uniquely identify the device if they are aware of the port mapping.<a href="#section-3.4.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.4.2-4">
+                In some situations, the User Equipment may have multiple IP addresses (either
+                IPv4, IPv6 or a dual-stack <span>[<a href="#RFC4213" class="xref">RFC4213</a>]</span> combination), while
+                still satisfying all of the recommended properties. This raises some challenges
+                to the components of the network. For example, if the User Equipment tries
+                to access the network with multiple IP addresses, should the Enforcement Device
+                and API Server treat each IP address as a unique User Equipment, or should it
+                tie the multiple addresses together into one view of the subscriber?
+                An implementation MAY do either. Attention should be paid to IPv6 and the fact
+                that it is expected for a device to have multiple IPv6 addresses on a single
+                link. In such cases, identification could be performed by subnet, such as the /64
+                to which the IP belongs.<a href="#section-3.4.2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="id_example_mac_address">
+<section id="section-3.4.3">
+          <h4 id="name-media-access-control-mac-ad">
+<a href="#section-3.4.3" class="section-number selfRef">3.4.3. </a><a href="#name-media-access-control-mac-ad" class="section-name selfRef">Media Access Control (MAC) Address</a>
+          </h4>
+<p id="section-3.4.3-1">
+            The MAC address of a device is often used as an identifier in existing implementations.
+            This document does not discuss the use of MAC addresses within a captive portal system, but they can be used
+            as an identifier type, subject to the criteria in <a href="#id_recommended_props" class="xref">Section 3.2</a>.<a href="#section-3.4.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="context_free_uri">
+<section id="section-3.5">
+        <h3 id="name-context-free-uri">
+<a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-context-free-uri" class="section-name selfRef">Context-free URI</a>
+        </h3>
+<p id="section-3.5-1">
+            A Captive Portal API needs to present information to clients
+            that is unique to that client. To do this, some systems use
+            information from the context of a request, such as the source
+            address, to identify the User Equipment.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
+<p id="section-3.5-2">
+            Using information from context rather than information from the
+            URI allows the same URI to be used for different clients. However,
+            it also means that the resource is unable to provide relevant
+            information if the User Equipment makes a request using a different network
+            path. This might happen when User Equipment has multiple network interfaces.
+            It might also happen if the address of the API provided by DNS
+            depends on where the query originates (as in split DNS
+            <span>[<a href="#RFC8499" class="xref">RFC8499</a>]</span>).<a href="#section-3.5-2" class="pilcrow">¶</a></p>
+<p id="section-3.5-3">
+            Accessing the API MAY depend on contextual information. However,
+            the URIs provided in the API SHOULD be unique to the User Equipment and not
+            dependent on contextual information to function correctly.<a href="#section-3.5-3" class="pilcrow">¶</a></p>
+<p id="section-3.5-4">
+            Though a URI might still correctly resolve when the User Equipment makes the
+            request from a different network, it is possible that some
+            functions could be limited to when the User Equipment makes requests using the
+            captive network. For example, payment options could be absent or a
+            warning could be displayed to indicate the payment is not for the
+            current connection.<a href="#section-3.5-4" class="pilcrow">¶</a></p>
+<p id="section-3.5-5">
+            URIs could include some means of identifying the User Equipment in
+            the URIs.  However, including unauthenticated User Equipment
+            identifiers in the URI may expose the service to spoofing or replay
+            attacks.<a href="#section-3.5-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="section_workflow">
+<section id="section-4">
+      <h2 id="name-solution-workflow">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-solution-workflow" class="section-name selfRef">Solution Workflow</a>
+      </h2>
+<p id="section-4-1">
+      This section aims to improve understanding by describing a possible
+      workflow of solutions adhering to the architecture. Note that the section is
+      not normative: it describes only as subset of possible implementations.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<section id="section-4.1">
+        <h3 id="name-initial-connection">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-initial-connection" class="section-name selfRef">Initial Connection</a>
+        </h3>
+<p id="section-4.1-1">
+      This section describes a possible workflow when User Equipment initially
+      joins a Captive Portal.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-4.1-2">
+          <li id="section-4.1-2.1">The User Equipment joins the Captive Portal by acquiring a DHCP
+         lease, RA, or similar, acquiring provisioning information.<a href="#section-4.1-2.1" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.1-2.2">The User Equipment learns the URI for the Captive Portal API from the
+         provisioning information (e.g., <span>[<a href="#RFC7710bis" class="xref">RFC7710bis</a>]</span>).<a href="#section-4.1-2.2" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.1-2.3">The User Equipment accesses the Captive Portal API to receive parameters
+         of the Captive Portal, including User Portal URI. (This step replaces
+         the clear-text query to a canary URI.)<a href="#section-4.1-2.3" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.1-2.4">If necessary, the User navigates to the User Portal to gain access to the
+         external network.<a href="#section-4.1-2.4" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.1-2.5">
+            If the User interacted with the User Portal to gain access to the external
+            network in the previous step, the User Portal indicates to the Enforcement
+            Device that the User Equipment is allowed to access the external network.<a href="#section-4.1-2.5" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.1-2.6">The User Equipment attempts a connection outside the captive network<a href="#section-4.1-2.6" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.1-2.7">If the requirements have been satisfied, the access is permitted;
+         otherwise the "Expired" behavior occurs.<a href="#section-4.1-2.7" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.1-2.8">The User Equipment accesses the network until conditions Expire.<a href="#section-4.1-2.8" class="pilcrow">¶</a>
+</li>
+        </ol>
+</section>
+<section id="section-4.2">
+        <h3 id="name-conditions-about-to-expire">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-conditions-about-to-expire" class="section-name selfRef">Conditions About to Expire</a>
+        </h3>
+<p id="section-4.2-1">
+      This section describes a possible workflow when access is about to expire.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-4.2-2">
+          <li id="section-4.2-2.1">Precondition: the API has provided the User Equipment with a duration
+         over which its access is valid.<a href="#section-4.2-2.1" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.2-2.2">The User Equipment is communicating with the outside network.<a href="#section-4.2-2.2" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.2-2.3">
+            The User Equipment detects that the length of time left
+            for its access has fallen below a threshold by comparing its stored
+            expiry time with the current time.<a href="#section-4.2-2.3" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.2-2.4">The User Equipment visits the API again to validate the expiry time.<a href="#section-4.2-2.4" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.2-2.5">If expiry is still imminent, the User Equipment prompts the user to access the
+         User Portal URI again.<a href="#section-4.2-2.5" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.2-2.6">The User accepts the prompt displayed by the User Equipment.<a href="#section-4.2-2.6" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.2-2.7">The User extends their access through the User Portal via the User Equipment's user interface.<a href="#section-4.2-2.7" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.2-2.8">The User Equipment's access to the outside network continues uninterrupted.<a href="#section-4.2-2.8" class="pilcrow">¶</a>
+</li>
+        </ol>
+</section>
+<section id="section-4.3">
+        <h3 id="name-handling-of-changes-in-port">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-handling-of-changes-in-port" class="section-name selfRef">Handling of Changes in Portal URI</a>
+        </h3>
+<p id="section-4.3-1">A different Captive Portal API URI could be returned in the following cases:<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.3-2.1">If DHCP is used, a lease renewal/rebind may return a different Captive
+          Portal API URI.<a href="#section-4.3-2.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.3-2.2">If RA is used, a new Captive Portal API URI may be specified in a new RA
+          message received by end User Equipment.<a href="#section-4.3-2.2" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-4.3-3">When the Network Provisioning Service updates the Captive Portal API URI, the User
+           Equipment can retrieve updated state from the URI immediately, or it can wait
+           as it normally would until the expiry conditions it retrieved from the old URI are
+           about to expire.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
+</section>
+</section>
+</div>
+<div id="Acknowledgments">
+<section id="section-5">
+      <h2 id="name-acknowledgments">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+      </h2>
+<p id="section-5-1">The authors thank Lorenzo Colitti for providing the majority of the content
+         for the Captive Portal Signal requirements.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">The authors thank Benjamin Kaduk for providing the content related to TLS
+         certificate validation of the API server.<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-3">The authors thank Michael Richardson for providing wording requiring DNSSEC and TLS to
+         operate without the user adding exceptions.<a href="#section-5-3" class="pilcrow">¶</a></p>
+<p id="section-5-4">The authors thank various individuals for their feedback on
+        the mailing list and during the IETF98 hackathon:
+        David Bird,
+        Erik Kline,
+        Alexis La Goulette,
+        Alex Roscoe,
+        Darshak Thakore,
+        and Vincent van Dam.<a href="#section-5-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="IANA">
+<section id="section-6">
+      <h2 id="name-iana-considerations">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<p id="section-6-1">This memo includes no request to IANA.<a href="#section-6-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="Security">
+<section id="section-7">
+      <h2 id="name-security-considerations">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<section id="section-7.1">
+        <h3 id="name-trusting-the-network">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-trusting-the-network" class="section-name selfRef">Trusting the Network</a>
+        </h3>
+<p id="section-7.1-1">
+         When joining a network, some trust is placed in the network operator.
+         This is usually considered to be a decision by a user on the basis of
+         the reputation of an organization. However, once a user makes such a
+         decision, protocols can support authenticating that a network is operated
+         by who claims to be operating it.  The Provisioning Domain
+         Architecture <span>[<a href="#RFC7556" class="xref">RFC7556</a>]</span> provides some discussion on
+         authenticating an operator.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-2">
+         The user makes an informed choice to visit and trust the Captive
+         Portal URI. Since the network provides Captive Portal URI to the user
+         equipment, the network SHOULD do so securely so that the user's trust in the
+         network can extend to their trust of the Captive Portal URI. E.g., the DHCPv6
+         AUTH option can sign this information.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.1-3">
+         If a user decides to incorrectly trust an attacking network, they might
+         be convinced to visit an attacking web page and unwittingly provide
+         credentials to an attacker. Browsers can authenticate servers but
+         cannot detect cleverly misspelled domains, for example.<a href="#section-7.1-3" class="pilcrow">¶</a></p>
+<p id="section-7.1-4">
+         Further, the possibility of an on-path attacker in an attacking network
+         introduces some risks. The attacker could redirect traffic to arbitrary
+         destinations. The attacker could analyze the user's
+         traffic leading to loss of confidentiality. Or, the attacker could modify
+         the traffic inline.<a href="#section-7.1-4" class="pilcrow">¶</a></p>
+</section>
+<section id="section-7.2">
+        <h3 id="name-authenticated-apis">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-authenticated-apis" class="section-name selfRef">Authenticated APIs</a>
+        </h3>
+<p id="section-7.2-1">
+         The solution described here requires that when the User Equipment needs to
+         access the API server, the User Equipment authenticates the
+         server; see <a href="#section_client" class="xref">Section 2.1</a>.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-2">
+         The Captive Portal API URI might change during the Captive Portal Session.
+         The User Equipment can apply the same trust mechanisms to the new URI as it
+         did to the URI it received initially from the network provisioning service.<a href="#section-7.2-2" class="pilcrow">¶</a></p>
+</section>
+<section id="section-7.3">
+        <h3 id="name-secure-apis">
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-secure-apis" class="section-name selfRef">Secure APIs</a>
+        </h3>
+<p id="section-7.3-1">
+           The solution described here requires that the API be secured using TLS.
+           This is required to allow the User Equipment and API Server to exchange
+           secrets which can be used to validate future interactions. The API MUST
+           ensure the integrity of this information, as well as its confidentiality.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.3-2">
+           An attacker with access to this information might be able to
+           masquerade as a specific User Equipment when interacting with the API, which
+           could then allow them to masquerade as that User Equipment when interacting
+           with the User Portal. This could give them the ability to determine whether
+           the User Equipment has accessed the portal, or deny the User Equipment service
+           by ending their session using mechanisms provided by the User Portal, or consume that
+           User Equipment's quota. An attacker with the ability to modify the information
+           could deny service to the User Equipment, or cause them to appear as a different
+           User Equipment.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
+</section>
+<div id="section_signal_risks">
+<section id="section-7.4">
+        <h3 id="name-risks-associated-with-the-s">
+<a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-risks-associated-with-the-s" class="section-name selfRef">Risks Associated with the Signaling Protocol</a>
+        </h3>
+<p id="section-7.4-1">
+         If a Signaling Protocol is implemented, it may be possible for any user on
+         the Internet to send signals in attempt to cause the receiving equipment to
+         communicate with the Captive Portal API. This has been considered, and implementations may
+         address it in the following ways:<a href="#section-7.4-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.4-2.1">The signal only signals to the User Equipment to query the API. It does not
+              carry any information which may mislead or misdirect the User Equipment.<a href="#section-7.4-2.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-7.4-2.2">Even when responding to the signal, the User Equipment securely authenticates
+               with API Servers.<a href="#section-7.4-2.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-7.4-2.3">Accesses to the Captive Portal API are rate-limited, reducing the impact of an
+              attack attempting to generate excessive load on either User Equipment or API.
+              Note that because there is only one type of signal and one type of API request in
+              response to the signal, this rate-limiting will not cause loss of signalling
+              information.<a href="#section-7.4-2.3" class="pilcrow">¶</a>
+</li>
+        </ul>
+</section>
+</div>
+<section id="section-7.5">
+        <h3 id="name-user-options">
+<a href="#section-7.5" class="section-number selfRef">7.5. </a><a href="#name-user-options" class="section-name selfRef">User Options</a>
+        </h3>
+<p id="section-7.5-1">
+         The Captive Portal Signal could signal to the User Equipment that it is being held
+         captive.  There is no requirement that the User Equipment do something
+         about this.
+         Devices MAY permit users to disable automatic reaction to
+         Captive Portal Signals indications for privacy reasons.
+         However, there would be the trade-off that the user doesn't get notified
+         when network access is restricted.
+         Hence, end-user devices MAY allow users to manually control captive
+         portal interactions, possibly on the granularity of Provisioning
+         Domains.<a href="#section-7.5-1" class="pilcrow">¶</a></p>
+</section>
+<section id="section-7.6">
+        <h3 id="name-privacy">
+<a href="#section-7.6" class="section-number selfRef">7.6. </a><a href="#name-privacy" class="section-name selfRef">Privacy</a>
+        </h3>
+<p id="section-7.6-1">
+          <a href="#ue_identity" class="xref">Section 3</a> describes a mechanism by which all components within
+          the Captive Portal are designed to use the same identifier to uniquely identify
+          the User Equipment.  This identifier could be abused to track the user.
+          Implementers and designers of Captive Portals should take care to ensure that
+          identifiers, if stored, are stored securely. Likewise, if any component
+          communicates the identifier over the network, it should ensure the confidentiality
+          of the identifier on the wire by using encryption such as TLS.<a href="#section-7.6-1" class="pilcrow">¶</a></p>
+<p id="section-7.6-2">
+          There are benefits to choosing mutable anonymous identifiers. For
+          example, User Equipment could cycle through multiple identifiers to help prevent
+          long-term tracking. However, if the components of the network use an internal
+          mapping to map the identity to a stable, long-term value in order to deal with
+          changing identifiers, they need to treat that value as sensitive information: an
+          attacker could use it to tie traffic back to the originating User Equipment,
+          despite the User Equipment having changed identifiers.<a href="#section-7.6-2" class="pilcrow">¶</a></p>
+</section>
+</section>
+</div>
+<section id="section-8">
+      <h2 id="name-references">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<section id="section-8.1">
+        <h3 id="name-normative-references">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
+<dl class="references">
+<dt id="RFC2119">[RFC2119]</dt>
+        <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2818">[RFC2818]</dt>
+        <dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"HTTP Over TLS"</span>, <span class="seriesInfo">RFC 2818</span>, <span class="seriesInfo">DOI 10.17487/RFC2818</span>, <time datetime="2000-05" class="refDate">May 2000</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2818">https://www.rfc-editor.org/info/rfc2818</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6125">[RFC6125]</dt>
+        <dd>
+<span class="refAuthor">Saint-Andre, P.</span><span class="refAuthor"> and J. Hodges</span>, <span class="refTitle">"Representation and Verification of Domain-Based Application Service Identity within Internet Public Key Infrastructure Using X.509 (PKIX) Certificates in the Context of Transport Layer Security (TLS)"</span>, <span class="seriesInfo">RFC 6125</span>, <span class="seriesInfo">DOI 10.17487/RFC6125</span>, <time datetime="2011-03" class="refDate">March 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6125">https://www.rfc-editor.org/info/rfc6125</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7556">[RFC7556]</dt>
+        <dd>
+<span class="refAuthor">Anipko, D., Ed.</span>, <span class="refTitle">"Multiple Provisioning Domain Architecture"</span>, <span class="seriesInfo">RFC 7556</span>, <span class="seriesInfo">DOI 10.17487/RFC7556</span>, <time datetime="2015-06" class="refDate">June 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7556">https://www.rfc-editor.org/info/rfc7556</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7710bis">[RFC7710bis]</dt>
+        <dd>
+<span class="refAuthor">Kumari, W.</span><span class="refAuthor"> and E. Kline</span>, <span class="refTitle">"Captive-Portal Identification in DHCP / RA"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-capport-rfc7710bis-01</span>, <time datetime="2020-01-12" class="refDate">12 January 2020</time>, <span>&lt;<a href="https://tools.ietf.org/html/draft-ietf-capport-rfc7710bis-01">https://tools.ietf.org/html/draft-ietf-capport-rfc7710bis-01</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+      <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<section id="section-8.2">
+        <h3 id="name-informative-references">
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="I-D.ietf-capport-api">[I-D.ietf-capport-api]</dt>
+        <dd>
+<span class="refAuthor">Pauly, T.</span><span class="refAuthor"> and D. Thakore</span>, <span class="refTitle">"Captive Portal API"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-capport-api-06</span>, <time datetime="2020-03-31" class="refDate">31 March 2020</time>, <span>&lt;<a href="https://tools.ietf.org/html/draft-ietf-capport-api-06">https://tools.ietf.org/html/draft-ietf-capport-api-06</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.pfister-capport-pvd">[I-D.pfister-capport-pvd]</dt>
+        <dd>
+<span class="refAuthor">Pfister, P.</span><span class="refAuthor"> and T. Pauly</span>, <span class="refTitle">"Using Provisioning Domains for Captive Portal Discovery"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-pfister-capport-pvd-00</span>, <time datetime="2018-06-30" class="refDate">30 June 2018</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-pfister-capport-pvd-00.txt">http://www.ietf.org/internet-drafts/draft-pfister-capport-pvd-00.txt</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3986">[RFC3986]</dt>
+        <dd>
+<span class="refAuthor">Berners-Lee, T.</span><span class="refAuthor">, Fielding, R.</span><span class="refAuthor">, and L. Masinter</span>, <span class="refTitle">"Uniform Resource Identifier (URI): Generic Syntax"</span>, <span class="seriesInfo">STD 66</span>, <span class="seriesInfo">RFC 3986</span>, <span class="seriesInfo">DOI 10.17487/RFC3986</span>, <time datetime="2005-01" class="refDate">January 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc3986">https://www.rfc-editor.org/info/rfc3986</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4213">[RFC4213]</dt>
+        <dd>
+<span class="refAuthor">Nordmark, E.</span><span class="refAuthor"> and R. Gilligan</span>, <span class="refTitle">"Basic Transition Mechanisms for IPv6 Hosts and Routers"</span>, <span class="seriesInfo">RFC 4213</span>, <span class="seriesInfo">DOI 10.17487/RFC4213</span>, <time datetime="2005-10" class="refDate">October 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc4213">https://www.rfc-editor.org/info/rfc4213</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8499">[RFC8499]</dt>
+      <dd>
+<span class="refAuthor">Hoffman, P.</span><span class="refAuthor">, Sullivan, A.</span><span class="refAuthor">, and K. Fujiwara</span>, <span class="refTitle">"DNS Terminology"</span>, <span class="seriesInfo">BCP 219</span>, <span class="seriesInfo">RFC 8499</span>, <span class="seriesInfo">DOI 10.17487/RFC8499</span>, <time datetime="2019-01" class="refDate">January 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8499">https://www.rfc-editor.org/info/rfc8499</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</section>
+<div id="app-additional">
+<section id="section-appendix.a">
+      <h2 id="name-existing-captive-portal-det">
+<a href="#section-appendix.a" class="section-number selfRef">Appendix A. </a><a href="#name-existing-captive-portal-det" class="section-name selfRef">Existing Captive Portal Detection Implementations</a>
+      </h2>
+<p id="section-appendix.a-1">
+       Operating systems and user applications may perform various tests when
+       network connectivity is established to determine if the device is
+       attached to a network with a captive portal present. A common method is
+       to attempt to make a HTTP request to a known, vendor-hosted endpoint with
+       a fixed response. Any other response is interpreted as a signal that a
+       captive portal is present. This check is typically not secured with TLS,
+       as a network with a captive portal may intercept the connection, leading
+       to a host name mismatch. This has been referred to as a "canary" request
+       because, like the canary in the coal mine, it can be the first sign
+       that something is wrong.<a href="#section-appendix.a-1" class="pilcrow">¶</a></p>
+<p id="section-appendix.a-2">
+       Another test that can be performed is a DNS lookup to a known address
+       with an expected answer. If the answer differs from the expected answer,
+       the equipment detects that a captive portal is present.
+       DNS queries over TCP or HTTPS are less likely to be modified than DNS
+       queries over UDP due to the complexity of implementation.<a href="#section-appendix.a-2" class="pilcrow">¶</a></p>
+<p id="section-appendix.a-3">
+       The different tests may produce different conclusions, varying by
+       whether or not the implementation treats both TCP and UDP traffic,
+       and by which types of DNS are intercepted.<a href="#section-appendix.a-3" class="pilcrow">¶</a></p>
+<p id="section-appendix.a-4">
+       Malicious or misconfigured networks with a captive portal present may
+       not intercept these canary requests and choose to pass them through or decide to
+       impersonate, leading to the device having a false negative.<a href="#section-appendix.a-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="section-appendix.b">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Kyle Larose</span></div>
+<div dir="auto" class="left"><span class="org">Agilicus</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:kyle@agilicus.com" class="email">kyle@agilicus.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">David Dolson</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:ddolson@acm.org" class="email">ddolson@acm.org</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Heng Liu</span></div>
+<div dir="auto" class="left"><span class="org">Google</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:liucougar@google.com" class="email">liucougar@google.com</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>
