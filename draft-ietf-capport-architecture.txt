@@ -5,10 +5,10 @@
 Internet Engineering Task Force                                K. Larose
 Internet-Draft                                                  Agilicus
 Intended status: Informational                                 D. Dolson
-Expires: 11 February 2021                                               
+Expires: 26 March 2021                                                  
                                                                   H. Liu
                                                                   Google
-                                                          10 August 2020
+                                                       22 September 2020
 
 
                       Captive Portal Architecture
@@ -36,7 +36,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 February 2021.
+   This Internet-Draft will expire on 26 March 2021.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Larose, et al.          Expires 11 February 2021                [Page 1]
+Larose, et al.            Expires 26 March 2021                 [Page 1]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Larose, et al.          Expires 11 February 2021                [Page 2]
+Larose, et al.            Expires 26 March 2021                 [Page 2]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
      7.6.  Privacy . . . . . . . . . . . . . . . . . . . . . . . . .  21
@@ -165,9 +165,9 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
 
 
-Larose, et al.          Expires 11 February 2021                [Page 3]
+Larose, et al.            Expires 26 March 2021                 [Page 3]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
       sacrificial queries to "canary" URIs to check for response
@@ -175,7 +175,7 @@ Internet-Draft         Captive Portal Architecture           August 2020
       work by affecting DNS or HTTP generally only function as intended
       with browsers, breaking other applications using those protocols;
       applications using other protocols are not alerted that the
-      network is a captive network.
+      network is a captive portal.
 
    *  The state of captivity SHOULD be explicitly available to devices
       via a standard protocol, rather than having to infer the state
@@ -221,9 +221,9 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
 
 
-Larose, et al.          Expires 11 February 2021                [Page 4]
+Larose, et al.            Expires 26 March 2021                 [Page 4]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
    *  Receipt of a Captive Portal Signal provides a hint that User
@@ -258,7 +258,7 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
    Captive Portal User Equipment: Also known as User Equipment.  A
    device which has voluntarily joined a network for purposes of
-   communicating beyond the constraints of the captive network.
+   communicating beyond the constraints of the Captive Portal.
 
    User Portal: The web server providing a user interface for assisting
    the user in satisfying the conditions to escape captivity.
@@ -277,9 +277,9 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
 
 
-Larose, et al.          Expires 11 February 2021                [Page 5]
+Larose, et al.            Expires 26 March 2021                 [Page 5]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
    Captive Portal Signaling Protocol: Also known as Signaling Protocol.
@@ -321,8 +321,8 @@ Internet-Draft         Captive Portal Architecture           August 2020
    *  SHOULD have a non-spoofable mechanism for notifying the user of
       the Captive Portal
 
-   *  SHOULD have a web browser so that the user may navigate the User
-      Portal.
+   *  SHOULD have a web browser so that the user may navigate to the
+      User Portal.
 
    *  SHOULD support updates to the Captive Portal API URI from the
       network provisioning service.
@@ -333,9 +333,9 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
 
 
-Larose, et al.          Expires 11 February 2021                [Page 6]
+Larose, et al.            Expires 26 March 2021                 [Page 6]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
       could avoid updating the default route to a device on captive WiFi
@@ -344,8 +344,8 @@ Internet-Draft         Captive Portal Architecture           August 2020
       has been termed "make before break".
 
    None of the above requirements are mandatory because (a) we do not
-   wish to say users or devices must seek full access to the captive
-   network, (b) the requirements may be fulfilled by manually visiting
+   wish to say users or devices must seek full access to the Captive
+   Portal, (b) the requirements may be fulfilled by manually visiting
    the captive portal web application, and (c) legacy devices must
    continue to be supported.
 
@@ -389,9 +389,9 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
 
 
-Larose, et al.          Expires 11 February 2021                [Page 7]
+Larose, et al.            Expires 26 March 2021                 [Page 7]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
 2.2.1.  DHCP or Router Advertisements
@@ -445,9 +445,9 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
 
 
-Larose, et al.          Expires 11 February 2021                [Page 8]
+Larose, et al.            Expires 26 March 2021                 [Page 8]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
    When User Equipment receives Captive Portal Signals, the User
@@ -501,9 +501,9 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
 
 
-Larose, et al.          Expires 11 February 2021                [Page 9]
+Larose, et al.            Expires 26 March 2021                 [Page 9]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
 2.5.  Captive Portal Signal
@@ -557,9 +557,9 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
 
 
-Larose, et al.          Expires 11 February 2021               [Page 10]
+Larose, et al.            Expires 26 March 2021                [Page 10]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
    o . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . o
@@ -613,9 +613,9 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
 
 
-Larose, et al.          Expires 11 February 2021               [Page 11]
+Larose, et al.            Expires 26 March 2021                [Page 11]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
    *  The User Equipment attempts to communicate to the external network
@@ -669,9 +669,9 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
 
 
-Larose, et al.          Expires 11 February 2021               [Page 12]
+Larose, et al.            Expires 26 March 2021                [Page 12]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
    *  be visible to the API Server
@@ -725,9 +725,9 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
 
 
-Larose, et al.          Expires 11 February 2021               [Page 13]
+Larose, et al.            Expires 26 March 2021                [Page 13]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
 3.2.4.  Visible to the Enforcement Device
@@ -781,9 +781,9 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
 
 
-Larose, et al.          Expires 11 February 2021               [Page 14]
+Larose, et al.            Expires 26 March 2021                [Page 14]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
    The Enforcement Device needs to be aware of the physical interface,
@@ -837,9 +837,9 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
 
 
-Larose, et al.          Expires 11 February 2021               [Page 15]
+Larose, et al.            Expires 26 March 2021                [Page 15]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
    In some situations, the User Equipment may have multiple IP addresses
@@ -885,7 +885,7 @@ Internet-Draft         Captive Portal Architecture           August 2020
    Though a URI might still correctly resolve when the User Equipment
    makes the request from a different network, it is possible that some
    functions could be limited to when the User Equipment makes requests
-   using the captive network.  For example, payment options could be
+   using the Captive Portal.  For example, payment options could be
    absent or a warning could be displayed to indicate the payment is not
    for the current connection.
 
@@ -893,9 +893,9 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
 
 
-Larose, et al.          Expires 11 February 2021               [Page 16]
+Larose, et al.            Expires 26 March 2021                [Page 16]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
    URIs could include some means of identifying the User Equipment in
@@ -933,8 +933,8 @@ Internet-Draft         Captive Portal Architecture           August 2020
        to the Enforcement Device that the User Equipment is allowed to
        access the external network.
 
-   6.  The User Equipment attempts a connection outside the captive
-       network
+   6.  The User Equipment attempts a connection outside the Captive
+       Portal
 
    7.  If the requirements have been satisfied, the access is permitted;
        otherwise the "Expired" behavior occurs.
@@ -949,9 +949,9 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
 
 
-Larose, et al.          Expires 11 February 2021               [Page 17]
+Larose, et al.            Expires 26 March 2021                [Page 17]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
    1.  Precondition: the API has provided the User Equipment with a
@@ -1005,9 +1005,9 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
 
 
-Larose, et al.          Expires 11 February 2021               [Page 18]
+Larose, et al.            Expires 26 March 2021                [Page 18]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
    The authors thank Michael Richardson for providing wording requiring
@@ -1061,9 +1061,9 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
 
 
-Larose, et al.          Expires 11 February 2021               [Page 19]
+Larose, et al.            Expires 26 March 2021                [Page 19]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
    The Captive Portal API URI might change during the Captive Portal
@@ -1117,9 +1117,9 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
 
 
-Larose, et al.          Expires 11 February 2021               [Page 20]
+Larose, et al.            Expires 26 March 2021                [Page 20]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
 7.5.  User Options
@@ -1173,9 +1173,9 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
 
 
-Larose, et al.          Expires 11 February 2021               [Page 21]
+Larose, et al.            Expires 26 March 2021                [Page 21]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
    [RFC6125]  Saint-Andre, P. and J. Hodges, "Representation and
@@ -1229,9 +1229,9 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
 
 
-Larose, et al.          Expires 11 February 2021               [Page 22]
+Larose, et al.            Expires 26 March 2021                [Page 22]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
    [RFC8499]  Hoffman, P., Sullivan, A., and K. Fujiwara, "DNS
@@ -1285,9 +1285,9 @@ Authors' Addresses
 
 
 
-Larose, et al.          Expires 11 February 2021               [Page 23]
+Larose, et al.            Expires 26 March 2021                [Page 23]
 
-Internet-Draft         Captive Portal Architecture           August 2020
+Internet-Draft         Captive Portal Architecture        September 2020
 
 
    Email: liucougar@google.com
@@ -1341,4 +1341,4 @@ Internet-Draft         Captive Portal Architecture           August 2020
 
 
 
-Larose, et al.          Expires 11 February 2021               [Page 24]
+Larose, et al.            Expires 26 March 2021                [Page 24]
