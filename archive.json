@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-08-10T04:14:41.051577+00:00",
+  "timestamp": "2020-09-22T12:51:16.396414+00:00",
   "repo": "capport-wg/architecture",
   "labels": [
     {
@@ -8294,6 +8294,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 162,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDkwOTE3MzU1",
+      "title": "fix phrasing and clean up captive networks",
+      "url": "https://github.com/capport-wg/architecture/pull/162",
+      "state": "OPEN",
+      "author": "klarose",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "A reviewer found a problem with some phrasing, and also noticed that we\r\nmissed a few captive networks. Clean them up.",
+      "createdAt": "2020-09-22T12:50:58Z",
+      "updatedAt": "2020-09-22T12:50:58Z",
+      "baseRepository": "capport-wg/architecture",
+      "baseRefName": "master",
+      "baseRefOid": "4b058f003e617ae99d194381472eaa430780ae40",
+      "headRepository": "capport-wg/architecture",
+      "headRefName": "various-fixes",
+      "headRefOid": "a79b1560514401d6c810905e872195530d497f75",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
