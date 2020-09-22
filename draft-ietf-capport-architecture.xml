@@ -133,7 +133,7 @@
             tampering (see <xref target="app-additional"/>). Current captive
             portal solutions that work by affecting DNS or HTTP generally only function as intended
             with browsers, breaking other applications using those protocols; applications using
-            other protocols are not alerted that the network is a captive network.</li>
+            other protocols are not alerted that the network is a captive portal.</li>
         <li>The state of captivity SHOULD be explicitly available to devices via
             a standard protocol, rather than having to infer the state indirectly.</li>
         <li>The architecture MUST provide a path of incremental migration,
@@ -207,7 +207,7 @@
           traffic restriction. Also known as Enforcement Device.</t>
         <t>Captive Portal User Equipment: Also known as User Equipment. A device
           which has voluntarily joined a network for purposes of communicating
-          beyond the constraints of the captive network.</t>
+          beyond the constraints of the Captive Portal.</t>
         <t>User Portal: The web server providing a user interface for
           assisting the user in satisfying the conditions to escape
           captivity.</t>
@@ -260,7 +260,7 @@
           <li>SHOULD distinguish Captive Portal API access per network interface, in the manner
            of Provisioning Domain Architecture <xref target="RFC7556"/>.</li>
           <li>SHOULD have a non-spoofable mechanism for notifying the user of the Captive Portal</li>
-          <li>SHOULD have a web browser so that the user may navigate the User Portal.</li>
+          <li>SHOULD have a web browser so that the user may navigate to the User Portal.</li>
           <li>SHOULD support updates to the Captive Portal API URI from the network provisioning
               service.</li>
           <li>MAY prevent applications from using networks that do not grant full
@@ -272,7 +272,7 @@
         </ul>
         <t>
         None of the above requirements are mandatory because (a) we do not wish
-        to say users or devices must seek full access to the captive network,
+        to say users or devices must seek full access to the Captive Portal,
         (b) the requirements may be fulfilled by manually visiting the captive
         portal web application, and (c) legacy devices must continue to be
         supported.
@@ -739,7 +739,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
             Though a URI might still correctly resolve when the User Equipment makes the
             request from a different network, it is possible that some
             functions could be limited to when the User Equipment makes requests using the
-            captive network. For example, payment options could be absent or a
+            Captive Portal. For example, payment options could be absent or a
             warning could be displayed to indicate the payment is not for the
             current connection.
           </t>
@@ -779,7 +779,7 @@ o . . . . . . . . . . . . . . . . . . .| |. . . . . . . . . . . o
             network in the previous step, the User Portal indicates to the Enforcement
             Device that the User Equipment is allowed to access the external network.
          </li>
-          <li>The User Equipment attempts a connection outside the captive network</li>
+          <li>The User Equipment attempts a connection outside the Captive Portal</li>
           <li>If the requirements have been satisfied, the access is permitted;
          otherwise the "Expired" behavior occurs.</li>
           <li>The User Equipment accesses the network until conditions Expire.</li>
