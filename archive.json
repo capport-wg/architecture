@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-09-22T12:51:16.396414+00:00",
+  "timestamp": "2020-09-23T21:33:54.434679+00:00",
   "repo": "capport-wg/architecture",
   "labels": [
     {
@@ -8300,24 +8300,68 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDkwOTE3MzU1",
       "title": "fix phrasing and clean up captive networks",
       "url": "https://github.com/capport-wg/architecture/pull/162",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "klarose",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "A reviewer found a problem with some phrasing, and also noticed that we\r\nmissed a few captive networks. Clean them up.",
       "createdAt": "2020-09-22T12:50:58Z",
-      "updatedAt": "2020-09-22T12:50:58Z",
+      "updatedAt": "2020-09-23T00:57:05Z",
       "baseRepository": "capport-wg/architecture",
       "baseRefName": "master",
       "baseRefOid": "4b058f003e617ae99d194381472eaa430780ae40",
       "headRepository": "capport-wg/architecture",
       "headRefName": "various-fixes",
       "headRefOid": "a79b1560514401d6c810905e872195530d497f75",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-09-22T19:10:45Z",
+      "mergedAt": "2020-09-22T19:10:45Z",
+      "mergedBy": "klarose",
+      "mergeCommit": {
+        "oid": "a962ef0839991103bf97f293b224ebbfc332c912"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDkzNzY0OTk2",
+          "commit": {
+            "abbreviatedOid": "a79b156"
+          },
+          "author": "liucougar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-09-22T19:06:56Z",
+          "updatedAt": "2020-09-22T19:06:56Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 163,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDkyMDUyMzc0",
+      "title": "bump to version 10",
+      "url": "https://github.com/capport-wg/architecture/pull/163",
+      "state": "MERGED",
+      "author": "klarose",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-09-23T21:33:22Z",
+      "updatedAt": "2020-09-23T21:33:30Z",
+      "baseRepository": "capport-wg/architecture",
+      "baseRefName": "master",
+      "baseRefOid": "a962ef0839991103bf97f293b224ebbfc332c912",
+      "headRepository": "capport-wg/architecture",
+      "headRefName": "version-10",
+      "headRefOid": "d75dbcf85f88dbce18f2325be082e2acfb0c44b8",
+      "closedAt": "2020-09-23T21:33:29Z",
+      "mergedAt": "2020-09-23T21:33:29Z",
+      "mergedBy": "klarose",
+      "mergeCommit": {
+        "oid": "471d2f961ab290885a94c95bdfcc39bb894b22f3"
+      },
       "comments": [],
       "reviews": []
     }
